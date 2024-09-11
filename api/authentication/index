@@ -1,4 +1,5 @@
 <h1 id='authentication'>Authentication</h1>
+
 <p>As a partner looking to integrate with Pi42 APIs and access the functionalities programmatically, ensure the following:</p>
 
 <ol>
@@ -21,6 +22,7 @@ All API requests from partners will be authenticated using the tokens of this ma
 <blockquote>
 <p>Common headers</p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight plaintext"><code>{
 
     "timestamp": &lt;unix_timestamp_in_milliseconds&gt;,
@@ -60,11 +62,13 @@ The data object should contain the headers passed along with the request as defi
 <span class="nx">fnc</span><span class="p">();</span>
 
 </code></pre></div>
+
 <p>All user-related endpoints should contain the following headers along with the common headers</p>
 
 <blockquote>
 <p>Additional headers</p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight plaintext"><code>{
     "user-id": 'user-id as returned from create-user endpoint',
     "account-id": 'account-id as returned from create-user endpoint'

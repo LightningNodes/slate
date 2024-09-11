@@ -1,14 +1,20 @@
 <h1 id='exchange'>Exchange</h1>
+
 <p>placeholder text</p>
+
 <h3 id='http-request'>HTTP Request</h3>
+
 <p><code>GET /v1/exchange/exchangeInfo</code> <br/>
  Query param (optional):  <code>market</code></p>
 
 <p>Example: <code>GET /v1/exchange/exchangeInfo?market=INR</code></p>
+
 <h3 id='response'>Response</h3>
+
 <blockquote>
 <p>The above command returns JSON structured such as:</p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"markets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"INR"</span><span class="w">

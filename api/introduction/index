@@ -1,4 +1,5 @@
 <h1 id='introduction'>Introduction</h1>
+
 <p>Pi42 offers a suite of public-facing APIs designed to facilitate integration with various applications and systems, particularly within the domains it specializes in. Here is a high-level introduction to the key features and functionalities of Pi42&#39;s public-facing APIs:</p>
 
 <ol>
@@ -41,7 +42,9 @@
 <li><strong>Compliance</strong>: Pi42 APIs adhere to industry standards and regulations, such as GDPR and HIPAA, making them suitable for use in regulated industries like healthcare and finance.</li>
 </ul></li>
 </ol>
+
 <h2 id='getting-started-with-pi42-apis'>Getting Started with Pi42 APIs</h2>
+
 <p>To begin using Pi42&#39;s public APIs, follow these steps:</p>
 
 <ol>

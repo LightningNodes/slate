@@ -1,18 +1,24 @@
 <h1 id='fawss-market-data-streams-web-socket-public'>FAWSS Market Data Streams Web Socket: Public</h1>
+
 <p>Base URL : https://pilot-fawss.pi42.com/
 Connection creation: Use <strong>socket.io-client</strong> library for the connection.</p>
 
 <p><code>import io from &#39;socket.io-client&#39;;</code></p>
 
 <p><code>const socketClient = io(&#39;https://testnet-fawss.pi42.com&#39;);</code></p>
+
 <h2 id='live-subscribing-unsubscribing-to-streams'>Live Subscribing/Unsubscribing to streams</h2>
+
 <p>The following data can be sent through the web socket instance in order to subscribe/unsubscribe from streams. </p>
+
 <h3 id='subscribe-to-a-stream'>Subscribe to a stream</h3>
+
 <p>Need to write some text header</p>
 
 <blockquote>
 <p>Sample code for subscription </p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight plaintext"><code>{
     socketClient.emit('subscribe', {
         params: [
@@ -647,15 +653,20 @@ Asks (a array)| The a array contains lists representing updated asks.  <br/> Eac
   // plus other symbols data
 }
 </code></pre></div>
+
 <p>This payload provides a snapshot of key trading metrics for various cryptocurrency pairs, helping traders and analysts monitor market performance and make informed decisions.</p>
+
 <h2 id='market-info'>Market Info</h2>
+
 <ul>
 <li>Stream Name: <symbol>@marketInfo , eg: btcinr@marketInfo <br/></li>
 <li>Listening Event Name: marketInfo <br/></li>
 <li>Description: Market Info will provide the last price, market price price change percent and base asset volume for the provided symbol. <br/></li>
 <li>Update Speed: 1000ms</li>
 </ul>
+
 <h3 id='response-7'>Response</h3>
+
 <p>This JSON payload represents a summary of market data for the BTCINR trading pair. </p>
 
 <table><thead>
@@ -689,6 +700,7 @@ Asks (a array)| The a array contains lists representing updated asks.  <br/> Eac
 <blockquote>
 <p>Sample payload for Market Info</p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight plaintext"><code>{
     "marketPrice": "5938759",
     "lastPrice": "5938739",
@@ -697,15 +709,20 @@ Asks (a array)| The a array contains lists representing updated asks.  <br/> Eac
     "symbol": "BTCINR"
 }
 </code></pre></div>
+
 <p>This payload provides key trading metrics for BTCINR, giving traders and analysts a snapshot of the current market conditions and recent trading activity.</p>
+
 <h2 id='mark-price-stream-for-all-markets'>Mark Price Stream for All Markets</h2>
+
 <ul>
 <li>Stream Name: markPriceArr <br/></li>
 <li>Listening Event Name: markPriceArr <br/></li>
 <li>Description: Mark price and funding rate for all symbols <br/></li>
 <li>Update Speed: 1000ms</li>
 </ul>
+
 <h3 id='response-8'>Response</h3>
+
 <p>This JSON array contains an object representing a <code>markPriceUpdate</code> event for the BTCINR trading pair. </p>
 
 <p>Here&#39;s a detailed breakdown of the fields within the object:</p>
@@ -761,6 +778,7 @@ Asks (a array)| The a array contains lists representing updated asks.  <br/> Eac
 <blockquote>
 <p>Sample Response</p>
 </blockquote>
+
 <div class="highlight"><pre class="highlight plaintext"><code>[
   {
     e: 'markPriceUpdate',// Event type
@@ -893,6 +911,7 @@ Asks (a array)| The a array contains lists representing updated asks.  <br/> Eac
   // Other markets data
 ]
 </code></pre></div>
+
 <ul>
 <li>This JSON array provides detailed 24-hour statistics for multiple trading pairs. <br/></li>
 <li>Each object in the array represents the ticker statistics for a specific trading pair (e.g., BTCINR). <br/></li>
