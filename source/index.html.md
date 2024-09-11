@@ -22,7 +22,6 @@ meta:
 
 <%= partial  "./api/introduction/index.md.erb" %>
 
-
 <%= partial  "./api/public-endpoints/index.md.erb" %>
 
 
