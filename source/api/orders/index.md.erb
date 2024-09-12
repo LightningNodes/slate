@@ -1,6 +1,251 @@
 <h1 id='orders'>Orders</h1>
 
-<h2 id="get-open-orders">Get Open Orders for a user </h2>
+<h2 id="place-order">Place an Order </h2>
+
+`POST /v1/order/place-order`
+
+Place an order (either a market order or a limit order) on Pi42's trading platform.
+
+```javascript
+async function placeOrder() {
+    // Market Order
+    const params = {
+        placeType: "POSITION",       // Indicates the type of order placement (e.g., POSITION or ORDER_FORM)
+        quantity: 0.005,             // Quantity of the asset to be traded
+        side: "SELL",                // Order side, either "BUY" or "SELL"
+        symbol: "BTCUSDT",           // Trading pair, e.g., Bitcoin to USDT
+        type: "MARKET",              // Order type, either "MARKET" or "LIMIT"
+        reduceOnly: false,           // Whether to reduce an existing position only
+        marginAsset: "INR",          // The asset used as margin
+        deviceType: "WEB",           // Indicates the device type (WEB, MOBILE, etc.)
+        userCategory: "EXTERNAL",    // Category of the user (EXTERNAL, INTERNAL, etc.)
+    };
+
+    // Limit order: Uncomment and use this block if placing a limit order instead of a market order
+    // const params = {
+    //     placeType: "ORDER_FORM",
+    //     quantity: 0.003,
+    //     reduceOnly: false,
+    //     side: "BUY",
+    //     symbol: "BTCUSDT",
+    //     type: "LIMIT",
+    //     price: 48000,               // Price at which the limit order should be executed
+    //     positionSide: "BOTH",
+    //     timeInForce: "GTC",        // Good-Til-Canceled, other options could be IOC (Immediate-Or-Cancel), etc.
+    //     isolated: true,
+    //     newOrderRespType: "ACK",
+    //     positionId: "string",
+    //     stopPrice: 0,              // Stop price for a stop order (not needed for a regular limit order)
+    //     refId: "dsfssa",           // Reference ID for tracking purposes
+    //     marginAsset: "INR",
+    // };
+
+    const endpoint = "/v1/order/place-order";  // API endpoint to place the order
+
+    // Call the postRequest function to send the POST request with the order parameters
+    return await postRequest(endpoint, params);
+}
+```
+
+```python
+def place_order():
+    # Generate the current timestamp in milliseconds
+    timestamp = str(int(time.time() * 1000))
+    
+    # Define the order parameters
+    params = {
+        'timestamp': timestamp,        # Current timestamp in milliseconds
+        'placeType': 'ORDER_FORM',     # Type of order placement, e.g., 'ORDER_FORM'
+        'quantity': 0.002,             # Quantity of the asset to trade
+        'side': 'BUY',                 # Order side, either 'BUY' or 'SELL'
+        'symbol': 'BTCUSDT',           # Trading pair, e.g., Bitcoin to USDT
+        'type': 'MARKET',              # Order type, either 'MARKET' or 'LIMIT'
+        'reduceOnly': False,           # Whether to reduce an existing position only
+        'marginAsset': 'INR',          # The asset used as margin (INR in this case)
+        'deviceType': 'WEB',           # Device type (e.g., WEB, MOBILE)
+        'userCategory': 'EXTERNAL',    # User category (e.g., EXTERNAL, INTERNAL)
+        'price': 50000,                # Price for the limit order (included here but irrelevant for market orders)
+    }
+    
+    # Convert the parameters to a JSON string to sign
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+    
+    # Generate the signature for authentication
+    signature = generate_signature(api_secret, data_to_sign)
+    
+    # Define the headers including the API key and the signature
+    headers = {
+        'api-key': api_key,
+        'signature': signature,
+    }
+    
+    try:
+        # Send the POST request to place the order
+        response = requests.post(f'{base_url}/v1/order/place-order', json=params, headers=headers)
+        
+        # Raise an HTTPError if the response status is 4xx or 5xx
+        response.raise_for_status()
+        
+        # Parse the JSON response data
+        response_data = response.json()
+        
+        # Print the success message with the order details
+        print('Order placed successfully:', json.dumps(response_data, indent=4))
+    
+    except requests.exceptions.HTTPError as err:
+        # Handle HTTP errors specifically
+        print(f"Error: {err.response.text if err.response else err}")
+    
+    except Exception as e:
+        # Handle any other unexpected errors
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+<h2 id="add-margin"> Add Margin </h2>
+
+`POST /v1/order/add-margin`
+
+Add margin to an existing trading position.
+
+```javascript
+async function addMargin() {
+    // Define the API endpoint for adding margin
+    const endpoint = "/v1/order/add-margin";
+
+    // Define the fixed values for positionId and amount
+    const positionId = "18c6c979-b089-4e67-b627-4c2072d0d5cb";  // Unique identifier for the position
+    const amount = 1;  // The amount of margin to be added
+
+    // Prepare request payload
+    const params = {
+        positionId: positionId,  // ID of the position to which margin is being added
+        amount: amount,          // Amount of margin to add
+    };
+
+    // Call the postRequest function to send the POST request to the API
+    return await postRequest(endpoint, params);
+}
+```
+
+```python
+def add_margin():
+    position_id = input("Enter the positionId: ")
+    amount_input = input("Enter the amount: ")
+
+    add_margin_url = "https://testnet-fapi.pi42.com/v1/order/add-margin"
+
+    try:
+        amount = int(amount_input)
+    except ValueError:
+        amount = float(amount_input)
+
+    timestamp = str(int(time.time() * 1000))
+
+    params = {
+        'positionId': position_id,
+        'amount': amount,
+        'timestamp': timestamp
+    }
+
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+    signature = generate_signature(api_secret, data_to_sign)
+
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature,
+    }
+
+    try:
+        response = requests.post(add_margin_url, json=params, headers=headers)
+        response.raise_for_status()
+        response_data = response.json()
+        print('Margin added successfully:', json.dumps(response_data, indent=4))
+
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+```
+
+<h2 id="reduce-margin">Reduce Margin</h2>
+
+`POST /v1/order/reduce-margin`
+
+Reduce the margin on an existing trading position.
+
+```javascript
+async function reduceMargin() {
+    // Define the API endpoint for reducing margin
+    const endpoint = "/v1/order/reduce-margin";
+
+    // Define the fixed values for positionId and amount
+    const positionId = "18c6c979-b089-4e67-b627-4c2072d0d5cb";  // Unique identifier for the position
+    const amount = 1;  // The amount of margin to be reduced
+
+    // Prepare request payload
+    const params = {
+        positionId: positionId,  // ID of the position from which margin is being reduced
+        amount: amount,          // Amount of margin to reduce
+    };
+
+    // Call the postRequest function to send the POST request to the API
+    return await postRequest(endpoint, params);
+}
+```
+```python
+def reduce_margin():
+    # Collect position ID and amount to reduce from user input
+    position_id = input("Enter the positionId: ")
+    amountInput = input("Enter the amount to reduce: ")
+    
+    try:
+        # Convert input to integer or float as necessary
+        amount = int(amountInput)
+    except ValueError:
+        amount = float(amountInput)
+    
+    # Generate current timestamp in milliseconds
+    timestamp = str(int(time.time() * 1000))
+    
+    # Prepare the request payload (JSON)
+    params = {
+        'positionId': position_id,
+        'amount': amount,
+        'timestamp': timestamp
+    }
+    
+    # Convert the payload to a JSON string for signature
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+    
+    # Generate the signature using a helper function
+    signature = generate_signature(api_secret, data_to_sign)
+    
+    # Set the headers for the POST request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+    
+    # Construct the full API endpoint URL
+    reduce_margin_url = f"{base_url}/v1/order/reduce-margin"
+    
+    try:
+        # Send the POST request to reduce margin
+        response = requests.post(reduce_margin_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for HTTP responses with 4xx/5xx status codes
+        response_data = response.json()
+        print('Margin reduced successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Error: {err.response.text if err.response else err}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+
+<h2 id="get-open-orders">Get Open Orders</h2>
 `GET /v1/order/open-orders`
 
 The sample codes in different languages are provided below:
@@ -57,7 +302,7 @@ return await getRequest(endpoint, params);
 }
 ```
 
-<h2 id="get-order-history">Get Order History for a user </h2>
+<h2 id="get-order-history">Get Order History</h2>
 `GET /v1/order/order-history`
 
 ```python
@@ -110,3 +355,573 @@ async function getOrderHistory() {
   return await getRequest(endpoint, params);
 }
 ```
+
+<h2 id="get-linked-orders">Get Linked Orders</h2>
+
+`GET /v1/order/linked-orders` 
+
+```python
+# Function to fetch linked orders based on linkId
+def linked_orders():
+link_id = input("Enter the Link Id: ")
+timestamp = str(int(time.time() * 1000))
+linked_orders_url = "https://testnet-fapi.pi42.com/v1/order/linked-orders"
+
+url = f"{linked_orders_url}/{link_id}"
+
+params = {
+'timestamp': timestamp
+}
+query_string = f"timestamp={params['timestamp']}"
+
+signature = generate_signature(api_secret, query_string)
+
+headers = {
+'api-key': api_key,
+'signature': signature,
+'accept': '*/*'
+ }
+try:
+response = requests.get(f"{url}?{query_string}", headers=headers)
+response.raise_for_status()
+response_data = response.json()
+print('Linked orders fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Failed {response.status_code}: {response.text}")
+```
+
+```javascript
+
+// Get Linked Orders
+async function linkedOrders(linkId) {
+  const linkId = "6acd808ba5957340b009-6238-ext"
+  const endpoint = `/v1/order/linked-orders/${linkId}`; // Endpoint for fetching linked orders
+
+// Call the getRequest function (similar to postRequest)
+  return await getRequest(endpoint);
+}
+
+// Fetch Margin History
+async function fetchMarginHistory() {
+ const endpoint = "/v1/order/fetch-margin-history";
+ const pageSize = 100;
+ const sortOrder = "desc";
+ const startTimestamp = "1696425435000";
+ const endTimestamp = "1725451568979";
+ const symbol = "BTCUSDT";
+
+// Prepare query parameters
+ const params = {
+
+// Optional Params
+ pageSize: pageSize.toString(),
+ sortOrder: sortOrder,
+ startTimestamp: startTimestamp,
+ endTimestamp: endTimestamp,
+ symbol: symbol,
+ };
+```
+
+<h2 id="get-margin-history">Fetch Margin History</h2>
+
+`GET /v1/order/fetch-margin-history`
+
+```python
+def fetch_margin_history():
+    endpoint = "/v1/order/fetch-margin-history"
+    symbol = input("Enter the symbol (e.g., BTCUSDT): ").upper()
+    
+    pageSize = 100
+    sortOrder = "desc"
+
+# Generate current timestamp for signing
+ timestamp = str(int(time.time() * 1000))
+
+# Prepare query parameters
+    params = {
+    'pageSize': str(pageSize),
+    'sortOrder': sortOrder,
+    'symbol': symbol,
+    'timestamp': timestamp
+    }
+
+# Convert params to query string
+    query_string = '&'.join([f"{key}={value}" for key, value in params.items()])
+
+# Generate signature
+    signature = generate_signature(api_secret, query_string)
+
+# Headers for the request
+    headers = {
+    'api-key': api_key,
+     'signature': signature,
+    'accept': '*/*'
+    }
+full_url = f"{base_url}{endpoint}?{query_string}"
+
+try:
+# Send the GET request to fetch margin history
+response = requests.get(full_url, headers=headers)
+response.raise_for_status() # Raises an error for 4xx/5xx responses
+response_data = response.json()
+print('Margin history fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Error: {err.response.text if err.response else err}")
+except Exception as e:
+print(f"An unexpected error occurred: {str(e)}")
+```
+
+```javascript
+// Fetch Margin History
+async function fetchMarginHistory() {
+  const endpoint = "/v1/order/fetch-margin-history";
+
+  const pageSize = 100;
+  const sortOrder = "desc";
+  const startTimestamp = "1696425435000";
+  const endTimestamp = "1725451568979";
+  const symbol = "BTCUSDT";
+
+// Prepare query parameters
+  const params = {
+
+// Optional Params
+    pageSize: pageSize.toString(),
+    sortOrder: sortOrder,
+    startTimestamp: startTimestamp,
+    endTimestamp: endTimestamp,
+    symbol: symbol,
+  };
+
+// Call the getRequest function
+  return await getRequest(endpoint, params);
+}
+```
+
+
+<h2 id="get-postions">Get Positions</h2>
+
+`GET /v1/positions`
+
+```python
+# Function to fetch positions
+def fetch_positions():
+position_status = input("Enter position status (open, closed, liquidated): ").upper()
+symbol = input("Enter the trading pair (e.g., BTCINR): ").upper()
+
+if position_status not in ["OPEN", "CLOSED", "LIQUIDATED"]:
+print("Invalid position status. Please enter 'open', 'closed', or 'liquidated'.")
+return
+
+# Optional parameters
+sort_order = "desc" # Default sort order
+page_size = 100 # Default page size
+
+# Prepare the query parameters
+params = {
+'sortOrder': sort_order,
+'pageSize': str(page_size),
+'symbol': symbol,
+  }
+
+# Generate current timestamp
+timestamp = str(int(time.time() * 1000))
+params['timestamp'] = timestamp
+
+# Generate signature based on the parameters
+query_string = '&'.join([f"{key}={value}" for key, value in params.items()])
+signature = generate_signature(api_secret, query_string)
+
+# Headers for the GET request
+headers = {
+'api-key': api_key,
+'signature': signature,
+'accept': '*/*'
+ }
+
+# Construct the full URL including the path parameter for position status
+full_url = f"{base_url}/v1/positions/{position_status}?{query_string}"
+
+try:
+# Send the GET request to fetch positions
+response = requests.get(full_url, headers=headers)
+response.raise_for_status() # Raises an error for 4xx/5xx responses
+response_data = response.json()
+print('Positions fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Error: {err.response.text if err.response else err}")
+except Exception as e:
+print(f"An unexpected error occurred: {str(e)}")
+```
+
+```javascript
+async function fetchPositions() {
+  const endpoint = "/v1/positions/";
+
+  const positionStatus = "OPEN"; // Required parameter
+  const startTimestamp = "1696425435000"; // Optional
+  const endTimestamp = "1725451568979"; // Optional
+  const sortOrder = "desc"; // Optional
+  const pageSize = 100; // Optional
+  const symbol = "BTCINR"; // Optional
+
+  const params = {
+    // Optional Params
+    // pageSize: pageSize.toString(),
+    // sortOrder: sortOrder,
+    // startTimestamp: startTimestamp,
+    // endTimestamp: endTimestamp,
+    // symbol: symbol,
+  };
+  const url = `${endpoint}${positionStatus}`;
+
+// Call the getRequest function
+  return await getRequest(url, params);
+}
+
+```
+
+<h2 id="get-position-status">Get Position Status</h2>
+
+`GET /v1/positions/{positionStatus}`
+
+```python
+def get_positions():
+ position_status = input("Enter position status (open, closed, liquidated): ").upper()
+
+  if position_status not in ["OPEN", "CLOSED", "LIQUIDATED"]:
+  print("Invalid position status. Please enter 'open', 'closed', or 'liquidated'.")
+  return
+
+# Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+# Prepare the query parameters
+    params = {
+    'sortOrder': 'desc',
+    'pageSize': 100,
+    'timestamp': timestamp
+    }
+
+# Convert the params into a query string to sign
+    query_string = f"sortOrder={params['sortOrder']}&pageSize={params['pageSize']}&timestamp=
+    {params['timestamp']}"
+
+# Generate the signature
+ signature = generate_signature(api_secret, query_string)
+
+# Headers for the GET request
+headers = {
+'api-key': api_key,
+'signature': signature,
+'accept': '*/*'
+ }
+
+# Construct the full URL including the path parameter for position status
+full_url = f"{base_url}/v1/positions/{position_status}?sortOrder={params['sortOrder']}&pageSize=
+{params['pageSize']}&timestamp={params['timestamp']}"
+
+try:
+# Send the GET request to fetch positions
+response = requests.get(full_url, headers=headers)
+response.raise_for_status() # Raises an error for 4xx/5xx responses
+response_data = response.json()
+print('Positions fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Error: {err.response.text if err.response else err}")
+except Exception as e:
+print(f"An unexpected error occurred: {str(e)}")
+```
+
+```javascript
+async function getPosition() {
+  const endpoint = "/v1/positions";
+  const positionId = "sample-2c52-45cb-addf-9c1fde92fce5";
+
+  const params = {
+    positionId,
+  };
+
+  return await getRequest(endpoint, params);
+}
+```
+
+<h2 id="trade-history">Get User's Trade History</h2>
+
+`GET /v1/user-data/trade-history`
+
+```javascript
+async function fetchUserTradeHistory() {
+  const endpoint = "/v1/user-data/trade-history";
+  const startTimestamp = "1696425435000"; // Optional
+  const endTimestamp = "1725451568979"; // Optional
+  const sortOrder = "desc"; // Optional
+  const pageSize = 100; // Optional
+  const symbol = "BTCINR"; // Optional
+
+const params = {
+   //Optional Params
+    pageSize: pageSize.toString(),
+    sortOrder: sortOrder,
+    startTimestamp: startTimestamp,
+    endTimestamp: endTimestamp,
+    symbol: symbol,
+  };
+
+// Call the getRequest function
+  return await getRequest(endpoint, params);
+}
+```
+
+```python
+# Function to fetch trade history
+def trade_history():
+    timestamp = str(int(time.time() * 1000))
+    trade_history_url = "https://testnet-fapi.pi42.com/v1/user-data/trade-history"
+
+params = {
+    sortOrder': 'desc',
+    'pageSize': 100,
+    'timestamp': timestamp
+ }
+
+query_string = f"sortOrder={params['sortOrder']}&pageSize={params['pageSize']}&timestamp=
+{params['timestamp']}"
+
+ signature = generate_signature(api_secret, query_string)
+
+ headers = {
+    'api-key': api_key,
+    'signature': signature,
+    'accept': '*/*'
+ }
+
+try:
+    response = requests.get(f"{trade_history_url}?{query_string}", headers=headers)
+    response.raise_for_status()
+    response_data = response.json()
+    print('Trade history fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+    print(f"Failed {response.status_code}: {response.text}")
+```
+
+<h2 id="get-transaction-history">Get User's Transaction History</h2>
+
+`GET/v1/user-data/transaction-history`
+
+Fetches transaction history by sending a GET request to the endpoint.
+
+```python
+def get_transaction_history():
+    # Default values for optional parameters
+    start_timestamp = None
+    end_timestamp = None
+    sort_order = 'desc'
+    page_size = 100
+    symbol = None
+    trade_id = None
+    position_id = None
+
+    # Generate the current timestamp (used as part of the authentication/signing process)
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare query parameters with required and optional fields
+    params = {
+        'sortOrder': sort_order,
+        'pageSize': page_size,
+        'timestamp': timestamp
+    }
+
+    # Include optional parameters only if they are provided
+    if start_timestamp:
+        params['startTimestamp'] = start_timestamp
+    if end_timestamp:
+        params['endTimestamp'] = end_timestamp
+    if symbol:
+        params['symbol'] = symbol
+    if trade_id:
+        params['tradeId'] = trade_id
+    if position_id:
+        params['positionId'] = position_id
+
+    # Convert the parameters to a query string to be signed
+    query_string = '&'.join([f"{key}={value}" for key, value in params.items()])
+
+    # Generate the signature (assuming `generate_signature` is defined)
+    signature = generate_signature(api_secret, query_string)
+
+    # Headers for the GET request
+    headers = {
+        'api-key': api_key,
+        'signature': signature,
+        'accept': '*/*'
+    }
+
+    # Construct the full URL with the query string
+    full_url = f"{base_url}/v1/user-data/transaction-history?{query_string}"
+
+    try:
+        # Send the GET request to fetch transaction history
+        response = requests.get(full_url, headers=headers)
+        response.raise_for_status()  # Raises an error for HTTP 4xx/5xx responses
+        response_data = response.json()
+        print('Transaction history fetched successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        # Handle specific HTTP errors
+        print(f"HTTP Error: {err.response.text if err.response else 'No response text'}")
+    except Exception as e:
+        # Handle any other exceptions
+        print(f"Failed {response.status_code}: {response.text}")
+```
+
+```javascript
+async function fetchUserTransactionHistory() {
+    const endpoint = "/v1/user-data/transaction-history";
+
+    // Optional parameters for filtering and sorting the transaction history
+    const startTimestamp = "1696425435000"; // Start timestamp in milliseconds
+    const endTimestamp = "1725451568979";   // End timestamp in milliseconds
+    const sortOrder = "desc";               // Sorting order: "asc" or "desc"
+    const pageSize = 100;                   // Number of records per page
+    const symbol = "BTCINR";                // Trading symbol, e.g., "BTCINR"
+    const tradeId = 12;                     // Specific trade ID to filter
+    const positionId = "3d5f302b-2c52-45cb-addf-9c1fde92fce5"; // Specific position ID
+
+    // Construct the query parameters object
+    const params = {
+        pageSize: pageSize.toString(),
+        sortOrder: sortOrder,
+        startTimestamp: startTimestamp,
+        endTimestamp: endTimestamp,
+        symbol: symbol,
+        tradeId: tradeId,
+        positionId: positionId,
+    };
+
+    // Call the getRequest function with the endpoint and query parameters
+    return await getRequest(endpoint, params);
+}
+```
+
+<h2 id='exchange-update-leverage'>Update Leverage</h2>
+
+`POST /v1/exchange/update/leverage`
+ 
+Update the leverage preference for a specific trading contract
+
+```javascript
+async function updateLeverage() {
+    const endpoint = "/v1/exchange/update/leverage";
+
+    const leverage = 10;
+    const contractName = "BTCINR";
+
+    // Prepare request payload
+    const params = {
+        leverage: leverage,       // Ensure leverage is an integer
+        contractName: contractName,
+    };
+
+    // Call the postRequest function
+    return await postRequest(endpoint, params);
+}
+```
+```python
+def update_leverage():
+  leverage = int(input("Enter the leverage value: "))
+  contract_name = input("Enter the contract name: ")
+
+  # Generate the current timestamp
+  timestamp = str(int(time.time() * 1000))
+
+  # Prepare the request body (JSON)
+  params = {
+      'leverage': int(leverage),
+      'contractName': contract_name,
+      'timestamp': timestamp
+  }
+
+  # Convert the request body to a JSON string for signing
+  data_to_sign = json.dumps(params, separators=(',', ':'))
+
+  # Generate the signature
+  signature = generate_signature(api_secret, data_to_sign)
+
+  # Headers for the POST request
+  headers = {
+      'api-key': api_key,
+      'Content-Type': 'application/json',
+      'signature': signature
+  }
+
+  # Construct the full URL
+  update_leverage_url = f"{base_url}/v1/exchange/update/leverage"
+
+  try:
+      # Send the POST request to update the leverage
+      response = requests.post(update_leverage_url, json=params, headers=headers)
+      response.raise_for_status() # Raises an error for 4xx/5xx responses
+      response_data = response.json()
+      print('Leverage updated successfully:', json.dumps(response_data, indent=4))
+  except requests.exceptions.HTTPError as err:
+      print(f"Error: {err.response.text if err.response else err}")
+  except Exception as e:
+      print(f"An unexpected error occurred: {str(e)}")
+
+
+```
+
+
+<h2 id="delete-order"> Deleting an Order</h2>
+
+`DELETE /v1/order/delete-order`
+
+Delete an existing order based on its clientOrderId
+
+```javascript
+async function deleteOrder() {
+    const endpoint = "/v1/order/delete-order";
+    const clientOrderId = "a9c5ba9893c99828e4b5-6238-ext";
+    const timestamp = Date.now().toString();
+
+    // Prepare request payload
+    const params = {
+        clientOrderId: clientOrderId,
+        timestamp: timestamp,
+    };
+
+    // Call the deleteRequest function
+    return await deleteRequest(endpoint, params);
+}
+```
+
+```python
+def delete_order():
+    client_order_id = input("Enter the clientOrderId to delete: ")
+    delete_order_url = "https://testnet-fapi.pi42.com/v1/order/delete-order"
+
+    timestamp = str(int(time.time() * 1000))
+
+    params = {
+        'clientOrderId': client_order_id,
+        'timestamp': timestamp
+    }
+
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+    signature = generate_signature(api_secret, data_to_sign)
+
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature,
+    }
+
+    try:
+        response = requests.delete(delete_order_url, json=params, headers=headers)
+        response.raise_for_status()
+        print(f"Order with clientOrderId {client_order_id} deleted successfully.")
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+```
+
+
