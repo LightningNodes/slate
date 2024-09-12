@@ -1,0 +1,29 @@
+<h1 id='rate-limits'>API Rate Limits</h1>
+
+<p>Rate limits are mechanisms used to control the frequency of requests that can be made to an API. These rate limits are essential for maintaining optimal performance and avoiding server overloads, ensuring a smooth and reliable user experience across all API interactions.</p>
+
+<p>Different endpoints may have varying rate limits depending on their purpose and the resources they consume.</p>
+
+<table><thead>
+<tr>
+<th>Endpoint</th>
+<th>Interval</th>
+<th>Limit</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>v1/order/place-order</td>
+<td>1 second (1s)</td>
+<td>20 requests</td>
+</tr>
+<tr>
+<td>v1/order/delete-order</td>
+<td>10 seconds (10s)</td>
+<td>5 requests </td>
+</tr>
+<tr>
+<td>All other endpoints</td>
+<td>10 seconds (10s)</td>
+<td>10 requests </td>
+</tr>
+</tbody></table>
