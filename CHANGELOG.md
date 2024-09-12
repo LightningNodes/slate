@@ -1,5 +1,7 @@
 # Changelog
 
+All the changes that have been done in the releases so far.
+
 ## Version 2.13.1
 
 *January 31, 2023*
@@ -297,11 +299,11 @@ Instead of `rake build` and `rake deploy`, you should now run `bundle exec middl
 - Fix variable leak and update search algorithms
 - Update Python examples to be valid Python
 - Update gems
-- More misc. bugfixes of Javascript errors
+- More miscalleneous bugfixes of Javascript errors
 - Add Dockerfile
 - Remove unused gems
 - Optimize images, fonts, and generated asset files
-- Add chinese font support
+- Add support for Chinese font
 - Remove RedCarpet header ID patch
 - Update language tabs to not disturb existing query strings
 

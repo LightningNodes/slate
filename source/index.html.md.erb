@@ -2,8 +2,6 @@
 title: Pi42 API Reference Documentation
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
-  - shell
-  - ruby
   - python
   - javascript
 
@@ -22,7 +20,12 @@ meta:
 
 <%= partial  "./api/introduction/index.md.erb" %>
 
+<%= partial  "./api/rate-limits.md.erb" %>
+
 <%= partial  "./api/authentication/index.md.erb" %>
+
+
+<%= partial  "./api/orders/index.md.erb" %>
 
 <%= partial  "./api/public-endpoints/index.md.erb" %>
 
