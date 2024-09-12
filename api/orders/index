@@ -1,6 +1,233 @@
 <h1 id='orders'>Orders</h1>
 
-<h2 id="get-open-orders">Get Open Orders for a user </h2>
+<h2 id="place-order">Place an Order </h2>
+
+<p><code>POST /v1/order/place-order</code></p>
+
+<p>Place an order (either a market order or a limit order) on Pi42&#39;s trading platform.</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Market Order</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">placeType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POSITION</span><span class="dl">"</span><span class="p">,</span>       <span class="c1">// Indicates the type of order placement (e.g., POSITION or ORDER_FORM)</span>
+        <span class="na">quantity</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>             <span class="c1">// Quantity of the asset to be traded</span>
+        <span class="na">side</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SELL</span><span class="dl">"</span><span class="p">,</span>                <span class="c1">// Order side, either "BUY" or "SELL"</span>
+        <span class="na">symbol</span><span class="p">:</span> <span class="dl">"</span><span class="s2">BTCUSDT</span><span class="dl">"</span><span class="p">,</span>           <span class="c1">// Trading pair, e.g., Bitcoin to USDT</span>
+        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">,</span>              <span class="c1">// Order type, either "MARKET" or "LIMIT"</span>
+        <span class="na">reduceOnly</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>           <span class="c1">// Whether to reduce an existing position only</span>
+        <span class="na">marginAsset</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INR</span><span class="dl">"</span><span class="p">,</span>          <span class="c1">// The asset used as margin</span>
+        <span class="na">deviceType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">WEB</span><span class="dl">"</span><span class="p">,</span>           <span class="c1">// Indicates the device type (WEB, MOBILE, etc.)</span>
+        <span class="na">userCategory</span><span class="p">:</span> <span class="dl">"</span><span class="s2">EXTERNAL</span><span class="dl">"</span><span class="p">,</span>    <span class="c1">// Category of the user (EXTERNAL, INTERNAL, etc.)</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Limit order: Uncomment and use this block if placing a limit order instead of a market order</span>
+    <span class="c1">// const params = {</span>
+    <span class="c1">//     placeType: "ORDER_FORM",</span>
+    <span class="c1">//     quantity: 0.003,</span>
+    <span class="c1">//     reduceOnly: false,</span>
+    <span class="c1">//     side: "BUY",</span>
+    <span class="c1">//     symbol: "BTCUSDT",</span>
+    <span class="c1">//     type: "LIMIT",</span>
+    <span class="c1">//     price: 48000,               // Price at which the limit order should be executed</span>
+    <span class="c1">//     positionSide: "BOTH",</span>
+    <span class="c1">//     timeInForce: "GTC",        // Good-Til-Canceled, other options could be IOC (Immediate-Or-Cancel), etc.</span>
+    <span class="c1">//     isolated: true,</span>
+    <span class="c1">//     newOrderRespType: "ACK",</span>
+    <span class="c1">//     positionId: "string",</span>
+    <span class="c1">//     stopPrice: 0,              // Stop price for a stop order (not needed for a regular limit order)</span>
+    <span class="c1">//     refId: "dsfssa",           // Reference ID for tracking purposes</span>
+    <span class="c1">//     marginAsset: "INR",</span>
+    <span class="c1">// };</span>
+
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/place-order</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// API endpoint to place the order</span>
+
+    <span class="c1">// Call the postRequest function to send the POST request with the order parameters</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">place_order</span><span class="p">():</span>
+    <span class="c1"># Generate the current timestamp in milliseconds
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># Define the order parameters
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>        <span class="c1"># Current timestamp in milliseconds
+</span>        <span class="s">'placeType'</span><span class="p">:</span> <span class="s">'ORDER_FORM'</span><span class="p">,</span>     <span class="c1"># Type of order placement, e.g., 'ORDER_FORM'
+</span>        <span class="s">'quantity'</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">,</span>             <span class="c1"># Quantity of the asset to trade
+</span>        <span class="s">'side'</span><span class="p">:</span> <span class="s">'BUY'</span><span class="p">,</span>                 <span class="c1"># Order side, either 'BUY' or 'SELL'
+</span>        <span class="s">'symbol'</span><span class="p">:</span> <span class="s">'BTCUSDT'</span><span class="p">,</span>           <span class="c1"># Trading pair, e.g., Bitcoin to USDT
+</span>        <span class="s">'type'</span><span class="p">:</span> <span class="s">'MARKET'</span><span class="p">,</span>              <span class="c1"># Order type, either 'MARKET' or 'LIMIT'
+</span>        <span class="s">'reduceOnly'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>           <span class="c1"># Whether to reduce an existing position only
+</span>        <span class="s">'marginAsset'</span><span class="p">:</span> <span class="s">'INR'</span><span class="p">,</span>          <span class="c1"># The asset used as margin (INR in this case)
+</span>        <span class="s">'deviceType'</span><span class="p">:</span> <span class="s">'WEB'</span><span class="p">,</span>           <span class="c1"># Device type (e.g., WEB, MOBILE)
+</span>        <span class="s">'userCategory'</span><span class="p">:</span> <span class="s">'EXTERNAL'</span><span class="p">,</span>    <span class="c1"># User category (e.g., EXTERNAL, INTERNAL)
+</span>        <span class="s">'price'</span><span class="p">:</span> <span class="mi">50000</span><span class="p">,</span>                <span class="c1"># Price for the limit order (included here but irrelevant for market orders)
+</span>    <span class="p">}</span>
+
+    <span class="c1"># Convert the parameters to a JSON string to sign
+</span>    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+
+    <span class="c1"># Generate the signature for authentication
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="c1"># Define the headers including the API key and the signature
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Send the POST request to place the order
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/order/place-order'</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+        <span class="c1"># Raise an HTTPError if the response status is 4xx or 5xx
+</span>        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+
+        <span class="c1"># Parse the JSON response data
+</span>        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+
+        <span class="c1"># Print the success message with the order details
+</span>        <span class="k">print</span><span class="p">(</span><span class="s">'Order placed successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="c1"># Handle HTTP errors specifically
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Handle any other unexpected errors
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="add-margin"> Add Margin </h2>
+
+<p><code>POST /v1/order/add-margin</code></p>
+
+<p>Add margin to an existing trading position.</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">addMargin</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Define the API endpoint for adding margin</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/add-margin</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Define the fixed values for positionId and amount</span>
+    <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">18c6c979-b089-4e67-b627-4c2072d0d5cb</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// Unique identifier for the position</span>
+    <span class="kd">const</span> <span class="nx">amount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// The amount of margin to be added</span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">positionId</span><span class="p">:</span> <span class="nx">positionId</span><span class="p">,</span>  <span class="c1">// ID of the position to which margin is being added</span>
+        <span class="na">amount</span><span class="p">:</span> <span class="nx">amount</span><span class="p">,</span>          <span class="c1">// Amount of margin to add</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the postRequest function to send the POST request to the API</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">add_margin</span><span class="p">():</span>
+    <span class="n">position_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the positionId: "</span><span class="p">)</span>
+    <span class="n">amount_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the amount: "</span><span class="p">)</span>
+
+    <span class="n">add_margin_url</span> <span class="o">=</span> <span class="s">"https://testnet-fapi.pi42.com/v1/order/add-margin"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">amount_input</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">amount_input</span><span class="p">)</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'positionId'</span><span class="p">:</span> <span class="n">position_id</span><span class="p">,</span>
+        <span class="s">'amount'</span><span class="p">:</span> <span class="n">amount</span><span class="p">,</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">add_margin_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Margin added successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+</code></pre></div>
+<h2 id="reduce-margin">Reduce Margin</h2>
+
+<p><code>POST /v1/order/reduce-margin</code></p>
+
+<p>Reduce the margin on an existing trading position.</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">reduceMargin</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Define the API endpoint for reducing margin</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/reduce-margin</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Define the fixed values for positionId and amount</span>
+    <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">18c6c979-b089-4e67-b627-4c2072d0d5cb</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// Unique identifier for the position</span>
+    <span class="kd">const</span> <span class="nx">amount</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>  <span class="c1">// The amount of margin to be reduced</span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">positionId</span><span class="p">:</span> <span class="nx">positionId</span><span class="p">,</span>  <span class="c1">// ID of the position from which margin is being reduced</span>
+        <span class="na">amount</span><span class="p">:</span> <span class="nx">amount</span><span class="p">,</span>          <span class="c1">// Amount of margin to reduce</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the postRequest function to send the POST request to the API</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">reduce_margin</span><span class="p">():</span>
+    <span class="c1"># Collect position ID and amount to reduce from user input
+</span>    <span class="n">position_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the positionId: "</span><span class="p">)</span>
+    <span class="n">amountInput</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the amount to reduce: "</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Convert input to integer or float as necessary
+</span>        <span class="n">amount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">amountInput</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">amount</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">amountInput</span><span class="p">)</span>
+
+    <span class="c1"># Generate current timestamp in milliseconds
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># Prepare the request payload (JSON)
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'positionId'</span><span class="p">:</span> <span class="n">position_id</span><span class="p">,</span>
+        <span class="s">'amount'</span><span class="p">:</span> <span class="n">amount</span><span class="p">,</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Convert the payload to a JSON string for signature
+</span>    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+
+    <span class="c1"># Generate the signature using a helper function
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="c1"># Set the headers for the POST request
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Construct the full API endpoint URL
+</span>    <span class="n">reduce_margin_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/order/reduce-margin"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Send the POST request to reduce margin
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">reduce_margin_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an error for HTTP responses with 4xx/5xx status codes
+</span>        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Margin reduced successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="get-open-orders">Get Open Orders</h2>
 
 <p><code>GET /v1/order/open-orders</code></p>
 
@@ -53,7 +280,7 @@
 <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<h2 id="get-order-history">Get Order History for a user </h2>
+<h2 id="get-order-history">Get Order History</h2>
 
 <p><code>GET /v1/order/order-history</code></p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch and display order history
@@ -102,4 +329,523 @@
   <span class="c1">// Call the postRequest function</span>
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
+</code></pre></div>
+<h2 id="get-linked-orders">Get Linked Orders</h2>
+
+<p><code>GET /v1/order/linked-orders</code> </p>
+<div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch linked orders based on linkId
+</span><span class="k">def</span> <span class="nf">linked_orders</span><span class="p">():</span>
+<span class="n">link_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the Link Id: "</span><span class="p">)</span>
+<span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">linked_orders_url</span> <span class="o">=</span> <span class="s">"https://testnet-fapi.pi42.com/v1/order/linked-orders"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">linked_orders_url</span><span class="si">}</span><span class="s">/</span><span class="si">{</span><span class="n">link_id</span><span class="si">}</span><span class="s">"</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+<span class="p">}</span>
+<span class="n">query_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"timestamp=</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'timestamp'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span>
+
+<span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">query_string</span><span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+<span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+<span class="s">'accept'</span><span class="p">:</span> <span class="s">'*/*'</span>
+ <span class="p">}</span>
+<span class="k">try</span><span class="p">:</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s">?</span><span class="si">{</span><span class="n">query_string</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Linked orders fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code>
+<span class="c1">// Get Linked Orders</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">linkedOrders</span><span class="p">(</span><span class="nx">linkId</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">linkId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">6acd808ba5957340b009-6238-ext</span><span class="dl">"</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="s2">`/v1/order/linked-orders/</span><span class="p">${</span><span class="nx">linkId</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span> <span class="c1">// Endpoint for fetching linked orders</span>
+
+<span class="c1">// Call the getRequest function (similar to postRequest)</span>
+  <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Fetch Margin History</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchMarginHistory</span><span class="p">()</span> <span class="p">{</span>
+ <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/fetch-margin-history</span><span class="dl">"</span><span class="p">;</span>
+ <span class="kd">const</span> <span class="nx">pageSize</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+ <span class="kd">const</span> <span class="nx">sortOrder</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">;</span>
+ <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span>
+ <span class="kd">const</span> <span class="nx">endTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1725451568979</span><span class="dl">"</span><span class="p">;</span>
+ <span class="kd">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCUSDT</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// Prepare query parameters</span>
+ <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="c1">// Optional Params</span>
+ <span class="na">pageSize</span><span class="p">:</span> <span class="nx">pageSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+ <span class="na">sortOrder</span><span class="p">:</span> <span class="nx">sortOrder</span><span class="p">,</span>
+ <span class="na">startTimestamp</span><span class="p">:</span> <span class="nx">startTimestamp</span><span class="p">,</span>
+ <span class="na">endTimestamp</span><span class="p">:</span> <span class="nx">endTimestamp</span><span class="p">,</span>
+ <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
+ <span class="p">};</span>
+</code></pre></div>
+<h2 id="get-margin-history">Fetch Margin History</h2>
+
+<p><code>GET /v1/order/fetch-margin-history</code></p>
+<div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">fetch_margin_history</span><span class="p">():</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"/v1/order/fetch-margin-history"</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the symbol (e.g., BTCUSDT): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="n">pageSize</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">sortOrder</span> <span class="o">=</span> <span class="s">"desc"</span>
+
+<span class="c1"># Generate current timestamp for signing
+</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+<span class="c1"># Prepare query parameters
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'pageSize'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">pageSize</span><span class="p">),</span>
+    <span class="s">'sortOrder'</span><span class="p">:</span> <span class="n">sortOrder</span><span class="p">,</span>
+    <span class="s">'symbol'</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+    <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+<span class="c1"># Convert params to query string
+</span>    <span class="n">query_string</span> <span class="o">=</span> <span class="s">'&amp;'</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="p">.</span><span class="n">items</span><span class="p">()])</span>
+
+<span class="c1"># Generate signature
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">query_string</span><span class="p">)</span>
+
+<span class="c1"># Headers for the request
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+     <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+    <span class="s">'accept'</span><span class="p">:</span> <span class="s">'*/*'</span>
+    <span class="p">}</span>
+<span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}{</span><span class="n">endpoint</span><span class="si">}</span><span class="s">?</span><span class="si">{</span><span class="n">query_string</span><span class="si">}</span><span class="s">"</span>
+
+<span class="k">try</span><span class="p">:</span>
+<span class="c1"># Send the GET request to fetch margin history
+</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span> <span class="c1"># Raises an error for 4xx/5xx responses
+</span><span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Margin history fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Fetch Margin History</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchMarginHistory</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/fetch-margin-history</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="kd">const</span> <span class="nx">pageSize</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">sortOrder</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">endTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1725451568979</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCUSDT</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="c1">// Prepare query parameters</span>
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="c1">// Optional Params</span>
+    <span class="na">pageSize</span><span class="p">:</span> <span class="nx">pageSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+    <span class="na">sortOrder</span><span class="p">:</span> <span class="nx">sortOrder</span><span class="p">,</span>
+    <span class="na">startTimestamp</span><span class="p">:</span> <span class="nx">startTimestamp</span><span class="p">,</span>
+    <span class="na">endTimestamp</span><span class="p">:</span> <span class="nx">endTimestamp</span><span class="p">,</span>
+    <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
+  <span class="p">};</span>
+
+<span class="c1">// Call the getRequest function</span>
+  <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="get-postions">Get Positions</h2>
+
+<p><code>GET /v1/positions</code></p>
+<div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch positions
+</span><span class="k">def</span> <span class="nf">fetch_positions</span><span class="p">():</span>
+<span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
+<span class="n">symbol</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the trading pair (e.g., BTCINR): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">position_status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"OPEN"</span><span class="p">,</span> <span class="s">"CLOSED"</span><span class="p">,</span> <span class="s">"LIQUIDATED"</span><span class="p">]:</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Invalid position status. Please enter 'open', 'closed', or 'liquidated'."</span><span class="p">)</span>
+<span class="k">return</span>
+
+<span class="c1"># Optional parameters
+</span><span class="n">sort_order</span> <span class="o">=</span> <span class="s">"desc"</span> <span class="c1"># Default sort order
+</span><span class="n">page_size</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># Default page size
+</span>
+<span class="c1"># Prepare the query parameters
+</span><span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">'sortOrder'</span><span class="p">:</span> <span class="n">sort_order</span><span class="p">,</span>
+<span class="s">'pageSize'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">page_size</span><span class="p">),</span>
+<span class="s">'symbol'</span><span class="p">:</span> <span class="n">symbol</span><span class="p">,</span>
+  <span class="p">}</span>
+
+<span class="c1"># Generate current timestamp
+</span><span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">params</span><span class="p">[</span><span class="s">'timestamp'</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp</span>
+
+<span class="c1"># Generate signature based on the parameters
+</span><span class="n">query_string</span> <span class="o">=</span> <span class="s">'&amp;'</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="p">.</span><span class="n">items</span><span class="p">()])</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">query_string</span><span class="p">)</span>
+
+<span class="c1"># Headers for the GET request
+</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+<span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+<span class="s">'accept'</span><span class="p">:</span> <span class="s">'*/*'</span>
+ <span class="p">}</span>
+
+<span class="c1"># Construct the full URL including the path parameter for position status
+</span><span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/positions/</span><span class="si">{</span><span class="n">position_status</span><span class="si">}</span><span class="s">?</span><span class="si">{</span><span class="n">query_string</span><span class="si">}</span><span class="s">"</span>
+
+<span class="k">try</span><span class="p">:</span>
+<span class="c1"># Send the GET request to fetch positions
+</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span> <span class="c1"># Raises an error for 4xx/5xx responses
+</span><span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Positions fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchPositions</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/positions/</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="kd">const</span> <span class="nx">positionStatus</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">OPEN</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Required parameter</span>
+  <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">endTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1725451568979</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">sortOrder</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">pageSize</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// Optional Params</span>
+    <span class="c1">// pageSize: pageSize.toString(),</span>
+    <span class="c1">// sortOrder: sortOrder,</span>
+    <span class="c1">// startTimestamp: startTimestamp,</span>
+    <span class="c1">// endTimestamp: endTimestamp,</span>
+    <span class="c1">// symbol: symbol,</span>
+  <span class="p">};</span>
+  <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">endpoint</span><span class="p">}${</span><span class="nx">positionStatus</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+
+<span class="c1">// Call the getRequest function</span>
+  <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre></div>
+<h2 id="get-position-status">Get Position Status</h2>
+
+<p><code>GET /v1/positions/{positionStatus}</code></p>
+<div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_positions</span><span class="p">():</span>
+ <span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
+
+  <span class="k">if</span> <span class="n">position_status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"OPEN"</span><span class="p">,</span> <span class="s">"CLOSED"</span><span class="p">,</span> <span class="s">"LIQUIDATED"</span><span class="p">]:</span>
+  <span class="k">print</span><span class="p">(</span><span class="s">"Invalid position status. Please enter 'open', 'closed', or 'liquidated'."</span><span class="p">)</span>
+  <span class="k">return</span>
+
+<span class="c1"># Generate the current timestamp
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+<span class="c1"># Prepare the query parameters
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'sortOrder'</span><span class="p">:</span> <span class="s">'desc'</span><span class="p">,</span>
+    <span class="s">'pageSize'</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+<span class="c1"># Convert the params into a query string to sign
+</span>    <span class="n">query_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"sortOrder=</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'sortOrder'</span><span class="p">]</span><span class="si">}</span><span class="s">&amp;pageSize=</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'pageSize'</span><span class="p">]</span><span class="si">}</span><span class="s">&amp;timestamp=
+    </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'timestamp'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span>
+
+<span class="c1"># Generate the signature
+</span> <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">query_string</span><span class="p">)</span>
+
+<span class="c1"># Headers for the GET request
+</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+<span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+<span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+<span class="s">'accept'</span><span class="p">:</span> <span class="s">'*/*'</span>
+ <span class="p">}</span>
+
+<span class="c1"># Construct the full URL including the path parameter for position status
+</span><span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/positions/</span><span class="si">{</span><span class="n">position_status</span><span class="si">}</span><span class="s">?sortOrder=</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'sortOrder'</span><span class="p">]</span><span class="si">}</span><span class="s">&amp;pageSize=
+</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'pageSize'</span><span class="p">]</span><span class="si">}</span><span class="s">&amp;timestamp=</span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s">'timestamp'</span><span class="p">]</span><span class="si">}</span><span class="s">"</span>
+
+<span class="k">try</span><span class="p">:</span>
+<span class="c1"># Send the GET request to fetch positions
+</span><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+<span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span> <span class="c1"># Raises an error for 4xx/5xx responses
+</span><span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'Positions fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getPosition</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/positions</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">sample-2c52-45cb-addf-9c1fde92fce5</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">positionId</span><span class="p">,</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id="trade-history">Get User's Trade History</h2>
+
+<p><code>GET /v1/user-data/trade-history</code></p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTradeHistory</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/user-data/trade-history</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">endTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1725451568979</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">sortOrder</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">pageSize</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="c1">// Optional</span>
+  <span class="kd">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
+
+<span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="c1">//Optional Params</span>
+    <span class="na">pageSize</span><span class="p">:</span> <span class="nx">pageSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+    <span class="na">sortOrder</span><span class="p">:</span> <span class="nx">sortOrder</span><span class="p">,</span>
+    <span class="na">startTimestamp</span><span class="p">:</span> <span class="nx">startTimestamp</span><span class="p">,</span>
+    <span class="na">endTimestamp</span><span class="p">:</span> <span class="nx">endTimestamp</span><span class="p">,</span>
+    <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
+  <span class="p">};</span>
+
+<span class="c1">// Call the getRequest function</span>
+  <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch trade history
+</span><span class="k">def</span> <span class="nf">trade_history</span><span class="p">():</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+    <span class="n">trade_history_url</span> <span class="o">=</span> <span class="s">"https://testnet-fapi.pi42.com/v1/user-data/trade-history"</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">sortOrder</span><span class="s">': '</span><span class="n">desc</span><span class="s">',
+    '</span><span class="n">pageSize</span><span class="s">': 100,
+    '</span><span class="n">timestamp</span><span class="s">': timestamp
+ }
+
+query_string = f"sortOrder={params['</span><span class="n">sortOrder</span><span class="s">']}&amp;pageSize={params['</span><span class="n">pageSize</span><span class="s">']}&amp;timestamp=
+{params['</span><span class="n">timestamp</span><span class="s">']}"
+
+ signature = generate_signature(api_secret, query_string)
+
+ headers = {
+    '</span><span class="n">api</span><span class="o">-</span><span class="n">key</span><span class="s">': api_key,
+    '</span><span class="n">signature</span><span class="s">': signature,
+    '</span><span class="n">accept</span><span class="s">': '</span><span class="o">*/*</span><span class="s">'
+ }
+
+try:
+    response = requests.get(f"{trade_history_url}?{query_string}", headers=headers)
+    response.raise_for_status()
+    response_data = response.json()
+    print('</span><span class="n">Trade</span> <span class="n">history</span> <span class="n">fetched</span> <span class="n">successfully</span><span class="p">:</span><span class="s">', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+    print(f"Failed {response.status_code}: {response.text}")
+</span></code></pre></div>
+<h2 id="get-transaction-history">Get User's Transaction History</h2>
+
+<p><code>GET/v1/user-data/transaction-history</code></p>
+
+<p>Fetches transaction history by sending a GET request to the endpoint.</p>
+<div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_transaction_history</span><span class="p">():</span>
+    <span class="c1"># Default values for optional parameters
+</span>    <span class="n">start_timestamp</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">end_timestamp</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">sort_order</span> <span class="o">=</span> <span class="s">'desc'</span>
+    <span class="n">page_size</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">symbol</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">trade_id</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">position_id</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="c1"># Generate the current timestamp (used as part of the authentication/signing process)
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># Prepare query parameters with required and optional fields
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'sortOrder'</span><span class="p">:</span> <span class="n">sort_order</span><span class="p">,</span>
+        <span class="s">'pageSize'</span><span class="p">:</span> <span class="n">page_size</span><span class="p">,</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Include optional parameters only if they are provided
+</span>    <span class="k">if</span> <span class="n">start_timestamp</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">'startTimestamp'</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_timestamp</span>
+    <span class="k">if</span> <span class="n">end_timestamp</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">'endTimestamp'</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_timestamp</span>
+    <span class="k">if</span> <span class="n">symbol</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">'symbol'</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbol</span>
+    <span class="k">if</span> <span class="n">trade_id</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">'tradeId'</span><span class="p">]</span> <span class="o">=</span> <span class="n">trade_id</span>
+    <span class="k">if</span> <span class="n">position_id</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s">'positionId'</span><span class="p">]</span> <span class="o">=</span> <span class="n">position_id</span>
+
+    <span class="c1"># Convert the parameters to a query string to be signed
+</span>    <span class="n">query_string</span> <span class="o">=</span> <span class="s">'&amp;'</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s">"</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="p">.</span><span class="n">items</span><span class="p">()])</span>
+
+    <span class="c1"># Generate the signature (assuming `generate_signature` is defined)
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">query_string</span><span class="p">)</span>
+
+    <span class="c1"># Headers for the GET request
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+        <span class="s">'accept'</span><span class="p">:</span> <span class="s">'*/*'</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Construct the full URL with the query string
+</span>    <span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/user-data/transaction-history?</span><span class="si">{</span><span class="n">query_string</span><span class="si">}</span><span class="s">"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Send the GET request to fetch transaction history
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an error for HTTP 4xx/5xx responses
+</span>        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Transaction history fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="c1"># Handle specific HTTP errors
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"HTTP Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="s">'No response text'</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Handle any other exceptions
+</span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTransactionHistory</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/user-data/transaction-history</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Optional parameters for filtering and sorting the transaction history</span>
+    <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Start timestamp in milliseconds</span>
+    <span class="kd">const</span> <span class="nx">endTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1725451568979</span><span class="dl">"</span><span class="p">;</span>   <span class="c1">// End timestamp in milliseconds</span>
+    <span class="kd">const</span> <span class="nx">sortOrder</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">desc</span><span class="dl">"</span><span class="p">;</span>               <span class="c1">// Sorting order: "asc" or "desc"</span>
+    <span class="kd">const</span> <span class="nx">pageSize</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>                   <span class="c1">// Number of records per page</span>
+    <span class="kd">const</span> <span class="nx">symbol</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>                <span class="c1">// Trading symbol, e.g., "BTCINR"</span>
+    <span class="kd">const</span> <span class="nx">tradeId</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>                     <span class="c1">// Specific trade ID to filter</span>
+    <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">3d5f302b-2c52-45cb-addf-9c1fde92fce5</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Specific position ID</span>
+
+    <span class="c1">// Construct the query parameters object</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">pageSize</span><span class="p">:</span> <span class="nx">pageSize</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+        <span class="na">sortOrder</span><span class="p">:</span> <span class="nx">sortOrder</span><span class="p">,</span>
+        <span class="na">startTimestamp</span><span class="p">:</span> <span class="nx">startTimestamp</span><span class="p">,</span>
+        <span class="na">endTimestamp</span><span class="p">:</span> <span class="nx">endTimestamp</span><span class="p">,</span>
+        <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
+        <span class="na">tradeId</span><span class="p">:</span> <span class="nx">tradeId</span><span class="p">,</span>
+        <span class="na">positionId</span><span class="p">:</span> <span class="nx">positionId</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the getRequest function with the endpoint and query parameters</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h2 id='exchange-update-leverage'>Update Leverage</h2>
+
+<p><code>POST /v1/exchange/update/leverage</code></p>
+
+<p>Update the leverage preference for a specific trading contract</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">updateLeverage</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/exchange/update/leverage</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="kd">const</span> <span class="nx">leverage</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">contractName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">leverage</span><span class="p">:</span> <span class="nx">leverage</span><span class="p">,</span>       <span class="c1">// Ensure leverage is an integer</span>
+        <span class="na">contractName</span><span class="p">:</span> <span class="nx">contractName</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the postRequest function</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">update_leverage</span><span class="p">():</span>
+  <span class="n">leverage</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s">"Enter the leverage value: "</span><span class="p">))</span>
+  <span class="n">contract_name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the contract name: "</span><span class="p">)</span>
+
+  <span class="c1"># Generate the current timestamp
+</span>  <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+  <span class="c1"># Prepare the request body (JSON)
+</span>  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s">'leverage'</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">leverage</span><span class="p">),</span>
+      <span class="s">'contractName'</span><span class="p">:</span> <span class="n">contract_name</span><span class="p">,</span>
+      <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+  <span class="p">}</span>
+
+  <span class="c1"># Convert the request body to a JSON string for signing
+</span>  <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+
+  <span class="c1"># Generate the signature
+</span>  <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+  <span class="c1"># Headers for the POST request
+</span>  <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+      <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+      <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span>
+  <span class="p">}</span>
+
+  <span class="c1"># Construct the full URL
+</span>  <span class="n">update_leverage_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/exchange/update/leverage"</span>
+
+  <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># Send the POST request to update the leverage
+</span>      <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">update_leverage_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+      <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span> <span class="c1"># Raises an error for 4xx/5xx responses
+</span>      <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'Leverage updated successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+  <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+
+
+</code></pre></div>
+<h2 id="delete-order"> Deleting an Order</h2>
+
+<p><code>DELETE /v1/order/delete-order</code></p>
+
+<p>Delete an existing order based on its clientOrderId</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">deleteOrder</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/delete-order</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">clientOrderId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">a9c5ba9893c99828e4b5-6238-ext</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">clientOrderId</span><span class="p">:</span> <span class="nx">clientOrderId</span><span class="p">,</span>
+        <span class="na">timestamp</span><span class="p">:</span> <span class="nx">timestamp</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the deleteRequest function</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">deleteRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">delete_order</span><span class="p">():</span>
+    <span class="n">client_order_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the clientOrderId to delete: "</span><span class="p">)</span>
+    <span class="n">delete_order_url</span> <span class="o">=</span> <span class="s">"https://testnet-fapi.pi42.com/v1/order/delete-order"</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'clientOrderId'</span><span class="p">:</span> <span class="n">client_order_id</span><span class="p">,</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="n">delete_order_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Order with clientOrderId </span><span class="si">{</span><span class="n">client_order_id</span><span class="si">}</span><span class="s"> deleted successfully."</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>

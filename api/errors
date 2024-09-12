@@ -1,6 +1,6 @@
 <h1 id="error-codes"> Error Codes </h1>
 
-<p>Pi42 APIs use the following error codes:</p>
+<p>Pi42 APIs utilize a set of custom error codes, each associated with an HTTP status code and a specific error message. These codes help users pinpoint the exact issue that caused the request to fail.</p>
 
 <table><thead>
 <tr>
@@ -11,21 +11,106 @@
 </tr>
 </thead><tbody>
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>3000</td>
+<td>400</td>
+<td>Incorrect device type in header values</td>
+<td>v1/order/place-order</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>3001</td>
+<td>400</td>
+<td>Symbol is missing</td>
+<td>v1/order/place-order</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>3003</td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
 </tr>
+<tr>
+<td>3004</td>
+<td>400</td>
+<td>Invalid order side </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td>3005</td>
+<td>400</td>
+<td> </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td>3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td>3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td>3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td>3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+<tr>
+<td3003></td>
+<td>400</td>
+<td>Invalid leverage </td>
+<td>v1/order/place-order</td>
+</tr>
+
 </tbody></table>
