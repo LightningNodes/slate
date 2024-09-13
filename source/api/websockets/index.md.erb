@@ -51,8 +51,71 @@ Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`
 
 Event listeners are described below:
 
+<table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>connect</td>
+                <td>Triggered when the connection to the WebSocket server is open.</td>
+            </tr>
+            <tr>
+                <td>newPosition</td>
+                <td>Triggered when a new position is received from the server.</td>
+            </tr>
+            <tr>
+                <td>orderFilled</td>
+                <td>Triggered when an order is completely filled.</td>
+            </tr>
+            <tr>
+                <td>orderPartiallyFilled</td>
+                <td>Triggered when an order is partially filled.</td>
+            </tr>
+            <tr>
+                <td>orderCancelled</td>
+                <td>Triggered when an order is cancelled.</td>
+            </tr>
+            <tr>
+                <td>orderFailed</td>
+                <td>Triggered when an order fails.</td>
+            </tr>
+            <tr>
+                <td>newOrder</td>
+                <td>Triggered when a new order is created.</td>
+            </tr>
+            <tr>
+                <td>updatePosition</td>
+                <td>Triggered when a position is updated.</td>
+            </tr>
+            <tr>
+                <td>closePosition</td>
+                <td>Triggered when a position is closed.</td>
+            </tr>
+            <tr>
+                <td>balanceUpdate</td>
+                <td>Triggered when the balance is updated.</td>
+            </tr>
+            <tr>
+                <td>newTrade</td>
+                <td>Triggered when a new trade occurs.</td>
+            </tr>
+            <tr>
+                <td>sessionExpired</td>
+                <td>Triggered when the session expires.</td>
+            </tr>
+            <tr>
+                <td>disconnect</td>
+                <td>Triggered when the connection to the WebSocket server is closed.</td>
+            </tr>
+        </tbody>
+</table>
 
-```code
+
+```javascript
 const serverUrl = `https://fawss.pi42.com/auth-stream/${listenKey}`;
 
 // Create a new socket connection
