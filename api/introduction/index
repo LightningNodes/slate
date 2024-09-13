@@ -95,7 +95,7 @@ fields. <br/></li>
 </ul></li>
 </ol>
 
-<h2 id="get-request">GET Request</h2>
+<h2 id="get-request">getRequest Function</h2>
 
 <p>The <code>getRequest</code> function sends a GET request to an API endpoint, handling both market and non-market endpoints differently. It adds a timestamp to the parameters for request uniqueness, generates a signature for authentication, and processes the response.</p>
 
@@ -158,7 +158,7 @@ fields. <br/></li>
 
 <p>Error Handling: If an error occurs during the request, it logs the error message or response data to the console.</p>
 
-<h2 id="post-request">POST Request</h2>
+<h2 id="post-request">postRequest Function</h2>
 
 <p>The function sends POST requests to an API endpoint, handling both authenticated and public requests based on the endpoint URL.</p>
 
@@ -212,7 +212,7 @@ Logs the response data to the console. <br/></p>
 <p><code>return response.data;</code> <br/>
 Returns the response data for further use.<br/></p>
 
-<h2 id="put-request">PUT Request Function</h2>
+<h2 id="put-request">putRequest Function</h2>
 
 <p>This function, <code>putRequest</code>, is an asynchronous JavaScript function designed to send a signed <code>PUT</code> HTTP request to a specified API endpoint. Here&#39;s a breakdown of its components and behavior:</p>
 
@@ -255,7 +255,7 @@ Returns the response data for further use.<br/></p>
 </code></pre></div><h3 id='response-3'>Response</h3>
 <p>If the request is successful, the response data is logged to the console and returned by the function.</p>
 
-<h2 id="delete-request">DELETE Request</h2>
+<h2 id="delete-request">deleteRequest Function</h2>
 
 <p>This deleteRequest function is an asynchronous JavaScript function designed to send a signed DELETE HTTP request to a specified API endpoint. Below is a detailed explanation of its components and behavior:</p>
 
