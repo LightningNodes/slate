@@ -11,36 +11,34 @@
     <span class="c1">// Call the postRequest function</span>
     <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="p">{});</span>
 <span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">create_or_update_listen_key</span><span class="p">():</span>
+  <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
 
-<span class="s2">```python
-def create_or_update_listen_key():
-  timestamp = str(int(time.time() * 1000))
+  <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+  <span class="p">}</span>
 
-  params = {
-      'timestamp': timestamp
-  }
+  <span class="c1"># Convert the parameters to a query string (if signing a query string)
+</span>  <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+  <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
 
-  # Convert the parameters to a query string (if signing a query string)
-  data_to_sign = json.dumps(params, separators=(',', ':'))
-  signature = generate_signature(api_secret, data_to_sign)
+  <span class="c1"># Headers for the request
+</span>  <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+      <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+      <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+  <span class="p">}</span>
 
-  # Headers for the request
-  headers = {
-      'api-key': api_key,
-      'Content-Type': 'application/json',
-      'signature': signature,
-  }
+  <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># Send the POST request to create or update a listen key
+</span>      <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s">'</span><span class="si">{</span><span class="n">listen_key_url</span><span class="si">}</span><span class="s">'</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+      <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+      <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'Listen key created or updated successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+  <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 
-  try:
-      # Send the POST request to create or update a listen key
-      response = requests.post(f'{listen_key_url}', json=params, headers=headers)
-      response.raise_for_status()
-      response_data = response.json()
-      print('Listen key created or updated successfully:', json.dumps(response_data, indent=4))
-  except requests.exceptions.HTTPError as err:
-      print(f"Failed {response.status_code}: {response.text}")
-
-</span></code></pre></div>
+</code></pre></div>
 <h2 id="update-listen-key">Update Listen Key</h2>
 
 <p><code>PUT /v1/retail/listen-key</code></p>
