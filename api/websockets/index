@@ -47,77 +47,140 @@ async function createListenKey(apiKey: string, apiSecret: string) {
 <p>Authenticated Web Socket stream base URL <code>https://fawss.pi42.com/auth-stream</code></p>
 
 <p>Event listeners are described below:</p>
-<div class="highlight"><pre class="highlight plaintext"><code>const serverUrl = `https://fawss.pi42.com/auth-stream/${listenKey}`;
 
-// Create a new socket connection
-const socket = io(serverUrl);
+<table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>connect</td>
+                <td>Triggered when the connection to the WebSocket server is open.</td>
+            </tr>
+            <tr>
+                <td>newPosition</td>
+                <td>Triggered when a new position is received from the server.</td>
+            </tr>
+            <tr>
+                <td>orderFilled</td>
+                <td>Triggered when an order is completely filled.</td>
+            </tr>
+            <tr>
+                <td>orderPartiallyFilled</td>
+                <td>Triggered when an order is partially filled.</td>
+            </tr>
+            <tr>
+                <td>orderCancelled</td>
+                <td>Triggered when an order is cancelled.</td>
+            </tr>
+            <tr>
+                <td>orderFailed</td>
+                <td>Triggered when an order fails.</td>
+            </tr>
+            <tr>
+                <td>newOrder</td>
+                <td>Triggered when a new order is created.</td>
+            </tr>
+            <tr>
+                <td>updatePosition</td>
+                <td>Triggered when a position is updated.</td>
+            </tr>
+            <tr>
+                <td>closePosition</td>
+                <td>Triggered when a position is closed.</td>
+            </tr>
+            <tr>
+                <td>balanceUpdate</td>
+                <td>Triggered when the balance is updated.</td>
+            </tr>
+            <tr>
+                <td>newTrade</td>
+                <td>Triggered when a new trade occurs.</td>
+            </tr>
+            <tr>
+                <td>sessionExpired</td>
+                <td>Triggered when the session expires.</td>
+            </tr>
+            <tr>
+                <td>disconnect</td>
+                <td>Triggered when the connection to the WebSocket server is closed.</td>
+            </tr>
+        </tbody>
+</table>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">serverUrl</span> <span class="o">=</span> <span class="s2">`https://fawss.pi42.com/auth-stream/</span><span class="p">${</span><span class="nx">listenKey</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
 
-// Event listener for when the connection is open
-socket.on('connect', () =&gt; {
-  console.log('Connected to WebSocket server');
-});
+<span class="c1">// Create a new socket connection</span>
+<span class="kd">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">(</span><span class="nx">serverUrl</span><span class="p">);</span>
 
-// Event listener for messages from the server
+<span class="c1">// Event listener for when the connection is open</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">connect</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Connected to WebSocket server</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Event listener for newPosition events
-socket.on('newPosition', (data: any) =&gt; {
-  console.log('New position received:', data);
-});
+<span class="c1">// Event listener for messages from the server</span>
 
-// Listen for order filled event
-socket.on('orderFilled', (data: any) =&gt; {
-  console.log('Order filled:', data);
-});
+<span class="c1">// Event listener for newPosition events</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">newPosition</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">New position received:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for order partially filled event
-socket.on('orderPartiallyFilled', (data: any) =&gt; {
-  console.log('Order partially filled:', data);
-});
+<span class="c1">// Listen for order filled event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">orderFilled</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Order filled:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for order cancelled event
-socket.on('orderCancelled', (data: any) =&gt; {
-  console.log('Order cancelled:', data);
-});
+<span class="c1">// Listen for order partially filled event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">orderPartiallyFilled</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Order partially filled:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for order failed event
-socket.on('orderFailed', (data: any) =&gt; {
-  console.log('Order failed:', data);
-});
+<span class="c1">// Listen for order cancelled event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">orderCancelled</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Order cancelled:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for new order event
-socket.on('newOrder', (data: any) =&gt; {
-  console.log('New order:', data);
-});
+<span class="c1">// Listen for order failed event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">orderFailed</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Order failed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for update position event
-socket.on('updatePosition', (data: any) =&gt; {
-  console.log('Position updated:', data);
-});
+<span class="c1">// Listen for new order event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">newOrder</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">New order:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for close position event
-socket.on('closePosition', (data: any) =&gt; {
-  console.log('Position closed:', data);
-});
+<span class="c1">// Listen for update position event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">updatePosition</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Position updated:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for balance update event
-socket.on('balanceUpdate', (data: any) =&gt; {
-  console.log('Balance updated:', data);
-});
+<span class="c1">// Listen for close position event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">closePosition</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Position closed:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for new trade event
-socket.on('newTrade', (data: any) =&gt; {
-  console.log('New trade:', data);
-});
+<span class="c1">// Listen for balance update event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">balanceUpdate</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Balance updated:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Listen for session expiry
-socket.on('sessionExpired', (data: any) =&gt; {
-  console.log('Session Expired:', data);
-});
+<span class="c1">// Listen for new trade event</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">newTrade</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">New trade:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Event listener for when the connection is closed
-socket.on('disconnect', () =&gt; {
-  console.log('Disconnected from WebSocket server');
-});
+<span class="c1">// Listen for session expiry</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">sessionExpired</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Session Expired:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Event listener for when the connection is closed</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">disconnect</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Disconnected from WebSocket server</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span>
 </code></pre></div>
 <h2 id="public-web-sockets">Public Web Sockets</h2>
 
