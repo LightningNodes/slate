@@ -32,7 +32,7 @@ def get_24hr_ticker_update():
         return
 
     # Construct the full URL for the API request using the provided contract pair
-    full_url = f"https://testnet-api.pi42.com/v1/market/ticker24Hr/{contract_pair}"
+    full_url = f"https://api.pi42.com/v1/market/ticker24Hr/{contract_pair}"
 
     try:
         # Send the GET request to the API
@@ -86,7 +86,7 @@ def get_trade_updates():
         return
 
     # Construct the URL for the API request using the provided contract pair
-    full_url = f"https://testnet-api.pi42.com/v1/market/aggTrade/{contract_pair}"
+    full_url = f"https://api.pi42.com/v1/market/aggTrade/{contract_pair}"
 
     try:
         # Send the GET request to fetch trade updates
@@ -135,7 +135,7 @@ def get_depth_update():
         return
 
     # Construct the URL for the API request using the provided contract pair
-    full_url = f"https://testnet-api.pi42.com/v1/market/depth/{contract_pair}"
+    full_url = f"https://api.pi42.com/v1/market/depth/{contract_pair}"
 
     try:
         # Send the GET request to fetch depth updates
@@ -204,7 +204,7 @@ def get_kline_data():
       }
 
       # Construct the full URL for the Kline endpoint
-      kline_url = "https://testnet-api.pi42.com/v1/market/klines"
+      kline_url = "https://api.pi42.com/v1/market/klines"
 
       # Send the POST request to get Kline data
       response = requests.post(kline_url, json=params, headers=headers)

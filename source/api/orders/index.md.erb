@@ -132,7 +132,7 @@ def add_margin():
     position_id = input("Enter the positionId: ")
     amount_input = input("Enter the amount: ")
 
-    add_margin_url = "https://testnet-fapi.pi42.com/v1/order/add-margin"
+    add_margin_url = "https://fapi.pi42.com/v1/order/add-margin"
 
     try:
         amount = int(amount_input)
@@ -309,7 +309,7 @@ return await getRequest(endpoint, params);
 # Function to fetch and display order history
 def order_history():
 timestamp = str(int(time.time() * 1000))
-order_history_url = "https://testnet-fapi.pi42.com/v1/order/order-history"
+order_history_url = "https://fapi.pi42.com/v1/order/order-history"
 params = {
 'sortOrder': 'desc',
 'pageSize': 100,
@@ -365,7 +365,7 @@ async function getOrderHistory() {
 def linked_orders():
 link_id = input("Enter the Link Id: ")
 timestamp = str(int(time.time() * 1000))
-linked_orders_url = "https://testnet-fapi.pi42.com/v1/order/linked-orders"
+linked_orders_url = "https://fapi.pi42.com/v1/order/linked-orders"
 
 url = f"{linked_orders_url}/{link_id}"
 
@@ -677,7 +677,7 @@ const params = {
 # Function to fetch trade history
 def trade_history():
     timestamp = str(int(time.time() * 1000))
-    trade_history_url = "https://testnet-fapi.pi42.com/v1/user-data/trade-history"
+    trade_history_url = "https://fapi.pi42.com/v1/user-data/trade-history"
 
 params = {
     sortOrder': 'desc',
@@ -898,7 +898,7 @@ async function deleteOrder() {
 ```python
 def delete_order():
     client_order_id = input("Enter the clientOrderId to delete: ")
-    delete_order_url = "https://testnet-fapi.pi42.com/v1/order/delete-order"
+    delete_order_url = "https://fapi.pi42.com/v1/order/delete-order"
 
     timestamp = str(int(time.time() * 1000))
 
