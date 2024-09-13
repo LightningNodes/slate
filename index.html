@@ -427,6 +427,15 @@
             <a href="#web-sockets" class="toc-h1 toc-link" data-title="Web Sockets">Web Sockets</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#create-listen-key" class="toc-h2 toc-link" data-title=" Create Listen Key "> Create Listen Key </a>
+                  </li>
+                  <li>
+                    <a href="#authenticated-web-sockets" class="toc-h2 toc-link" data-title="Authenticated Web Sockets">Authenticated Web Sockets</a>
+                  </li>
+                  <li>
+                    <a href="#public-web-sockets" class="toc-h2 toc-link" data-title="Public Web Sockets">Public Web Sockets</a>
+                  </li>
+                  <li>
                     <a href="#get-listen-key" class="toc-h2 toc-link" data-title="Get Listen Key">Get Listen Key</a>
                   </li>
                   <li>
@@ -962,6 +971,7 @@ Returns the response data for further use.<br/></p>
 </tr>
 </tbody></table>
 
+
 <h1 id='orders'>Orders</h1>
 
 <h2 id="place-order">Place an Order </h2>
@@ -969,7 +979,6 @@ Returns the response data for further use.<br/></p>
 <p><code>POST /v1/order/place-order</code></p>
 
 <p>Place an order (either a market order or a limit order) on Pi42&#39;s trading platform.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Market Order</span>
     <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
@@ -1060,13 +1069,11 @@ Returns the response data for further use.<br/></p>
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
-
 <h2 id="add-margin"> Add Margin </h2>
 
 <p><code>POST /v1/order/add-margin</code></p>
 
 <p>Add margin to an existing trading position.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">addMargin</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Define the API endpoint for adding margin</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/add-margin</span><span class="dl">"</span><span class="p">;</span>
@@ -1124,13 +1131,11 @@ Returns the response data for further use.<br/></p>
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 
 </code></pre></div>
-
 <h2 id="reduce-margin">Reduce Margin</h2>
 
 <p><code>POST /v1/order/reduce-margin</code></p>
 
 <p>Reduce the margin on an existing trading position.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">reduceMargin</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Define the API endpoint for reducing margin</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/reduce-margin</span><span class="dl">"</span><span class="p">;</span>
@@ -1196,13 +1201,11 @@ Returns the response data for further use.<br/></p>
     <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
-
 <h2 id="get-open-orders">Get Open Orders</h2>
 
 <p><code>GET /v1/order/open-orders</code></p>
 
 <p>The sample codes in different languages are provided below:</p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_open_orders</span><span class="p">():</span>
 <span class="c1"># Generate the current timestamp
 </span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
@@ -1251,11 +1254,9 @@ Returns the response data for further use.<br/></p>
 <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id="get-order-history">Get Order History</h2>
 
 <p><code>GET /v1/order/order-history</code></p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch and display order history
 </span><span class="k">def</span> <span class="nf">order_history</span><span class="p">():</span>
 <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
@@ -1303,11 +1304,9 @@ Returns the response data for further use.<br/></p>
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
 <p><code>GET /v1/order/linked-orders</code> </p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch linked orders based on linkId
 </span><span class="k">def</span> <span class="nf">linked_orders</span><span class="p">():</span>
 <span class="n">link_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the Link Id: "</span><span class="p">)</span>
@@ -1365,11 +1364,9 @@ Returns the response data for further use.<br/></p>
  <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
  <span class="p">};</span>
 </code></pre></div>
-
 <h2 id="get-margin-history">Fetch Margin History</h2>
 
 <p><code>GET /v1/order/fetch-margin-history</code></p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">fetch_margin_history</span><span class="p">():</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"/v1/order/fetch-margin-history"</span>
     <span class="n">symbol</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the symbol (e.g., BTCUSDT): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
@@ -1437,11 +1434,9 @@ Returns the response data for further use.<br/></p>
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id="get-postions">Get Positions</h2>
 
 <p><code>GET /v1/positions</code></p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch positions
 </span><span class="k">def</span> <span class="nf">fetch_positions</span><span class="p">():</span>
 <span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
@@ -1515,11 +1510,9 @@ Returns the response data for further use.<br/></p>
 <span class="p">}</span>
 
 </code></pre></div>
-
 <h2 id="get-position-status">Get Position Status</h2>
 
 <p><code>GET /v1/positions/{positionStatus}</code></p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_positions</span><span class="p">():</span>
  <span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
 
@@ -1576,11 +1569,9 @@ Returns the response data for further use.<br/></p>
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id="trade-history">Get User's Trade History</h2>
 
 <p><code>GET /v1/user-data/trade-history</code></p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTradeHistory</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/user-data/trade-history</span><span class="dl">"</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
@@ -1631,13 +1622,11 @@ try:
 except requests.exceptions.HTTPError as err:
     print(f"Failed {response.status_code}: {response.text}")
 </span></code></pre></div>
-
 <h2 id="get-transaction-history">Get User's Transaction History</h2>
 
 <p><code>GET/v1/user-data/transaction-history</code></p>
 
 <p>Fetches transaction history by sending a GET request to the endpoint.</p>
-
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_transaction_history</span><span class="p">():</span>
     <span class="c1"># Default values for optional parameters
 </span>    <span class="n">start_timestamp</span> <span class="o">=</span> <span class="bp">None</span>
@@ -1725,13 +1714,11 @@ except requests.exceptions.HTTPError as err:
     <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <h2 id='exchange-update-leverage'>Update Leverage</h2>
 
 <p><code>POST /v1/exchange/update/leverage</code></p>
 
 <p>Update the leverage preference for a specific trading contract</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">updateLeverage</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/exchange/update/leverage</span><span class="dl">"</span><span class="p">;</span>
 
@@ -1790,13 +1777,11 @@ except requests.exceptions.HTTPError as err:
 
 
 </code></pre></div>
-
 <h2 id="delete-order"> Deleting an Order</h2>
 
 <p><code>DELETE /v1/order/delete-order</code></p>
 
 <p>Delete an existing order based on its clientOrderId</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">deleteOrder</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/delete-order</span><span class="dl">"</span><span class="p">;</span>
     <span class="kd">const</span> <span class="nx">clientOrderId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">a9c5ba9893c99828e4b5-6238-ext</span><span class="dl">"</span><span class="p">;</span>
@@ -1849,7 +1834,6 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 <p><code>GET /v1/market/ticker24Hr</code></p>
 
 <p>Fetch the 24-hour market ticker data for a specific trading pair, in this case, &quot;BTCINR&quot;.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchTicker</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/ticker24Hr/</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// API endpoint for fetching the 24-hour market ticker</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>              <span class="c1">// The trading pair for which the ticker data is being requested</span>
@@ -1892,13 +1876,11 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 
 
 </code></pre></div>
-
 <h2 id='agg-trade-update'>Aggregate Trade Update</h2>
 
 <p><code>GET /v1/market/aggTrade</code></p>
 
 <p>Fetch the aggregated trade data for a specific trading pair, in this case, &quot;BTCINR&quot;. </p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchAggTrade</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/aggTrade/</span><span class="dl">"</span><span class="p">;</span>   <span class="c1">// Define the API endpoint for aggregated trades</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>             <span class="c1">// Specify the trading pair (e.g., Bitcoin to Indian Rupee)</span>
@@ -1940,13 +1922,11 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 
 </code></pre></div>
-
 <h2 id='depth-update'>Depth Update</h2>
 
 <p><code>GET /v1/market/depth/</code></p>
 
 <p>Retrieves the order book depth data for a specified trading pair and interval.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchDepth</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/depth/</span><span class="dl">"</span><span class="p">;</span>   <span class="c1">// API endpoint for fetching order book depth data</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>           <span class="c1">// Trading pair for which the depth data is requested</span>
@@ -1984,13 +1964,11 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
-
 <h2 id='klines'>Get Klines</h2>
 
 <p><code>POST /v1/market/klines</code></p>
 
 <p>Retrieves candlestick (Kline) data for a specific trading pair.</p>
-
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getKlines</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/klines</span><span class="dl">"</span><span class="p">;</span>
 
@@ -2048,11 +2026,280 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 
 <h1 id='web-sockets'>Web Sockets</h1>
 
+<h2 id="create-listen-key"> Create Listen Key </h2>
+
+<p>Users can create a Listen Key for each API key. By default each listen key will be valid for 60 minutes.</p>
+
+<p><code>POST /v1/retail/listen-key</code></p>
+<div class="highlight"><pre class="highlight plaintext"><code>const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
+
+// Function to generate a signature for the request
+const generateSignature = (params: object, apiSecret: string) =&gt; {
+  return crypto
+    .createHmac('sha256', apiSecret)
+    .update(JSON.stringify(params))
+    .digest('hex');
+};
+
+// Function to call Create Listen Key API
+async function createListenKey(apiKey: string, apiSecret: string) {
+  const params = {
+    timestamp: Date.now().toString(),
+  };
+
+  const signature = generateSignature(params, apiSecret);
+
+  try {
+    const response = await axios.post(baseUrl, params, {
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+        'signature': signature,
+      },
+    });
+    console.log('Create Listen Key Response:', response.data);
+    return response.data.listenKey;
+  } catch (error) {
+    console.error(
+      'Error creating Listen Key:',
+      error.response ? error.response.data : error.message
+    );
+    throw error; // Rethrow the error for further handling
+  }
+}
+</code></pre></div>
+<h2 id="authenticated-web-sockets">Authenticated Web Sockets</h2>
+
+<p>Authenticated Web Socket stream base URL <code>https://fawss.pi42.com/auth-stream</code></p>
+
+<p>Event listeners are described below:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>const serverUrl = `https://fawss.pi42.com/auth-stream/${listenKey}`;
+
+// Create a new socket connection
+const socket = io(serverUrl);
+
+// Event listener for when the connection is open
+socket.on('connect', () =&gt; {
+  console.log('Connected to WebSocket server');
+});
+
+// Event listener for messages from the server
+
+// Event listener for newPosition events
+socket.on('newPosition', (data: any) =&gt; {
+  console.log('New position received:', data);
+});
+
+// Listen for order filled event
+socket.on('orderFilled', (data: any) =&gt; {
+  console.log('Order filled:', data);
+});
+
+// Listen for order partially filled event
+socket.on('orderPartiallyFilled', (data: any) =&gt; {
+  console.log('Order partially filled:', data);
+});
+
+// Listen for order cancelled event
+socket.on('orderCancelled', (data: any) =&gt; {
+  console.log('Order cancelled:', data);
+});
+
+// Listen for order failed event
+socket.on('orderFailed', (data: any) =&gt; {
+  console.log('Order failed:', data);
+});
+
+// Listen for new order event
+socket.on('newOrder', (data: any) =&gt; {
+  console.log('New order:', data);
+});
+
+// Listen for update position event
+socket.on('updatePosition', (data: any) =&gt; {
+  console.log('Position updated:', data);
+});
+
+// Listen for close position event
+socket.on('closePosition', (data: any) =&gt; {
+  console.log('Position closed:', data);
+});
+
+// Listen for balance update event
+socket.on('balanceUpdate', (data: any) =&gt; {
+  console.log('Balance updated:', data);
+});
+
+// Listen for new trade event
+socket.on('newTrade', (data: any) =&gt; {
+  console.log('New trade:', data);
+});
+
+// Listen for session expiry
+socket.on('sessionExpired', (data: any) =&gt; {
+  console.log('Session Expired:', data);
+});
+
+// Event listener for when the connection is closed
+socket.on('disconnect', () =&gt; {
+  console.log('Disconnected from WebSocket server');
+});
+</code></pre></div>
+<h2 id="public-web-sockets">Public Web Sockets</h2>
+
+<p>Public Web Socket URL <code>https://fawss.pi42.com/</code>. Once connected, users can subscribe to different topics mentioned below:</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Example</th>
+            <th>Listening Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contract_pair@depth_minGrouping</td>
+            <td>btcinr@depth
+            _
+            0.1</td>
+            <td>depthUpdate</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@kline
+            _
+            interval</td>
+            <td>btcinr@kline
+            _
+            1m</td>
+            <td>kline</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@markPrice</td>
+            <td>btcinr@markPrice</td>
+            <td>markPriceUpdatee</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@aggTrade</td>
+            <td>btcinr@aggTrade</td>
+            <td>aggTrade</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@ticker</td>
+            <td>btcinr@ticker</td>
+            <td>24hrTicker</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@marketInfo</td>
+            <td>btcinr@marketInfo</td>
+            <td>marketInfo</td>
+        </tr>
+        <tr>
+            <td>markPriceArr</td>
+            <td>N/A</td>
+            <td>markPriceArr</td>
+        </tr>
+        <tr>
+            <td>tickerArr</td>
+            <td>N/A</td>
+            <td>tickerArr</td>
+        </tr>
+        <tr>
+            <td>All contracts details</td>
+            <td>N/A</td>
+            <td>allContractDetails</td>
+        </tr>
+</table>
+
+<ul>
+<li>Intervals: The intervals for kline (candlestick) data can be <code>1m</code>, <code>3m</code>, <code>5m</code>, <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>2h</code>, <code>4h</code>, <code>6h</code>, <code>8h</code>, <code>12h</code>, <code>1d</code>, <code>3d</code>, <code>1w</code>, <code>1M</code>.</li>
+<li>MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.</li>
+</ul>
+
+<div class="highlight"><pre class="highlight plaintext"><code>import { io } from 'socket.io-client';
+
+// WebSocket server URL
+const serverUrl = 'https://fawss.pi42.com/';
+
+// Create a new socket connection
+const socket = io(serverUrl);
+
+// Event listener for when the connection is open
+socket.on('connect', () =&gt; {
+  console.log('Connected to WebSocket server');
+  subscribeToTopics();
+});
+
+// Event listener for when the connection is closed
+socket.on('disconnect', () =&gt; {
+  console.log('Disconnected from WebSocket server');
+});
+
+// Event listener for errors
+socket.on('error', (error: any) =&gt; {
+  console.error('Socket.IO error:', error);
+});
+
+// Function to subscribe to various WebSocket topics
+function subscribeToTopics() {
+  const topics = ['btcinr@depth_0.1', 'btcinr@markPrice']; // List of topics you want to subscribe to
+
+  // Subscribe to each topic
+  socket.emit('subscribe', {
+    params: topics, // Sends the topics array to the WebSocket server
+  });
+
+  // Event listener for updates on various data topics
+  socket.on('depthUpdate', (data) =&gt; {
+    console.log('depthUpdate: ', data);
+  });
+
+  socket.on('kline', (data) =&gt; {
+    console.log('kline: ', data);
+  });
+
+  socket.on('markPriceUpdate', (data) =&gt; {
+    console.log('markPriceUpdate: ', data);
+  });
+
+  socket.on('aggTrade', (data) =&gt; {
+    console.log('aggTrade: ', data);
+  });
+
+  socket.on('24hrTicker', (data) =&gt; {
+    console.log('24hrTicker: ', data);
+  });
+
+  socket.on('marketInfo', (data) =&gt; {
+    console.log('marketInfo: ', data);
+  });
+
+  socket.on('markPriceArr', (data) =&gt; {
+    console.log('markPriceArr: ', data);
+  });
+
+  socket.on('tickerArr', (data) =&gt; {
+    console.log('tickerArr: ', data);
+  });
+
+  socket.on('marginRate', (data) =&gt; {
+    console.log('marginRate: ', data);
+  });
+}
+
+
+</code></pre></div>
+
 <h2 id="get-listen-key">Get Listen Key</h2>
 
 <p><code>POST /v1/retail/listen-key</code></p>
 
-<p>Obtain a WebSocket listen key from the endpoint.</p>
+<p>Obtain a WebSocket listen key from the endpoint. </p>
 
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getListenKey</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/retail/listen-key</span><span class="dl">"</span><span class="p">;</span>
