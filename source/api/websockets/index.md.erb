@@ -1,5 +1,7 @@
 <h1 id='web-sockets'>Web Sockets</h1>
 
+
+
 <h2 id="get-listen-key">Get Listen Key</h2>
 
 `POST /v1/retail/listen-key`
@@ -13,7 +15,7 @@ async function getListenKey() {
     // Call the postRequest function
     return await postRequest(endpoint, {});
 }
-
+```
 ```python
 def create_or_update_listen_key():
   timestamp = str(int(time.time() * 1000))
