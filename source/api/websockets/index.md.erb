@@ -1,12 +1,288 @@
 <h1 id='web-sockets'>Web Sockets</h1>
 
+<h2 id="create-listen-key"> Create Listen Key </h2>
+
+Users can create a Listen Key for each API key. By default each listen key will be valid for 60 minutes.
+
+`POST /v1/retail/listen-key`
+
+```code
+const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
+
+// Function to generate a signature for the request
+const generateSignature = (params: object, apiSecret: string) => {
+  return crypto
+    .createHmac('sha256', apiSecret)
+    .update(JSON.stringify(params))
+    .digest('hex');
+};
+
+// Function to call Create Listen Key API
+async function createListenKey(apiKey: string, apiSecret: string) {
+  const params = {
+    timestamp: Date.now().toString(),
+  };
+
+  const signature = generateSignature(params, apiSecret);
+
+  try {
+    const response = await axios.post(baseUrl, params, {
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+        'signature': signature,
+      },
+    });
+    console.log('Create Listen Key Response:', response.data);
+    return response.data.listenKey;
+  } catch (error) {
+    console.error(
+      'Error creating Listen Key:',
+      error.response ? error.response.data : error.message
+    );
+    throw error; // Rethrow the error for further handling
+  }
+}
+```
+
+<h2 id="authenticated-web-sockets">Authenticated Web Sockets</h2>
+
+Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`
+
+Event listeners are described below:
+
+
+```code
+const serverUrl = `https://fawss.pi42.com/auth-stream/${listenKey}`;
+
+// Create a new socket connection
+const socket = io(serverUrl);
+
+// Event listener for when the connection is open
+socket.on('connect', () => {
+  console.log('Connected to WebSocket server');
+});
+
+// Event listener for messages from the server
+
+// Event listener for newPosition events
+socket.on('newPosition', (data: any) => {
+  console.log('New position received:', data);
+});
+
+// Listen for order filled event
+socket.on('orderFilled', (data: any) => {
+  console.log('Order filled:', data);
+});
+
+// Listen for order partially filled event
+socket.on('orderPartiallyFilled', (data: any) => {
+  console.log('Order partially filled:', data);
+});
+
+// Listen for order cancelled event
+socket.on('orderCancelled', (data: any) => {
+  console.log('Order cancelled:', data);
+});
+
+// Listen for order failed event
+socket.on('orderFailed', (data: any) => {
+  console.log('Order failed:', data);
+});
+
+// Listen for new order event
+socket.on('newOrder', (data: any) => {
+  console.log('New order:', data);
+});
+
+// Listen for update position event
+socket.on('updatePosition', (data: any) => {
+  console.log('Position updated:', data);
+});
+
+// Listen for close position event
+socket.on('closePosition', (data: any) => {
+  console.log('Position closed:', data);
+});
+
+// Listen for balance update event
+socket.on('balanceUpdate', (data: any) => {
+  console.log('Balance updated:', data);
+});
+
+// Listen for new trade event
+socket.on('newTrade', (data: any) => {
+  console.log('New trade:', data);
+});
+
+// Listen for session expiry
+socket.on('sessionExpired', (data: any) => {
+  console.log('Session Expired:', data);
+});
+
+// Event listener for when the connection is closed
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket server');
+});
+```
+
+<h2 id="public-web-sockets">Public Web Sockets</h2>
+
+Public Web Socket URL `https://fawss.pi42.com/`. Once connected, users can subscribe to different topics mentioned below:
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Example</th>
+            <th>Listening Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contract_pair@depth_minGrouping</td>
+            <td>btcinr@depth
+            _
+            0.1</td>
+            <td>depthUpdate</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@kline
+            _
+            interval</td>
+            <td>btcinr@kline
+            _
+            1m</td>
+            <td>kline</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@markPrice</td>
+            <td>btcinr@markPrice</td>
+            <td>markPriceUpdatee</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@aggTrade</td>
+            <td>btcinr@aggTrade</td>
+            <td>aggTrade</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@ticker</td>
+            <td>btcinr@ticker</td>
+            <td>24hrTicker</td>
+        </tr>
+        <tr>
+            <td>contract
+            _pair@marketInfo</td>
+            <td>btcinr@marketInfo</td>
+            <td>marketInfo</td>
+        </tr>
+        <tr>
+            <td>markPriceArr</td>
+            <td>N/A</td>
+            <td>markPriceArr</td>
+        </tr>
+        <tr>
+            <td>tickerArr</td>
+            <td>N/A</td>
+            <td>tickerArr</td>
+        </tr>
+        <tr>
+            <td>All contracts details</td>
+            <td>N/A</td>
+            <td>allContractDetails</td>
+        </tr>
+</table>
+
+- Intervals: The intervals for kline (candlestick) data can be `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `6h`, `8h`, `12h`, `1d`, `3d`, `1w`, `1M`.
+- MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.
+
+```code
+import { io } from 'socket.io-client';
+
+// WebSocket server URL
+const serverUrl = 'https://fawss.pi42.com/';
+
+// Create a new socket connection
+const socket = io(serverUrl);
+
+// Event listener for when the connection is open
+socket.on('connect', () => {
+  console.log('Connected to WebSocket server');
+  subscribeToTopics();
+});
+
+// Event listener for when the connection is closed
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket server');
+});
+
+// Event listener for errors
+socket.on('error', (error: any) => {
+  console.error('Socket.IO error:', error);
+});
+
+// Function to subscribe to various WebSocket topics
+function subscribeToTopics() {
+  const topics = ['btcinr@depth_0.1', 'btcinr@markPrice']; // List of topics you want to subscribe to
+
+  // Subscribe to each topic
+  socket.emit('subscribe', {
+    params: topics, // Sends the topics array to the WebSocket server
+  });
+
+  // Event listener for updates on various data topics
+  socket.on('depthUpdate', (data) => {
+    console.log('depthUpdate: ', data);
+  });
+
+  socket.on('kline', (data) => {
+    console.log('kline: ', data);
+  });
+
+  socket.on('markPriceUpdate', (data) => {
+    console.log('markPriceUpdate: ', data);
+  });
+
+  socket.on('aggTrade', (data) => {
+    console.log('aggTrade: ', data);
+  });
+
+  socket.on('24hrTicker', (data) => {
+    console.log('24hrTicker: ', data);
+  });
+
+  socket.on('marketInfo', (data) => {
+    console.log('marketInfo: ', data);
+  });
+
+  socket.on('markPriceArr', (data) => {
+    console.log('markPriceArr: ', data);
+  });
+
+  socket.on('tickerArr', (data) => {
+    console.log('tickerArr: ', data);
+  });
+
+  socket.on('marginRate', (data) => {
+    console.log('marginRate: ', data);
+  });
+}
+
+
+```
+
+
 
 
 <h2 id="get-listen-key">Get Listen Key</h2>
 
 `POST /v1/retail/listen-key`
 
-Obtain a WebSocket listen key from the endpoint.
+Obtain a WebSocket listen key from the endpoint. 
 
 ```javascript
 async function getListenKey() {
