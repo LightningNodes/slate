@@ -75,7 +75,13 @@ The function generates a signature using HMAC SHA-256 encryption of the request 
 
 <h2 id="authenticated-web-sockets">Authenticated Web Sockets</h2>
 
-Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`
+Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`.
+
+<aside class="notice">
+
+Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a>
+
+</aside>
 
 The WebSocket client connects to a server using a listen key and listens for various events related to trading activities and session management. Each event handler logs specific information when the event is received.
 
