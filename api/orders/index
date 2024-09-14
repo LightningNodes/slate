@@ -4,7 +4,7 @@
 
 <p><code>POST /v1/order/place-order</code></p>
 
-<p>Place an order (either a market order or a limit order) on Pi42&#39;s trading platform.</p>
+<p>Place an order (either a market order or a limit order) on Pi42&#39;s trading platform. It allows users to submit an order to buy or sell a specific asset.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Market Order</span>
     <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
@@ -95,11 +95,126 @@
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>placeType</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Indicates the type of order placement (e.g., POSITION or ORDER_FORM)</td>
+        </tr>
+        <tr>
+            <td>quantity</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Quantity of the asset to be traded</td>
+        </tr>
+        <tr>
+            <td>side</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Order side, either "BUY" or "SELL"</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Trading pair, e.g., Bitcoin to USDT</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Order type, either "MARKET" or "LIMIT"</td>
+        </tr>
+        <tr>
+            <td>reduceOnly</td>
+            <td>boolean</td>
+            <td>No</td>
+            <td>Whether to reduce an existing position only</td>
+        </tr>
+        <tr>
+            <td>marginAsset</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The asset used as margin</td>
+        </tr>
+        <tr>
+            <td>deviceType</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Indicates the device type (WEB, MOBILE, etc.)</td>
+        </tr>
+        <tr>
+            <td>userCategory</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Category of the user (EXTERNAL, INTERNAL, etc.)</td>
+        </tr>
+        <tr>
+            <td>price</td>
+            <td>number</td>
+            <td>Yes (LIMIT)</td>
+            <td>Price at which the limit order should be executed (only for LIMIT orders)</td>
+        </tr>
+        <tr>
+            <td>positionSide</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Position side (BOTH, LONG, SHORT, etc.)</td>
+        </tr>
+        <tr>
+            <td>timeInForce</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Good-Til-Canceled (GTC), Immediate-Or-Cancel (IOC), etc.</td>
+        </tr>
+        <tr>
+            <td>isolated</td>
+            <td>boolean</td>
+            <td>No</td>
+            <td>Specifies if the margin mode is isolated</td>
+        </tr>
+        <tr>
+            <td>newOrderRespType</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Response type for the order (e.g., ACK)</td>
+        </tr>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Position ID for tracking the order</td>
+        </tr>
+        <tr>
+            <td>stopPrice</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Stop price for a stop order (optional)</td>
+        </tr>
+        <tr>
+            <td>refId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Reference ID for tracking purposes</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="add-margin"> Add Margin </h2>
 
 <p><code>POST /v1/order/add-margin</code></p>
 
-<p>Add margin to an existing trading position.</p>
+<p>Add margin to a specific position. It requires a unique position ID and the amount of margin to be added. This operation helps in increasing the margin available for a given position, which can be used for trading or managing positions.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">addMargin</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Define the API endpoint for adding margin</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/add-margin</span><span class="dl">"</span><span class="p">;</span>
@@ -155,8 +270,32 @@
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
     <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position to which margin is being added</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Amount of margin to be added to the specified position</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="reduce-margin">Reduce Margin</h2>
 
 <p><code>POST /v1/order/reduce-margin</code></p>
@@ -227,11 +366,36 @@
     <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position from which margin is being reduced</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Amount of margin to reduce from the specified position</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-open-orders">Get Open Orders</h2>
 
 <p><code>GET /v1/order/open-orders</code></p>
 
-<p>The sample codes in different languages are provided below:</p>
+<p>Retrieves the open orders for a given account. It supports filtering results based on optional parameters such as page size, sorting order, and timestamps. The symbol parameter can be used to filter the results to a specific trading pair. <br/>This endpoint is useful for fetching the current active orders and managing them accordingly.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_open_orders</span><span class="p">():</span>
 <span class="c1"># Generate the current timestamp
 </span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
@@ -280,9 +444,58 @@
 <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering open orders</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering open orders</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the orders (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-order-history">Get Order History</h2>
 
 <p><code>GET /v1/order/order-history</code></p>
+
+<p>Provides historical order data for a given account. </p>
+
+<p>It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair. </p>
+
+<p>This endpoint is helpful for reviewing past orders and analyzing historical trading activity.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch and display order history
 </span><span class="k">def</span> <span class="nf">order_history</span><span class="p">():</span>
 <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
@@ -330,9 +543,54 @@
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering order history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering order history</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the orders (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
 <p><code>GET /v1/order/linked-orders</code> </p>
+
+<p>Retrieves orders that are linked by a specific link ID. It is used to fetch all orders associated with a given link ID, which can help in tracking related orders or managing linked order groups.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch linked orders based on linkId
 </span><span class="k">def</span> <span class="nf">linked_orders</span><span class="p">():</span>
 <span class="n">link_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the Link Id: "</span><span class="p">)</span>
@@ -360,8 +618,7 @@
 <span class="k">print</span><span class="p">(</span><span class="s">'Linked orders fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
 <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
 <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code>
-<span class="c1">// Get Linked Orders</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Get Linked Orders</span>
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">linkedOrders</span><span class="p">(</span><span class="nx">linkId</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">linkId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">6acd808ba5957340b009-6238-ext</span><span class="dl">"</span>
   <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="s2">`/v1/order/linked-orders/</span><span class="p">${</span><span class="nx">linkId</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span> <span class="c1">// Endpoint for fetching linked orders</span>
@@ -390,9 +647,34 @@
  <span class="na">symbol</span><span class="p">:</span> <span class="nx">symbol</span><span class="p">,</span>
  <span class="p">};</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>linkId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the linked orders</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-margin-history">Fetch Margin History</h2>
 
 <p><code>GET /v1/order/fetch-margin-history</code></p>
+
+<p>Retrieves the margin history for an account.</p>
+
+<p>It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol. </p>
+
+<p>This endpoint is useful for analyzing past margin activities and historical changes in margin levels.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">fetch_margin_history</span><span class="p">():</span>
     <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"/v1/order/fetch-margin-history"</span>
     <span class="n">symbol</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the symbol (e.g., BTCUSDT): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
@@ -460,9 +742,58 @@
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering margin history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering margin history</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the margin history (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-postions">Get Positions</h2>
 
 <p><code>GET /v1/positions</code></p>
+
+<p>Retrieves positions based on their status. </p>
+
+<p>It allows filtering positions by their status (e.g., &quot;OPEN&quot;) and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol. </p>
+
+<p>This endpoint is useful for fetching current or historical positions and managing your trading portfolio.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch positions
 </span><span class="k">def</span> <span class="nf">fetch_positions</span><span class="p">():</span>
 <span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
@@ -536,9 +867,62 @@
 <span class="p">}</span>
 
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionStatus</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The status of the positions to retrieve (e.g., "OPEN")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering positions</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering positions</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter positions (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-position-status">Get Position Status</h2>
 
 <p><code>GET /v1/positions/{positionStatus}</code></p>
+
+<p>Retrieves details for a specific position identified by its unique position ID. </p>
+
+<p>It returns information related to the specified position, such as current status, asset details, and other relevant data.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_positions</span><span class="p">():</span>
  <span class="n">position_status</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter position status (open, closed, liquidated): "</span><span class="p">).</span><span class="n">upper</span><span class="p">()</span>
 
@@ -595,9 +979,32 @@
   <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the position to retrieve</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="trade-history">Get User's Trade History</h2>
 
 <p><code>GET /v1/user-data/trade-history</code></p>
+
+<p>Retrieves the trade history for a user. </p>
+
+<p>It supports optional filtering parameters such as timestamps, sorting order, page size, and trading symbol to help users access their historical trade data efficiently.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTradeHistory</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/user-data/trade-history</span><span class="dl">"</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">startTimestamp</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">1696425435000</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Optional</span>
@@ -648,11 +1055,56 @@ try:
 except requests.exceptions.HTTPError as err:
     print(f"Failed {response.status_code}: {response.text}")
 </span></code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering trade history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering trade history</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter trade history (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-transaction-history">Get User's Transaction History</h2>
 
 <p><code>GET/v1/user-data/transaction-history</code></p>
 
-<p>Fetches transaction history by sending a GET request to the endpoint.</p>
+<p>Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters. </p>
+
+<p>It provides detailed records of transactions within the specified time range and can be filtered by trading symbol, trade ID, and position ID.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_transaction_history</span><span class="p">():</span>
     <span class="c1"># Default values for optional parameters
 </span>    <span class="n">start_timestamp</span> <span class="o">=</span> <span class="bp">None</span>
@@ -740,11 +1192,68 @@ except requests.exceptions.HTTPError as err:
     <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering transaction history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering transaction history</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of records to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading symbol to filter the transaction history (e.g., BTCINR)</td>
+        </tr>
+        <tr>
+            <td>tradeId</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The specific trade ID to filter the transaction history</td>
+        </tr>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The specific position ID to filter the transaction history</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id='exchange-update-leverage'>Update Leverage</h2>
 
 <p><code>POST /v1/exchange/update/leverage</code></p>
 
-<p>Update the leverage preference for a specific trading contract</p>
+<p>Updates the leverage for a specified contract. It allows setting the leverage level for trading a particular asset or trading pair.</p>
+
+<p>This endpoint is used to adjust the leverage settings for risk management and trading strategies.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">updateLeverage</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/exchange/update/leverage</span><span class="dl">"</span><span class="p">;</span>
 
@@ -800,14 +1309,39 @@ except requests.exceptions.HTTPError as err:
       <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
   <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
       <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-
-
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>leverage</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>The leverage level to set for the contract (e.g., 10). Must be an integer.</td>
+        </tr>
+        <tr>
+            <td>contractName</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair or contract name to which the leverage applies (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="delete-order"> Deleting an Order</h2>
 
 <p><code>DELETE /v1/order/delete-order</code></p>
 
-<p>Delete an existing order based on its clientOrderId</p>
+<p>deletes a specific order based on its client order ID. </p>
+
+<p>It requires the client order ID (<code>clientOrderID</code>) to identify the order to be deleted and a timestamp for request validation.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">deleteOrder</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/delete-order</span><span class="dl">"</span><span class="p">;</span>
     <span class="kd">const</span> <span class="nx">clientOrderId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">a9c5ba9893c99828e4b5-6238-ext</span><span class="dl">"</span><span class="p">;</span>
@@ -849,3 +1383,27 @@ except requests.exceptions.HTTPError as err:
     <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>clientOrderId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the order to be deleted (e.g., a9c5ba9893c99828e4b5-6238-ext)</td>
+        </tr>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+    </tbody>
+</table>

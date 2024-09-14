@@ -1,13 +1,16 @@
 <h1 id='public-endpoints'>Public Endpoints</h1>
 
 <p>Public endpoints in Pi42 are designed to facilitate easy access to various functionalities of the Pi42 platform, particularly for integration with external systems and applications. 
+
 Below is an overview of the public endpoints available in Pi42, their typical uses, and example API calls.</p>
 
 <h2 id='ticker-update-24hr'>Ticker Update (24Hr)</h2>
 
 <p><code>GET /v1/market/ticker24Hr</code></p>
 
-<p>Fetch the 24-hour market ticker data for a specific trading pair, in this case, &quot;BTCINR&quot;.</p>
+<p>Fetches the 24-hour market ticker data for a specific trading pair. </p>
+
+<p>It provides details such as the last traded price, volume, and other market metrics over the past 24 hours.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchTicker</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/ticker24Hr/</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// API endpoint for fetching the 24-hour market ticker</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>              <span class="c1">// The trading pair for which the ticker data is being requested</span>
@@ -47,14 +50,33 @@ Below is an overview of the public endpoints available in Pi42, their typical us
     <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-
-
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch the ticker data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id='agg-trade-update'>Aggregate Trade Update</h2>
 
 <p><code>GET /v1/market/aggTrade</code></p>
 
-<p>Fetch the aggregated trade data for a specific trading pair, in this case, &quot;BTCINR&quot;. </p>
+<p>Retrieves aggregated trade data for a specific trading pair. </p>
+
+<p>Aggregated trades provide summarized information about trade activities, such as total volume and price changes, for the given trading pair.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchAggTrade</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/aggTrade/</span><span class="dl">"</span><span class="p">;</span>   <span class="c1">// Define the API endpoint for aggregated trades</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>             <span class="c1">// Specify the trading pair (e.g., Bitcoin to Indian Rupee)</span>
@@ -96,11 +118,32 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch aggregated trade data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id='depth-update'>Depth Update</h2>
 
 <p><code>GET /v1/market/depth/</code></p>
 
-<p>Retrieves the order book depth data for a specified trading pair and interval.</p>
+<p>Fetches the order book depth data for a specific trading pair. </p>
+
+<p>It provides information about the current market depth, including bid and ask prices and their respective volumes, which is essential for understanding market liquidity.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchDepth</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/depth/</span><span class="dl">"</span><span class="p">;</span>   <span class="c1">// API endpoint for fetching order book depth data</span>
     <span class="kd">const</span> <span class="nx">contractPair</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">BTCINR</span><span class="dl">"</span><span class="p">;</span>           <span class="c1">// Trading pair for which the depth data is requested</span>
@@ -138,11 +181,32 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch the order book depth data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id='klines'>Get Klines</h2>
 
 <p><code>POST /v1/market/klines</code></p>
 
-<p>Retrieves candlestick (Kline) data for a specific trading pair.</p>
+<p>Retrieves candlestick (kline) data for a specified trading pair and time interval. </p>
+
+<p>It provides historical price data that can be used for charting and analysis, including start and end times, and limits on the number of records returned.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getKlines</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/klines</span><span class="dl">"</span><span class="p">;</span>
 
@@ -197,3 +261,45 @@ Below is an overview of the public endpoints available in Pi42, their typical us
   <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
       <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch kline data (e.g., BTCINR)</td>
+        </tr>
+        <tr>
+            <td>interval</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The interval for each kline (e.g., "1m" for 1 minute, "5m" for 5 minutes)</td>
+        </tr>
+        <tr>
+            <td>startTime</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The start time (in milliseconds) for the kline data (timestamp)</td>
+        </tr>
+        <tr>
+            <td>endTime</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The end time (in milliseconds) for the kline data (timestamp)</td>
+        </tr>
+        <tr>
+            <td>limit</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The maximum number of kline records to return</td>
+        </tr>
+    </tbody>
+</table>
