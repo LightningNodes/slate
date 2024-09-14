@@ -6,6 +6,15 @@
 
 Place an order (either a market order or a limit order) on Pi42's trading platform. It allows users to submit an order to buy or sell a specific asset.
 
+<aside class="notice"> Price is compulsory to place a limit order. <br/>
+
+To successfully place an order from a position, you need to pass the `positionId` in the request payload, which can be obtained calling the
+<strong><a href="#get-positions">Get Positions API</a></strong>
+ 
+ </aside>
+
+
+
 ```javascript
 async function placeOrder() {
     // Market Order
