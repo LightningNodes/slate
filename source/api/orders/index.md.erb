@@ -4,7 +4,7 @@
 
 `POST /v1/order/place-order`
 
-Place an order (either a market order or a limit order) on Pi42's trading platform.
+Place an order (either a market order or a limit order) on Pi42's trading platform. It allows users to submit an order to buy or sell a specific asset.
 
 ```javascript
 async function placeOrder() {
@@ -100,12 +100,127 @@ def place_order():
         # Handle any other unexpected errors
         print(f"An unexpected error occurred: {str(e)}")
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>placeType</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Indicates the type of order placement (e.g., POSITION or ORDER_FORM)</td>
+        </tr>
+        <tr>
+            <td>quantity</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Quantity of the asset to be traded</td>
+        </tr>
+        <tr>
+            <td>side</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Order side, either "BUY" or "SELL"</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Trading pair, e.g., Bitcoin to USDT</td>
+        </tr>
+        <tr>
+            <td>type</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Order type, either "MARKET" or "LIMIT"</td>
+        </tr>
+        <tr>
+            <td>reduceOnly</td>
+            <td>boolean</td>
+            <td>No</td>
+            <td>Whether to reduce an existing position only</td>
+        </tr>
+        <tr>
+            <td>marginAsset</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The asset used as margin</td>
+        </tr>
+        <tr>
+            <td>deviceType</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Indicates the device type (WEB, MOBILE, etc.)</td>
+        </tr>
+        <tr>
+            <td>userCategory</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Category of the user (EXTERNAL, INTERNAL, etc.)</td>
+        </tr>
+        <tr>
+            <td>price</td>
+            <td>number</td>
+            <td>Yes (LIMIT)</td>
+            <td>Price at which the limit order should be executed (only for LIMIT orders)</td>
+        </tr>
+        <tr>
+            <td>positionSide</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Position side (BOTH, LONG, SHORT, etc.)</td>
+        </tr>
+        <tr>
+            <td>timeInForce</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Good-Til-Canceled (GTC), Immediate-Or-Cancel (IOC), etc.</td>
+        </tr>
+        <tr>
+            <td>isolated</td>
+            <td>boolean</td>
+            <td>No</td>
+            <td>Specifies if the margin mode is isolated</td>
+        </tr>
+        <tr>
+            <td>newOrderRespType</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Response type for the order (e.g., ACK)</td>
+        </tr>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Position ID for tracking the order</td>
+        </tr>
+        <tr>
+            <td>stopPrice</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Stop price for a stop order (optional)</td>
+        </tr>
+        <tr>
+            <td>refId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Reference ID for tracking purposes</td>
+        </tr>
+    </tbody>
+</table>
 
 <h2 id="add-margin"> Add Margin </h2>
 
 `POST /v1/order/add-margin`
 
-Add margin to an existing trading position.
+Add margin to a specific position. It requires a unique position ID and the amount of margin to be added. This operation helps in increasing the margin available for a given position, which can be used for trading or managing positions.
+
 
 ```javascript
 async function addMargin() {
@@ -166,8 +281,32 @@ def add_margin():
         print(f"Failed {response.status_code}: {response.text}")
     except Exception as e:
         print(f"An unexpected error occurred: {str(e)}")
-
 ```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position to which margin is being added</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Amount of margin to be added to the specified position</td>
+        </tr>
+    </tbody>
+</table>
 
 <h2 id="reduce-margin">Reduce Margin</h2>
 
@@ -244,11 +383,36 @@ def reduce_margin():
         print(f"An unexpected error occurred: {str(e)}")
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position from which margin is being reduced</td>
+        </tr>
+        <tr>
+            <td>amount</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>Amount of margin to reduce from the specified position</td>
+        </tr>
+    </tbody>
+</table>
 
 <h2 id="get-open-orders">Get Open Orders</h2>
+
 `GET /v1/order/open-orders`
 
-The sample codes in different languages are provided below:
+Retrieves the open orders for a given account. It supports filtering results based on optional parameters such as page size, sorting order, and timestamps. The symbol parameter can be used to filter the results to a specific trading pair. <br/>This endpoint is useful for fetching the current active orders and managing them accordingly.
 
 ```python
 def get_open_orders():
@@ -302,8 +466,59 @@ return await getRequest(endpoint, params);
 }
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering open orders</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering open orders</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the orders (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id="get-order-history">Get Order History</h2>
+
 `GET /v1/order/order-history`
+
+Provides historical order data for a given account. 
+
+It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair. 
+
+This endpoint is helpful for reviewing past orders and analyzing historical trading activity.
 
 ```python
 # Function to fetch and display order history
@@ -355,10 +570,54 @@ async function getOrderHistory() {
   return await getRequest(endpoint, params);
 }
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering order history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering order history</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the orders (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
 
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
 `GET /v1/order/linked-orders` 
+
+Retrieves orders that are linked by a specific link ID. It is used to fetch all orders associated with a given link ID, which can help in tracking related orders or managing linked order groups.
 
 ```python
 # Function to fetch linked orders based on linkId
@@ -391,7 +650,6 @@ print(f"Failed {response.status_code}: {response.text}")
 ```
 
 ```javascript
-
 // Get Linked Orders
 async function linkedOrders(linkId) {
   const linkId = "6acd808ba5957340b009-6238-ext"
@@ -422,9 +680,35 @@ async function fetchMarginHistory() {
  };
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>linkId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the linked orders</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id="get-margin-history">Fetch Margin History</h2>
 
 `GET /v1/order/fetch-margin-history`
+
+Retrieves the margin history for an account.
+
+It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol. 
+
+This endpoint is useful for analyzing past margin activities and historical changes in margin levels.
 
 ```python
 def fetch_margin_history():
@@ -498,10 +782,59 @@ async function fetchMarginHistory() {
 }
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering margin history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering margin history</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter the margin history (e.g., BTCUSDT)</td>
+        </tr>
+    </tbody>
+</table>
+
 
 <h2 id="get-postions">Get Positions</h2>
 
 `GET /v1/positions`
+
+Retrieves positions based on their status. 
+
+It allows filtering positions by their status (e.g., "OPEN") and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol. 
+
+This endpoint is useful for fetching current or historical positions and managing your trading portfolio.
 
 ```python
 # Function to fetch positions
@@ -581,9 +914,63 @@ async function fetchPositions() {
 
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionStatus</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The status of the positions to retrieve (e.g., "OPEN")</td>
+        </tr>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering positions</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering positions</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter positions (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id="get-position-status">Get Position Status</h2>
 
 `GET /v1/positions/{positionStatus}`
+
+Retrieves details for a specific position identified by its unique position ID. 
+
+It returns information related to the specified position, such as current status, asset details, and other relevant data.
 
 ```python
 def get_positions():
@@ -646,9 +1033,35 @@ async function getPosition() {
 }
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the position to retrieve</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id="trade-history">Get User's Trade History</h2>
 
 `GET /v1/user-data/trade-history`
+
+Retrieves the trade history for a user. 
+
+
+It supports optional filtering parameters such as timestamps, sorting order, page size, and trading symbol to help users access their historical trade data efficiently.
+
 
 ```javascript
 async function fetchUserTradeHistory() {
@@ -705,11 +1118,56 @@ except requests.exceptions.HTTPError as err:
     print(f"Failed {response.status_code}: {response.text}")
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering trade history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering trade history</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of results to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading pair symbol to filter trade history (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 <h2 id="get-transaction-history">Get User's Transaction History</h2>
 
 `GET/v1/user-data/transaction-history`
 
-Fetches transaction history by sending a GET request to the endpoint.
+Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters. 
+
+It provides detailed records of transactions within the specified time range and can be filtered by trading symbol, trade ID, and position ID.
 
 ```python
 def get_transaction_history():
@@ -803,12 +1261,71 @@ async function fetchUserTransactionHistory() {
 }
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>startTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The start timestamp (in milliseconds) for filtering transaction history</td>
+        </tr>
+        <tr>
+            <td>endTimestamp</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The end timestamp (in milliseconds) for filtering transaction history</td>
+        </tr>
+        <tr>
+            <td>sortOrder</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The sorting order for the results (e.g., "asc" or "desc")</td>
+        </tr>
+        <tr>
+            <td>pageSize</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The number of records to return per page</td>
+        </tr>
+        <tr>
+            <td>symbol</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The trading symbol to filter the transaction history (e.g., BTCINR)</td>
+        </tr>
+        <tr>
+            <td>tradeId</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The specific trade ID to filter the transaction history</td>
+        </tr>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>No</td>
+            <td>The specific position ID to filter the transaction history</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id='exchange-update-leverage'>Update Leverage</h2>
 
 `POST /v1/exchange/update/leverage`
- 
-Update the leverage preference for a specific trading contract
 
+Updates the leverage for a specified contract. It allows setting the leverage level for trading a particular asset or trading pair.
+
+This endpoint is used to adjust the leverage settings for risk management and trading strategies.
+
+ 
 ```javascript
 async function updateLeverage() {
     const endpoint = "/v1/exchange/update/leverage";
@@ -867,16 +1384,40 @@ def update_leverage():
       print(f"Error: {err.response.text if err.response else err}")
   except Exception as e:
       print(f"An unexpected error occurred: {str(e)}")
-
-
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>leverage</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>The leverage level to set for the contract (e.g., 10). Must be an integer.</td>
+        </tr>
+        <tr>
+            <td>contractName</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair or contract name to which the leverage applies (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
 
 
 <h2 id="delete-order"> Deleting an Order</h2>
 
 `DELETE /v1/order/delete-order`
 
-Delete an existing order based on its clientOrderId
+deletes a specific order based on its client order ID. 
+
+It requires the client order ID (`clientOrderID`) to identify the order to be deleted and a timestamp for request validation.
 
 ```javascript
 async function deleteOrder() {
@@ -924,4 +1465,28 @@ def delete_order():
         print(f"Failed {response.status_code}: {response.text}")
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>clientOrderId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The unique identifier for the order to be deleted (e.g., a9c5ba9893c99828e4b5-6238-ext)</td>
+        </tr>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+    </tbody>
+</table>
 

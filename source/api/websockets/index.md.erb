@@ -2,9 +2,12 @@
 
 <h2 id="create-listen-key"> Create Listen Key </h2>
 
-Users can create a Listen Key for each API key. By default each listen key will be valid for 60 minutes.
-
 `POST /v1/retail/listen-key`
+
+Creates a new listen key for WebSocket connections. 
+
+A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
+
 
 ```code
 const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
@@ -44,10 +47,37 @@ async function createListenKey(apiKey: string, apiSecret: string) {
   }
 }
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp in milliseconds to ensure request uniqueness and prevent replay attacks</td>
+        </tr>
+    </tbody>
+</table>
+
+The `createListenKey` function also requires an `apiKey` and `apiSecret` for authentication, and these are included in the headers of the request:
+
+- `apiKey`: The API key for authenticating the request.
+- `apiSecret`: The API secret used to generate the signature for request validation.
+
+The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.
 
 <h2 id="authenticated-web-sockets">Authenticated Web Sockets</h2>
 
 Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`
+
+The WebSocket client connects to a server using a listen key and listens for various events related to trading activities and session management. Each event handler logs specific information when the event is received.
 
 Event listeners are described below:
 
@@ -340,7 +370,9 @@ function subscribeToTopics() {
 
 `POST /v1/retail/listen-key`
 
-Obtain a WebSocket listen key from the endpoint. 
+Retrieves a new listen key for WebSocket connections. 
+
+A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.
 
 ```javascript
 async function getListenKey() {
@@ -377,14 +409,56 @@ def create_or_update_listen_key():
       print('Listen key created or updated successfully:', json.dumps(response_data, indent=4))
   except requests.exceptions.HTTPError as err:
       print(f"Failed {response.status_code}: {response.text}")
-
 ```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Retrieves a new listen key for WebSocket connections. <br/>A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.</td>
+        </tr>
+    </tbody>
+</table>
+
 
 <h2 id="update-listen-key">Update Listen Key</h2>
 
 `PUT /v1/retail/listen-key`
 
-Update the expiry of a listen key.
+Updates the listen key for WebSocket connections. 
+
+
+Updating the listen key is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Updates the listen key for WebSocket connections. </td>
+        </tr>
+    </tbody>
+</table>
+
 
 ```javascript
 async function updateListenKey() {
@@ -425,6 +499,11 @@ def update_listen_key_expiry():
 <h2 id="delete-listen-key">Delete Listen Key</h2>
 
 `DELETE /v1/retail/listen-key`
+
+Deletes the listen key for WebSocket connections.
+
+This action terminates the connection and stops the receipt of real-time updates.
+
 
 ```javascript
 async function deleteListenKey() {
@@ -469,4 +548,23 @@ def delete_listen_key():
   except Exception as e:
       print(f"An unexpected error occurred: {str(e)}")
 ```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Deletes the listen key for WebSocket connections</td>
+        </tr>
+    </tbody>
+</table>
 

@@ -1,12 +1,16 @@
 <h1 id='public-endpoints'>Public Endpoints</h1>
 <p>Public endpoints in Pi42 are designed to facilitate easy access to various functionalities of the Pi42 platform, particularly for integration with external systems and applications. 
+
 Below is an overview of the public endpoints available in Pi42, their typical uses, and example API calls.</p>
 
 <h2 id='ticker-update-24hr'>Ticker Update (24Hr)</h2>
 
 `GET /v1/market/ticker24Hr`
 
-Fetch the 24-hour market ticker data for a specific trading pair, in this case, "BTCINR".
+Fetches the 24-hour market ticker data for a specific trading pair. 
+
+It provides details such as the last traded price, volume, and other market metrics over the past 24 hours.
+
 
 ```javascript
 async function fetchTicker() {
@@ -18,6 +22,7 @@ async function fetchTicker() {
     return await getRequest(url, {});
 }
 ```
+
 ```python
 import requests
 import json
@@ -50,16 +55,36 @@ def get_24hr_ticker_update():
     except Exception as e:
         # Handle any other unexpected errors
         print(f"An unexpected error occurred: {str(e)}")
-
-
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch the ticker data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
 
 
 <h2 id='agg-trade-update'>Aggregate Trade Update</h2>
 
 `GET /v1/market/aggTrade`
 
-Fetch the aggregated trade data for a specific trading pair, in this case, "BTCINR". 
+Retrieves aggregated trade data for a specific trading pair. 
+
+
+Aggregated trades provide summarized information about trade activities, such as total volume and price changes, for the given trading pair.
+
 
 ```javascript
 async function fetchAggTrade() {
@@ -107,11 +132,34 @@ def get_trade_updates():
 
 ```
 
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch aggregated trade data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
+
 <h2 id='depth-update'>Depth Update</h2>
 
 `GET /v1/market/depth/`
 
-Retrieves the order book depth data for a specified trading pair and interval.
+Fetches the order book depth data for a specific trading pair. 
+
+It provides information about the current market depth, including bid and ask prices and their respective volumes, which is essential for understanding market liquidity.
+
 
 ```javascript
 async function fetchDepth() {
@@ -123,7 +171,6 @@ async function fetchDepth() {
     return await getRequest(url, {});
 }
 ```
-
 ```python
 def get_depth_update():
     # Prompt the user to enter a contract pair
@@ -154,12 +201,33 @@ def get_depth_update():
         # Handle any other unexpected errors
         print(f"An unexpected error occurred: {str(e)}")
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>contractPair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch the order book depth data (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
 
 <h2 id='klines'>Get Klines</h2>
 
 `POST /v1/market/klines`
 
-Retrieves candlestick (Kline) data for a specific trading pair.
+Retrieves candlestick (kline) data for a specified trading pair and time interval. 
+
+It provides historical price data that can be used for charting and analysis, including start and end times, and limits on the number of records returned.
 
 ```javascript
 async function getKlines() {
@@ -219,5 +287,49 @@ def get_kline_data():
   except Exception as e:
       print(f"An unexpected error occurred: {str(e)}")
 ```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pair</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair for which to fetch kline data (e.g., BTCINR)</td>
+        </tr>
+        <tr>
+            <td>interval</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The interval for each kline (e.g., "1m" for 1 minute, "5m" for 5 minutes)</td>
+        </tr>
+        <tr>
+            <td>startTime</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The start time (in milliseconds) for the kline data (timestamp)</td>
+        </tr>
+        <tr>
+            <td>endTime</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The end time (in milliseconds) for the kline data (timestamp)</td>
+        </tr>
+        <tr>
+            <td>limit</td>
+            <td>number</td>
+            <td>No</td>
+            <td>The maximum number of kline records to return</td>
+        </tr>
+    </tbody>
+</table>
+
 
 
