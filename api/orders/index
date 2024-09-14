@@ -6,12 +6,13 @@
 
 <p>Place an order (either a market order or a limit order) on Pi42&#39;s trading platform. It allows users to submit an order to buy or sell a specific asset.</p>
 
-<aside class="notice"> Price is compulsory to place a limit order. <br/>
-
-To successfully place an order from a position, you need to pass the `positionId` in the request payload, which can be obtained calling the
-<strong><a href="#get-positions">Get Positions API</a></strong>
- 
- </aside>
+<aside class="notice"> Note:
+<ul>
+<li>Price is compulsory to place a limit order.</li>
+<li>To successfully place an order from a position, you need to pass the `positionId` in the request payload, which can be obtained calling the
+<a href="#get-positions">Get Positions API</a></li>
+</ul>
+</aside>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Market Order</span>
     <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
@@ -303,6 +304,10 @@ To successfully place an order from a position, you need to pass the `positionId
     </tbody>
 </table>
 
+<aside class="notice">
+The required positionId can be obtained calling the <a href="#get-positions">Get Positions API</a>
+</aside>
+
 <h2 id="reduce-margin">Reduce Margin</h2>
 
 <p><code>POST /v1/order/reduce-margin</code></p>
@@ -397,6 +402,10 @@ To successfully place an order from a position, you need to pass the `positionId
         </tr>
     </tbody>
 </table>
+
+<aside class="notice">
+The required positionId can be obtained calling the <a href="#get-positions">Get Positions API</a>
+</aside>
 
 <h2 id="get-open-orders">Get Open Orders</h2>
 
@@ -673,6 +682,10 @@ To successfully place an order from a position, you need to pass the `positionId
     </tbody>
 </table>
 
+<aside class="notice">
+Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
+</aside>
+
 <h2 id="get-margin-history">Fetch Margin History</h2>
 
 <p><code>GET /v1/order/fetch-margin-history</code></p>
@@ -792,7 +805,7 @@ To successfully place an order from a position, you need to pass the `positionId
     </tbody>
 </table>
 
-<h2 id="get-postions">Get Positions</h2>
+<h2 id="get-positions">Get Positions</h2>
 
 <p><code>GET /v1/positions</code></p>
 
@@ -1261,6 +1274,21 @@ except requests.exceptions.HTTPError as err:
 <p>Updates the leverage for a specified contract. It allows setting the leverage level for trading a particular asset or trading pair.</p>
 
 <p>This endpoint is used to adjust the leverage settings for risk management and trading strategies.</p>
+
+<aside class="notice">Notes:
+<ol>
+<li><strong>Update Leverage for Specific Symbols</strong></li>
+<ul>
+<li>Users can adjust the leverage for individual symbols using the /update/leverage endpoint.</li>
+<li>This adjustment applies only to the specified symbol.</li>
+</ul>
+<li><strong>Placing Orders</strong></li>
+<ul>
+<li>Orders will be executed with the leverage that was previously set for the symbol.</li>
+<li>To use a different leverage for an order, users must first update the leverage for the symbol via the /update/leverage endpoint.</li>
+</ul>
+</ol>
+</aside>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">updateLeverage</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/exchange/update/leverage</span><span class="dl">"</span><span class="p">;</span>
 
@@ -1414,3 +1442,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
+
+<aside class="notice">
+Requires clientOrderId that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
+</aside>
