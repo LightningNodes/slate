@@ -1,86 +1,21 @@
 <h1 id='web-sockets'>Web Sockets</h1>
 
-<h2 id="create-listen-key"> Create Listen Key </h2>
+WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges). 
 
-`POST /v1/retail/listen-key`
+Here's how different web sockets work:
 
-Creates a new listen key for WebSocket connections. 
-
-A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
-
-
-```code
-const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
-
-// Function to generate a signature for the request
-const generateSignature = (params: object, apiSecret: string) => {
-  return crypto
-    .createHmac('sha256', apiSecret)
-    .update(JSON.stringify(params))
-    .digest('hex');
-};
-
-// Function to call Create Listen Key API
-async function createListenKey(apiKey: string, apiSecret: string) {
-  const params = {
-    timestamp: Date.now().toString(),
-  };
-
-  const signature = generateSignature(params, apiSecret);
-
-  try {
-    const response = await axios.post(baseUrl, params, {
-      headers: {
-        'api-key': apiKey,
-        'Content-Type': 'application/json',
-        'signature': signature,
-      },
-    });
-    console.log('Create Listen Key Response:', response.data);
-    return response.data.listenKey;
-  } catch (error) {
-    console.error(
-      'Error creating Listen Key:',
-      error.response ? error.response.data : error.message
-    );
-    throw error; // Rethrow the error for further handling
-  }
-}
-```
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>timestamp</td>
-            <td>string</td>
-            <td>Yes</td>
-            <td>The current timestamp in milliseconds to ensure request uniqueness and prevent replay attacks</td>
-        </tr>
-    </tbody>
-</table>
-
-The `createListenKey` function also requires an `apiKey` and `apiSecret` for authentication, and these are included in the headers of the request:
-
-- `apiKey`: The API key for authenticating the request.
-- `apiSecret`: The API secret used to generate the signature for request validation.
-
-The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.
 
 <h2 id="authenticated-web-sockets">Authenticated Web Sockets</h2>
 
-Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`.
+Authenticated WebSockets require user validation to ensure that only authorized users can access the data or functionality provided such as receiving real-time updates about a trader's account.
 
-<aside class="notice">
+For example,  balance changes, order executions, or margin updates.
 
-Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a>
-
+<aside class="notice"> Notes:
+<ul>
+  <li>Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`</li>
+  <li>Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a></li>
+</ul>
 </aside>
 
 The WebSocket client connects to a server using a listen key and listens for various events related to trading activities and session management. Each event handler logs specific information when the event is received.
@@ -227,7 +162,17 @@ socket.on('disconnect', () => {
 
 <h2 id="public-web-sockets">Public Web Sockets</h2>
 
-Public Web Socket URL `https://fawss.pi42.com/`. Once connected, users can subscribe to different topics mentioned below:
+Public WebSockets are open to all clients and do not require authentication to establish a connection. They are useful for scenarios where the data being transmitted is not sensitive or where the application does not require user-specific interactions.
+
+For example, to receive real-time updates on market data such as price changes, order book depth, and trade history without requiring authentication.
+
+<aside class="notice">
+
+  Public Web Socket URL `https://fawss.pi42.com/`
+
+</aside>
+
+Once connected, users can subscribe to different topics mentioned below:
 
 <table>
     <thead>
@@ -371,6 +316,80 @@ function subscribeToTopics() {
   });
 }
 ```
+
+<h2 id="create-listen-key"> Create Listen Key </h2>
+
+`POST /v1/retail/listen-key`
+
+Creates a new listen key for WebSocket connections. 
+
+A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
+
+
+```code
+const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
+
+// Function to generate a signature for the request
+const generateSignature = (params: object, apiSecret: string) => {
+  return crypto
+    .createHmac('sha256', apiSecret)
+    .update(JSON.stringify(params))
+    .digest('hex');
+};
+
+// Function to call Create Listen Key API
+async function createListenKey(apiKey: string, apiSecret: string) {
+  const params = {
+    timestamp: Date.now().toString(),
+  };
+
+  const signature = generateSignature(params, apiSecret);
+
+  try {
+    const response = await axios.post(baseUrl, params, {
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+        'signature': signature,
+      },
+    });
+    console.log('Create Listen Key Response:', response.data);
+    return response.data.listenKey;
+  } catch (error) {
+    console.error(
+      'Error creating Listen Key:',
+      error.response ? error.response.data : error.message
+    );
+    throw error; // Rethrow the error for further handling
+  }
+}
+```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp in milliseconds to ensure request uniqueness and prevent replay attacks</td>
+        </tr>
+    </tbody>
+</table>
+
+The `createListenKey` function also requires an `apiKey` and `apiSecret` for authentication, and these are included in the headers of the request:
+
+- `apiKey`: The API key for authenticating the request.
+- `apiSecret`: The API secret used to generate the signature for request validation.
+
+The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.
+
 
 <h2 id="get-listen-key">Get Listen Key</h2>
 
