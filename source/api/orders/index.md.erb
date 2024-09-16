@@ -9,7 +9,7 @@ Place an order (either a market order or a limit order) on Pi42's trading platfo
 <aside class="notice"> Note:
 <ul>
 <li>Price is compulsory to place a limit order.</li>
-<li>To successfully place an order from a position, you need to pass the `positionId` in the request payload, which can be obtained calling the
+<li>To successfully place an order from a position, you need to pass the <code>positionId</code> in the request payload, which can be obtained calling the
 <a href="#get-positions">Get Positions API</a></li>
 </ul>
 </aside>
@@ -224,6 +224,13 @@ def place_order():
     </tbody>
 </table>
 
+### Response
+
+The response parameters are described below: 
+
+
+
+
 <h2 id="add-margin"> Add Margin </h2>
 
 `POST /v1/order/add-margin`
@@ -318,8 +325,49 @@ def add_margin():
 </table>
 
 <aside class="notice">
-The required positionId can be obtained calling the <a href="#get-positions">Get Positions API</a>
+The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
+
+### Response
+The response parameters are described below:
+
+
+```json
+# Response
+{
+  "lockedBalance": 870,
+  "withdrawableBalance": 9393.52,
+  "asset": "INR",
+  "message": "Margin added successfully"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>lockedBalance</strong></td>
+      <td>The amount of balance that is locked and cannot be withdrawn (870 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>withdrawableBalance</strong></td>
+      <td>The amount of balance available for withdrawal (9393.52 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>asset</strong></td>
+      <td>The asset or currency being used (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>message</strong></td>
+      <td>A confirmation message indicating that margin was added successfully.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="reduce-margin">Reduce Margin</h2>
 
@@ -423,8 +471,51 @@ def reduce_margin():
 </table>
 
 <aside class="notice">
-The required positionId can be obtained calling the <a href="#get-positions">Get Positions API</a>
+The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
+
+### Response
+
+The JSON body returned in the response is as follows:
+
+```json
+
+# Response
+{
+    "lockedBalance": 870,
+    "withdrawableBalance": 9393.52,
+    "asset": "INR",
+    "message": "Margin reduced successfully"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>lockedBalance</strong></td>
+      <td>The amount of balance that is locked and cannot be withdrawn (870 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>withdrawableBalance</strong></td>
+      <td>The amount of balance available for withdrawal (9393.52 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>asset</strong></td>
+      <td>The asset or currency being used (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>message</strong></td>
+      <td>A confirmation message indicating that margin was reduced successfully.</td>
+    </tr>
+  </tbody>
+</table>
+
 
 <h2 id="get-open-orders">Get Open Orders</h2>
 
@@ -525,6 +616,104 @@ return await getRequest(endpoint, params);
             <td>The trading pair symbol to filter the orders (e.g., BTCUSDT)</td>
         </tr>
     </tbody>
+</table>
+
+### Response
+
+The response parameters are described below:
+
+
+```json
+[
+  {
+    "clientOrderId": "ccef6a84a5cf6a463353-6238-ext",
+    "time": "2024-09-13T07:57:15.305Z",
+    "symbol": "BTCINR",
+    "contractType": "PERPETUAL",
+    "type": "MARKET",
+    "side": "BUY",
+    "price": 5170418,
+    "orderAmount": 0.002,
+    "filledAmount": 0,
+    "linkId": "ccef6a84a5cf6a463353-6238-ext",
+    "linkType": "ORDER",
+    "subType": "PRIMARY",
+    "placeType": "ORDER_FORM",
+    "baseAsset": "BTC",
+    "quoteAsset": "INR"
+  }
+]
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client's order (<code>ccef6a84a5cf6a463353-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td>Timestamp when the order was placed (<code>2024-09-13T07:57:15.305Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>Trading pair involved (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupees (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>Type of contract (<code>PERPETUAL</code>), suggests a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The order type (<code>MARKET</code>), meaning the order will be executed immediately at the current market price.</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Indicates whether the order is to buy or sell (<code>BUY</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>The price per unit of Bitcoin at the time the order was placed (<code>5170418 INR</code> per BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>orderAmount</strong></td>
+      <td>The amount of Bitcoin to be purchased (<code>0.002</code> BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>filledAmount</strong></td>
+      <td>Amount of the order that has been filled so far (<code>0</code>, indicating it hasn't been executed yet).</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Additional reference that ties this order to a broader system or linked entities (<code>ccef6a84a5cf6a463353-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>The type of link (<code>ORDER</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>Order classification (<code>PRIMARY</code>), indicating the main order type.</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>Describes where the order was placed from (<code>ORDER_FORM</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The asset being bought (Bitcoin).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (INR).</td>
+    </tr>
+  </tbody>
 </table>
 
 
@@ -631,6 +820,149 @@ async function getOrderHistory() {
     </tbody>
 </table>
 
+### Response
+
+The details of the JSON object returned in the response body are as follows:
+
+```json
+[
+  {
+    "clientOrderId": "c707985129f41a13ab40-6238-ext",
+    "updatedAt": "2024-09-13T10:48:57.630Z",
+    "symbol": "BTCINR",
+    "type": "MARKET",
+    "isIsolated": true,
+    "side": "SELL",
+    "price": "5182995",
+    "avgPrice": "5182656",
+    "origQty": "10365.31",
+    "cumQty": "0.002",
+    "executedQty": "0.002",
+    "reduceOnly": false,
+    "status": "FILLED",
+    "leverage": 25,
+    "subType": "PRIMARY",
+    "stopPrice": null,
+    "lockedMargin": 0,
+    "lockedMarginInMarginAsset": 0,
+    "marginAsset": "INR",
+    "contractType": "PERPETUAL",
+    "iconUrl": "https://storage.googleapis.com/pi42-dev-static/contract-icons/btc.png",
+    "quoteAsset": "INR",
+    "baseAsset": "BTC",
+    "leveragedQty": 0.002
+  }
+]
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client's order (<code>c707985129f41a13ab40-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>updatedAt</strong></td>
+      <td>The timestamp when the order was last updated (<code>2024-09-13T10:48:57.630Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>The trading pair involved (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupees (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The order type (<code>MARKET</code>), meaning the order was executed at the current market price.</td>
+    </tr>
+    <tr>
+      <td><strong>isIsolated</strong></td>
+      <td>Indicates whether the order is isolated (<code>true</code>), meaning it's an isolated margin trade.</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Indicates whether the order is to buy or sell (<code>SELL</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>The price per unit of Bitcoin at the time the order was placed (<code>5182995 INR</code> per BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>avgPrice</strong></td>
+      <td>The average price at which the order was executed (<code>5182656 INR</code> per BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>origQty</strong></td>
+      <td>The original quantity in INR before conversion to BTC (<code>10365.31</code> INR).</td>
+    </tr>
+    <tr>
+      <td><strong>cumQty</strong></td>
+      <td>The cumulative amount of Bitcoin executed so far (<code>0.002</code> BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>executedQty</strong></td>
+      <td>The total executed quantity of the order (<code>0.002</code> BTC).</td>
+    </tr>
+    <tr>
+      <td><strong>reduceOnly</strong></td>
+      <td>A flag indicating if the order is only to reduce an existing position (<code>false</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>The current status of the order (<code>FILLED</code>), meaning the order is completely executed.</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>The leverage applied to the trade (<code>25x</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>The order classification (<code>PRIMARY</code>), indicating the main order type.</td>
+    </tr>
+    <tr>
+      <td><strong>stopPrice</strong></td>
+      <td>The stop price associated with the order (<code>null</code>), as this is not a stop order.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>The amount of margin locked in INR (<code>0</code> INR).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>The amount of margin locked in the margin asset (<code>0</code> INR).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>iconUrl</strong></td>
+      <td>The URL of the contract icon (<a href="https://storage.googleapis.com/pi42-dev-static/contract-icons/btc.png" target="_blank">BTC Icon</a>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The asset being traded (Bitcoin).</td>
+    </tr>
+    <tr>
+      <td><strong>leveragedQty</strong></td>
+      <td>The quantity of Bitcoin being traded with leverage (<code>0.002</code> BTC).</td>
+    </tr>
+  </tbody>
+</table>
+
+
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
 `GET /v1/order/linked-orders` 
@@ -720,6 +1052,120 @@ async function fetchMarginHistory() {
 <aside class="notice">
 Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
 </aside>
+
+### Response
+
+The details returned in the response body as are as follows:
+
+```json
+
+// Response
+[
+  {
+    "clientOrderId": "m2l-1f04cd91efa7ebe09cad-6238-ext",
+    "time": "2024-09-11T12:14:03.706Z",
+    "symbol": "BTCINR",
+    "contractType": "PERPETUAL",
+    "type": "MARKET",
+    "side": "BUY",
+    "price": 5054068,
+    "orderAmount": 0.002,
+    "filledAmount": 0,
+    "linkId": "m2l-1f04cd91efa7ebe09cad-6238-ext",
+    "subType": "PRIMARY",
+    "linkType": "ORDER_SL",
+    "takeProfitPrice": null,
+    "stopLossPrice": null,
+    "status": "NEW",
+    "placeType": "ORDER_FORM",
+    "baseAsset": "BTC",
+    "quoteAsset": "INR"
+  }
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client's order (<code>m2l-1f04cd91efa7ebe09cad-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td>The timestamp when the order was created (<code>2024-09-11T12:14:03.706Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>The trading pair involved (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupees (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The order type (<code>MARKET</code>), meaning the order was executed at the current market price.</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Indicates whether the order is to buy or sell (<code>BUY</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>The price per unit of Bitcoin at the time the order was placed (<code>5054068 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>orderAmount</strong></td>
+      <td>The total amount of Bitcoin to be bought (<code>0.002 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>filledAmount</strong></td>
+      <td>The amount of Bitcoin that has been filled so far (<code>0 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Unique identifier for the linked order (<code>m2l-1f04cd91efa7ebe09cad-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>The order classification (<code>PRIMARY</code>), indicating the main order type.</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>Indicates the link type of the order (<code>ORDER_SL</code>), possibly linking to a stop-loss order.</td>
+    </tr>
+    <tr>
+      <td><strong>takeProfitPrice</strong></td>
+      <td>The take-profit price associated with the order (<code>null</code>), indicating no take-profit price set.</td>
+    </tr>
+    <tr>
+      <td><strong>stopLossPrice</strong></td>
+      <td>The stop-loss price associated with the order (<code>null</code>), indicating no stop-loss price set.</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>The current status of the order (<code>NEW</code>), meaning the order has been placed but not filled.</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>The method by which the order was placed (<code>ORDER_FORM</code>), likely using an order form interface.</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset being traded (<code>BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>INR</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
 
 
 <h2 id="get-margin-history">Fetch Margin History</h2>
@@ -845,6 +1291,86 @@ async function fetchMarginHistory() {
             <td>The trading pair symbol to filter the margin history (e.g., BTCUSDT)</td>
         </tr>
     </tbody>
+</table>
+
+### Response
+
+The response details are as follows:
+
+```json
+// Response
+{
+  "data": [
+    {
+      "id": 549,
+      "amount": 0.1,
+      "refId": null,
+      "marginInMarginAsset": 8.7,
+      "marginAsset": "INR",
+      "positionId": "90483119-0c3a-4cc0-9afa-25366f907fca",
+      "operation": "REDUCE_MARGIN",
+      "createdAt": "2024-09-12T08:59:57.707Z",
+      "updatedAt": "2024-09-12T08:59:57.707Z"
+    }
+  ],
+  "totalCount": 45,
+  "nextTimestamp": "1725624883814"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the margin operation (<code>549</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>amount</strong></td>
+      <td>The amount involved in the margin operation (<code>0.1</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>refId</strong></td>
+      <td>Reference ID associated with the operation (<code>null</code>, indicating no reference ID).</td>
+    </tr>
+    <tr>
+      <td><strong>marginInMarginAsset</strong></td>
+      <td>Margin in the margin asset (<code>8.7</code> INR).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionId</strong></td>
+      <td>Unique identifier for the position associated with the margin operation (<code>90483119-0c3a-4cc0-9afa-25366f907fca</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>operation</strong></td>
+      <td>The type of operation performed (<code>REDUCE_MARGIN</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>createdAt</strong></td>
+      <td>Timestamp when the margin operation was created (<code>2024-09-12T08:59:57.707Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>updatedAt</strong></td>
+      <td>Timestamp when the margin operation was last updated (<code>2024-09-12T08:59:57.707Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>totalCount</strong></td>
+      <td>The total number of margin operations recorded (<code>45</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>nextTimestamp</strong></td>
+      <td>The next timestamp for fetching data (<code>1725624883814</code>).</td>
+    </tr>
+  </tbody>
 </table>
 
 
@@ -985,6 +1511,131 @@ async function fetchPositions() {
     </tbody>
 </table>
 
+### Response
+
+The response parameters are described below:
+
+```json
+{
+  "id": 5454,
+  "contractPair": "GRTINR",
+  "contractType": "PERPETUAL",
+  "entryPrice": 12.541,
+  "leverage": 10,
+  "liquidationPrice": 11.4,
+  "marginType": "ISOLATED",
+  "margin": 45.6,
+  "marginInMarginAsset": 45.6,
+  "positionAmount": 36,
+  "positionId": "8b56348d-0d5d-4de1-85e1-3325bdf84087",
+  "positionSize": 451.48,
+  "positionStatus": "OPEN",
+  "positionType": "LONG",
+  "realizedProfit": null,
+  "quantity": 36,
+  "baseAsset": "GRT",
+  "marginAsset": "INR",
+  "quoteAsset": "INR",
+  "createdTime": "2024-09-16T09:39:41.689Z",
+  "updatedTime": "2024-09-16T09:39:41.689Z"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the position (<code>5454</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>contractPair</strong></td>
+      <td>The trading pair for the contract (<code>GRTINR</code>), indicating GRT traded against INR.</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>entryPrice</strong></td>
+      <td>The price at which the position was entered (<code>12.541 INR</code> per GRT).</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>The leverage applied to the trade (<code>10x</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>liquidationPrice</strong></td>
+      <td>The price at which the position would be liquidated (<code>11.4 INR</code> per GRT).</td>
+    </tr>
+    <tr>
+      <td><strong>marginType</strong></td>
+      <td>The type of margin used for the position (<code>ISOLATED</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>margin</strong></td>
+      <td>The amount of margin allocated to the position (<code>45.6 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginInMarginAsset</strong></td>
+      <td>The amount of margin in the margin asset (<code>45.6 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionAmount</strong></td>
+      <td>The amount of the position (<code>36 GRT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionId</strong></td>
+      <td>Unique identifier for the position (<code>8b56348d-0d5d-4de1-85e1-3325bdf84087</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionSize</strong></td>
+      <td>The size of the position in terms of value (<code>451.48 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionStatus</strong></td>
+      <td>The current status of the position (<code>OPEN</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionType</strong></td>
+      <td>The type of position (<code>LONG</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>realizedProfit</strong></td>
+      <td>The profit realized from the position (<code>null</code>, indicating no realized profit yet).</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>The quantity of the asset involved (<code>36 GRT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset being traded (<code>GRT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>createdTime</strong></td>
+      <td>The timestamp when the position was created (<code>2024-09-16T09:39:41.689Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>updatedTime</strong></td>
+      <td>The timestamp when the position was last updated (<code>2024-09-16T09:39:41.689Z</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
 
 <h2 id="get-position-status">Get Position Status</h2>
 
@@ -1072,6 +1723,127 @@ async function getPosition() {
             <td>The unique identifier for the position to retrieve</td>
         </tr>
     </tbody>
+</table>
+
+### Response
+
+```json
+// Response
+[
+    {
+        "contractPair": "BTCUSDT",
+        "entryPrice": 58003.7,
+        "leverage": 9,
+        "liquidationPrice": 52173.1,
+        "marginType": "ISOLATED",
+        "marginAsset": "INR",
+        "margin": 19.404,
+        "marginInMarginAsset": 1688.15,
+        "positionAmount": 0.003,
+        "positionId": "dd89732b-3a9d-4500-acec-64e1384c7149",
+        "positionSize": 174.0111,
+        "positionStatus": "OPEN",
+        "positionType": "LONG",
+        "realizedProfit": 0,
+        "quantity": 0.003,
+        "createdAt": "2024-09-13T08:19:18.642Z",
+        "contractType": "PERPETUAL",
+        "iconUrl": "https://storage.googleapis.com/pi42-dev-static/contract-icons/btc.png",
+        "baseAsset": "BTC",
+        "quoteAsset": "USDT"
+    }
+]
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>contractPair</strong></td>
+      <td>The trading pair for the contract (<code>BTCUSDT</code>), indicating Bitcoin (BTC) traded against USDT (Tether).</td>
+    </tr>
+    <tr>
+      <td><strong>entryPrice</strong></td>
+      <td>The price at which the position was entered (<code>58003.7 USDT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>The leverage applied to the trade (<code>9x</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>liquidationPrice</strong></td>
+      <td>The price at which the position would be liquidated (<code>52173.1 USDT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginType</strong></td>
+      <td>The type of margin used for the position (<code>ISOLATED</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>margin</strong></td>
+      <td>The amount of margin allocated to the position (<code>19.404 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginInMarginAsset</strong></td>
+      <td>The amount of margin in the margin asset (<code>1688.15 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionAmount</strong></td>
+      <td>The amount of the position (<code>0.003 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionId</strong></td>
+      <td>Unique identifier for the position (<code>dd89732b-3a9d-4500-acec-64e1384c7149</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionSize</strong></td>
+      <td>The size of the position in terms of value (<code>174.0111 USDT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionStatus</strong></td>
+      <td>The current status of the position (<code>OPEN</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>positionType</strong></td>
+      <td>The type of position (<code>LONG</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>realizedProfit</strong></td>
+      <td>The profit realized from the position (<code>0</code>, indicating no realized profit yet).</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>The quantity of the asset involved (<code>0.003 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>createdAt</strong></td>
+      <td>The timestamp when the position was created (<code>2024-09-13T08:19:18.642Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>iconUrl</strong></td>
+      <td>The URL for the contract icon (<code>https://storage.googleapis.com/pi42-dev-static/contract-icons/btc.png</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset being traded (<code>BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>USDT</code>).</td>
+    </tr>
+  </tbody>
 </table>
 
 
@@ -1528,6 +2300,6 @@ def delete_order():
 </table>
 
 <aside class="notice">
-Requires clientOrderId that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
+Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
 </aside>
 
