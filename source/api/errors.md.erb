@@ -1,0 +1,250 @@
+<h1 id="error-codes"> Error Codes </h1>
+
+Pi42 APIs utilize a set of custom error codes, each associated with an HTTP status code and a specific error message. These codes help users pinpoint the exact issue that caused the request to fail.
+
+<table>
+  <thead>
+    <tr>
+      <th>Error Code</th>
+      <th>HTTP Status Code</th>
+      <th>Error Message</th>
+      <th>API Endpoints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2303</td>
+      <td>400</td>
+      <td>Contract pair not found</td>
+      <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2304</td>
+      <td>400</td>
+      <td>Leverage value out of range</td>
+      <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2305</td>
+      <td>400</td>
+      <td>Leverage cannot be updated with open position</td>
+      <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2306</td>
+      <td>400</td>
+      <td>Leverage cannot be updated with open orders</td>
+      <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2307</td>
+      <td>500</td>
+      <td>Unable to update user leverage preference</td>
+      <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2400</td>
+      <td>400</td>
+      <td>Interval value is invalid</td>
+      <td><code>v1/market/klines</code></td>
+    </tr>
+    <tr>
+      <td>2401</td>
+      <td>500</td>
+      <td>Unable to fetch kline data</td>
+      <td><code>v1/market/klines</code></td>
+    </tr>
+    <tr>
+      <td>2402</td>
+      <td>400</td>
+      <td>Invalid contract pair</td>
+      <td><code>v1/market/depth/{contractPair}<br/>v1/market/aggTrade/{contractPair}<br/>v1/market/ticker24Hr/{contractPair}</code></td>
+    </tr>
+    <tr>
+      <td>2403</td>
+      <td>500</td>
+      <td>Unable to fetch depth update for given contract pair</td>
+      <td><code>v1/market/depth/{contractPair}</code></td>
+    </tr>
+    <tr>
+      <td>2404</td>
+      <td>500</td>
+      <td>Unable to fetch trade update for given contract pair</td>
+      <td><code>v1/market/aggTrade/{contractPair}</code></td>
+    </tr>
+    <tr>
+      <td>2405</td>
+      <td>500</td>
+      <td>Unable to fetch 24 hr ticker update for given contract pair</td>
+      <td><code>v1/market/ticker24Hr/{contractPair}</code></td>
+    </tr>
+    <tr>
+      <td>2406</td>
+      <td>400</td>
+      <td>Invalid market is provided</td>
+      <td><code>v1/market/marketInfo</code></td>
+    </tr>
+    <tr>
+      <td>2407</td>
+      <td>500</td>
+      <td>Unable to fetch market information</td>
+      <td><code>v1/market/marketInfo</code></td>
+    </tr>
+    <tr>
+      <td>2500</td>
+      <td>400</td>
+      <td>Account id not found</td>
+      <td><code>v1/positions/{positionStatus}</code></td>
+    </tr>
+    <tr>
+      <td>2501</td>
+      <td>500</td>
+      <td>Unable to fetch positions</td>
+      <td><code>v1/positions/{positionStatus}</code></td>
+    </tr>
+    <tr>
+      <td>2502</td>
+      <td>400</td>
+      <td>No position exists with provided position id</td>
+      <td><code>v1/positions</code></td>
+    </tr>
+    <tr>
+      <td>2503</td>
+      <td>400</td>
+      <td>Invalid contract pair</td>
+      <td><code>v1/positions</code></td>
+    </tr>
+    <tr>
+      <td>2504</td>
+      <td>500</td>
+      <td>Unable to fetch position for provided position id</td>
+      <td><code>v1/positions</code></td>
+    </tr>
+    <tr>
+      <td>3000</td>
+      <td>400</td>
+      <td>Incorrect device type in header values</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3001</td>
+      <td>400</td>
+      <td>Symbol is missing</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3003</td>
+      <td>400</td>
+      <td>Invalid leverage</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3004</td>
+      <td>400</td>
+      <td>Invalid order side</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3005</td>
+      <td>400</td>
+      <td>Order price not present</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3006</td>
+      <td>400</td>
+      <td>Quantity precision should be less than {value}</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3007</td>
+      <td>400</td>
+      <td>Price precision should be less than {value}</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3008</td>
+      <td>400</td>
+      <td>Limit price is required</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3009</td>
+      <td>400</td>
+      <td>Limit price is out of allowed values</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3010</td>
+      <td>400</td>
+      <td>Order quantity is out of range</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3011</td>
+      <td>400</td>
+      <td>Order declined, TP/SL will be activated instantly</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3012</td>
+      <td>400</td>
+      <td>Margin asset {asset} is not supported for this contract</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3013</td>
+      <td>400</td>
+      <td>Order placement for this contract pair is not allowed as there is already an open order</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3014</td>
+      <td>400</td>
+      <td>Order placement for this contract pair is not allowed as there is already an open position</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3015</td>
+      <td>400</td>
+      <td>Take profit/Stop loss orders cannot be placed while reducing position</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3018</td>
+      <td>400</td>
+      <td>Insufficient margin</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3019</td>
+      <td>400</td>
+      <td>Ref id already exists</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3020</td>
+      <td>400</td>
+      <td>API request limit exceeded</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3021</td>
+      <td>400</td>
+      <td>Order type is not supported</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3022</td>
+      <td>500</td>
+      <td>Order execution error</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3023</td>
+      <td>500</td>
+      <td>Order cancellation error</td>
+      <td><code>v1/order/cancel-order</code></td>
+    </tr>
+  </tbody>
+</table>
