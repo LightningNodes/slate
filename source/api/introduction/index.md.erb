@@ -52,12 +52,11 @@ The Authenticated endpoints require users to provide valid credentials before ac
 APIs that require trade permissions:
 
 <table>
-<tr>
-<td>/v1/order/place-order</td></tr>
-<tr><td>/v1/order/delete-order</td></tr>
-<tr><td>/v1/order/add-margin</td></tr>
-<tr><td>/v1/order/reduce-margin</td></tr>
-<tr><td>/v1/exchange/update/leverage</td></tr>
+<tr><td><code>/v1/order/place-order</code></td></tr>
+<tr><td><code>/v1/order/delete-order</code></td></tr>
+<tr><td><code>/v1/order/add-margin</code></td></tr>
+<tr><td><code>/v1/order/reduce-margin</code></td></tr>
+<tr><td><code>/v1/exchange/update/leverage</code></td></tr>
 </table>
 
 ### Public APIs
@@ -67,17 +66,17 @@ Endpoints which **DO NOT** require `api-key` and `signature` authentication:
 
 <table>
 <tr>
-<td>/v1/market/klines</td></tr>
-<tr><td>/v1/market/depth</td></tr>
-<tr><td>/v1/market/aggTrade</td></tr>
-<tr><td>/v1/market/ticker24Hr</td></tr>
+<td><code>/v1/market/klines</code></td></tr>
+<tr><td><code>/v1/market/depth</code></td></tr>
+<tr><td><code>/v1/market/aggTrade</code></td></tr>
+<tr><td><code>/v1/market/ticker24Hr</code></td></tr>
 </table>
 
 
 <aside class="notice"> 
 Base URLs for: <br/>
-- Authenticated endpoints: `https://fapi.pi42.com/` <br/>
-- Public endpoints: `https://api.pi42.com/`
+- Authenticated endpoints: <code>https://fapi.pi42.com/ </code> <br/>
+- Public endpoints: <code> https://api.pi42.com/ </code>
 </aside>
 
 To begin using Pi42 Authenticated APIs, follow these steps:
