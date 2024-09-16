@@ -987,44 +987,52 @@ Returns the response data for further use.<br/></p>
 <a href="#get-positions">Get Positions API</a></li>
 </ul>
 </aside>
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">()</span> <span class="p">{</span>
-    <span class="c1">// Market Order</span>
-    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="na">placeType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POSITION</span><span class="dl">"</span><span class="p">,</span>       <span class="c1">// Indicates the type of order placement (e.g., POSITION or ORDER_FORM)</span>
-        <span class="na">quantity</span><span class="p">:</span> <span class="mf">0.005</span><span class="p">,</span>             <span class="c1">// Quantity of the asset to be traded</span>
-        <span class="na">side</span><span class="p">:</span> <span class="dl">"</span><span class="s2">SELL</span><span class="dl">"</span><span class="p">,</span>                <span class="c1">// Order side, either "BUY" or "SELL"</span>
-        <span class="na">symbol</span><span class="p">:</span> <span class="dl">"</span><span class="s2">BTCUSDT</span><span class="dl">"</span><span class="p">,</span>           <span class="c1">// Trading pair, e.g., Bitcoin to USDT</span>
-        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">,</span>              <span class="c1">// Order type, either "MARKET" or "LIMIT"</span>
-        <span class="na">reduceOnly</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>           <span class="c1">// Whether to reduce an existing position only</span>
-        <span class="na">marginAsset</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INR</span><span class="dl">"</span><span class="p">,</span>          <span class="c1">// The asset used as margin</span>
-        <span class="na">deviceType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">WEB</span><span class="dl">"</span><span class="p">,</span>           <span class="c1">// Indicates the device type (WEB, MOBILE, etc.)</span>
-        <span class="na">userCategory</span><span class="p">:</span> <span class="dl">"</span><span class="s2">EXTERNAL</span><span class="dl">"</span><span class="p">,</span>    <span class="c1">// Category of the user (EXTERNAL, INTERNAL, etc.)</span>
-    <span class="p">};</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">(</span><span class="nx">orderType</span><span class="p">,</span> <span class="nx">quantity</span> <span class="o">=</span> <span class="mi">38</span><span class="p">,</span> <span class="nx">price</span> <span class="o">=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Validate orderType</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">LIMIT</span><span class="dl">"</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">orderType</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid order type. Must be 'MARKET' or 'LIMIT'.</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
 
-    <span class="c1">// Limit order: Uncomment and use this block if placing a limit order instead of a market order</span>
-    <span class="c1">// const params = {</span>
-    <span class="c1">//     placeType: "ORDER_FORM",</span>
-    <span class="c1">//     quantity: 0.003,</span>
-    <span class="c1">//     reduceOnly: false,</span>
-    <span class="c1">//     side: "BUY",</span>
-    <span class="c1">//     symbol: "BTCUSDT",</span>
-    <span class="c1">//     type: "LIMIT",</span>
-    <span class="c1">//     price: 48000,               // Price at which the limit order should be executed</span>
-    <span class="c1">//     positionSide: "BOTH",</span>
-    <span class="c1">//     timeInForce: "GTC",        // Good-Til-Canceled, other options could be IOC (Immediate-Or-Cancel), etc.</span>
-    <span class="c1">//     isolated: true,</span>
-    <span class="c1">//     newOrderRespType: "ACK",</span>
-    <span class="c1">//     positionId: "string",</span>
-    <span class="c1">//     stopPrice: 0,              // Stop price for a stop order (not needed for a regular limit order)</span>
-    <span class="c1">//     refId: "dsfssa",           // Reference ID for tracking purposes</span>
-    <span class="c1">//     marginAsset: "INR",</span>
-    <span class="c1">// };</span>
+  <span class="c1">// Validate quantity</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">quantity</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Quantity must be greater than 0.</span><span class="dl">"</span><span class="p">);</span>
+  <span class="p">}</span>
 
-    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/place-order</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// API endpoint to place the order</span>
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">placeType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">ORDER_FORM</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">quantity</span><span class="p">:</span> <span class="nx">quantity</span><span class="p">,</span> <span class="c1">// Dynamically set quantity</span>
+    <span class="na">side</span><span class="p">:</span> <span class="dl">"</span><span class="s2">BUY</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">symbol</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GRTINR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">reduceOnly</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="na">marginAsset</span><span class="p">:</span> <span class="dl">"</span><span class="s2">INR</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">type</span><span class="p">:</span> <span class="nx">orderType</span><span class="p">,</span> <span class="c1">// Set the order type dynamically</span>
+  <span class="p">};</span>
 
-    <span class="c1">// Call the postRequest function to send the POST request with the order parameters</span>
-    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+  <span class="c1">// Add additional parameters if the order is a LIMIT order</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">orderType</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">LIMIT</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">price</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">price</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Price must be specified and greater than 0 for LIMIT orders.</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">price</span> <span class="o">=</span> <span class="nx">price</span><span class="p">;</span> <span class="c1">// Dynamically set price for LIMIT orders</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/place-order</span><span class="dl">"</span><span class="p">;</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="c1">// Call the postRequest function</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Failed to place order:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
 <span class="p">}</span>
+
+<span class="c1">// Example usage for market order</span>
+<span class="nx">placeOrder</span><span class="p">(</span><span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="c1">// Example usage for limit order with price</span>
+<span class="nx">placeOrder</span><span class="p">(</span><span class="dl">"</span><span class="s2">LIMIT</span><span class="dl">"</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mf">11.9</span><span class="p">);</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">place_order</span><span class="p">():</span>
     <span class="c1"># Generate the current timestamp in milliseconds
 </span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
@@ -1077,126 +1085,79 @@ Returns the response data for further use.<br/></p>
         <span class="c1"># Handle any other unexpected errors
 </span>        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
 </code></pre></div>
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Type</th>
-            <th>Required</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>placeType</td>
-            <td>string</td>
-            <td>Yes</td>
-            <td>Indicates the type of order placement (e.g., POSITION or ORDER_FORM)</td>
-        </tr>
-        <tr>
-            <td>quantity</td>
-            <td>number</td>
-            <td>Yes</td>
-            <td>Quantity of the asset to be traded</td>
-        </tr>
-        <tr>
-            <td>side</td>
-            <td>string</td>
-            <td>Yes</td>
-            <td>Order side, either "BUY" or "SELL"</td>
-        </tr>
-        <tr>
-            <td>symbol</td>
-            <td>string</td>
-            <td>Yes</td>
-            <td>Trading pair, e.g., Bitcoin to USDT</td>
-        </tr>
-        <tr>
-            <td>type</td>
-            <td>string</td>
-            <td>Yes</td>
-            <td>Order type, either "MARKET" or "LIMIT"</td>
-        </tr>
-        <tr>
-            <td>reduceOnly</td>
-            <td>boolean</td>
-            <td>No</td>
-            <td>Whether to reduce an existing position only</td>
-        </tr>
-        <tr>
-            <td>marginAsset</td>
-            <td>string</td>
-            <td>No</td>
-            <td>The asset used as margin</td>
-        </tr>
-        <tr>
-            <td>deviceType</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Indicates the device type (WEB, MOBILE, etc.)</td>
-        </tr>
-        <tr>
-            <td>userCategory</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Category of the user (EXTERNAL, INTERNAL, etc.)</td>
-        </tr>
-        <tr>
-            <td>price</td>
-            <td>number</td>
-            <td>Yes (LIMIT)</td>
-            <td>Price at which the limit order should be executed (only for LIMIT orders)</td>
-        </tr>
-        <tr>
-            <td>positionSide</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Position side (BOTH, LONG, SHORT, etc.)</td>
-        </tr>
-        <tr>
-            <td>timeInForce</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Good-Til-Canceled (GTC), Immediate-Or-Cancel (IOC), etc.</td>
-        </tr>
-        <tr>
-            <td>isolated</td>
-            <td>boolean</td>
-            <td>No</td>
-            <td>Specifies if the margin mode is isolated</td>
-        </tr>
-        <tr>
-            <td>newOrderRespType</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Response type for the order (e.g., ACK)</td>
-        </tr>
-        <tr>
-            <td>positionId</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Position ID for tracking the order</td>
-        </tr>
-        <tr>
-            <td>stopPrice</td>
-            <td>number</td>
-            <td>No</td>
-            <td>Stop price for a stop order (optional)</td>
-        </tr>
-        <tr>
-            <td>refId</td>
-            <td>string</td>
-            <td>No</td>
-            <td>Reference ID for tracking purposes</td>
-        </tr>
-    </tbody>
+<table style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>orderType</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The type of the order. It can be "MARKET" or "LIMIT".</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The amount of the asset to be ordered. Specify the desired quantity.</td>
+    </tr>
+    <tr>
+      <td>price</td>
+      <td>number</td>
+      <td>Conditional</td>
+      <td>The price at which to place the LIMIT order. Must be specified if orderType is "LIMIT".</td>
+    </tr>
+    <tr>
+      <td>placeType</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>Fixed value "ORDER_FORM". Indicates the type of order placement.</td>
+    </tr>
+    <tr>
+      <td>side</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The side of the order, which is "BUY" in this case.</td>
+    </tr>
+    <tr>
+      <td>symbol</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The trading pair symbol, for example, "GRTINR".</td>
+    </tr>
+    <tr>
+      <td>reduceOnly</td>
+      <td>boolean</td>
+      <td>No</td>
+      <td>Indicates whether the order should only reduce the position. Default is false.</td>
+    </tr>
+    <tr>
+      <td>marginAsset</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The asset used for margin, such as "INR".</td>
+    </tr>
+    <tr>
+      <td>type</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+    </tr>
+  </tbody>
 </table>
 
 <h3 id='response'>Response</h3>
 
 <p>The response parameters are described below: </p>
 
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
     </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"19db8caf3cd3e5a08cfa-6895-ext"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-09-13T08:19:18.029Z"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCUSDT"</span><span class="p">,</span><span class="w">
