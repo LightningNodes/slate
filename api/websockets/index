@@ -382,6 +382,28 @@ async function createListenKey(apiKey: string, apiSecret: string) {
 </ul>
 
 <p>The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.</p>
+<h3 id='reponse'>Reponse</h3>
+<p>The response parameters are described below:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"listenKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>listenKey</strong></td>
+      <td>The unique identifier for the Listen Key, used to maintain a persistent connection for real-time data streams. Example: <code>c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc</code>.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="get-listen-key">Get Listen Key</h2>
 
@@ -498,7 +520,12 @@ async function createListenKey(apiKey: string, apiSecret: string) {
       <span class="k">print</span><span class="p">(</span><span class="s">'Listen key expiry updated successfully:'</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
   <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
       <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
-</code></pre></div>
+</code></pre></div><h3 id='response'>Response</h3>
+<p>The response contains a message as shown:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+   </span><span class="err">Listen</span><span class="w"> </span><span class="err">Key</span><span class="w"> </span><span class="err">expiry</span><span class="w"> </span><span class="err">time</span><span class="w"> </span><span class="err">updated</span><span class="w"> </span><span class="err">successfully.</span><span class="w">
+
+</span></code></pre></div>
 <h2 id="delete-listen-key">Delete Listen Key</h2>
 
 <p><code>DELETE /v1/retail/listen-key</code></p>
@@ -563,3 +590,7 @@ async function createListenKey(apiKey: string, apiSecret: string) {
         </tr>
     </tbody>
 </table>
+<h3 id='response-2'>Response</h3>
+<p>The response body contains the message as shown in the snippet:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>Listen key deleted successfully.
+</code></pre></div>

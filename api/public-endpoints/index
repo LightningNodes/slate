@@ -69,6 +69,114 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         </tr>
     </tbody>
 </table>
+<h3 id='response'>Response</h3>
+<p>The response parameters are as follows:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"24hrTicker"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"E"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313209122</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"s"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCINR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"p"</span><span class="p">:</span><span class="w"> </span><span class="s2">"139470.66"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"P"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.718"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5230573.12"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"c"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5271387.66"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"Q"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.081"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"o"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5131917"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5344655.41"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"l"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5079790.8"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"v"</span><span class="p">:</span><span class="w"> </span><span class="s2">"274282.584"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"q"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16265932028.08"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"O"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726226760000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"C"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313209120</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"F"</span><span class="p">:</span><span class="w"> </span><span class="mi">5380307688</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"L"</span><span class="p">:</span><span class="w"> </span><span class="mi">5383597456</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"n"</span><span class="p">:</span><span class="w"> </span><span class="mi">3289757</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>24hrTicker</code>), indicating a 24-hour ticker event.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313209122</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>p</strong></td>
+      <td>The price change in the last 24 hours (<code>139470.66 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>The percentage price change in the last 24 hours (<code>2.718%</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>w</strong></td>
+      <td>The weighted average price in the last 24 hours (<code>5230573.12 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>c</strong></td>
+      <td>The last price (<code>5271387.66 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>Q</strong></td>
+      <td>The last quantity traded (<code>0.081 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>o</strong></td>
+      <td>The open price of the 24-hour period (<code>5131917 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>h</strong></td>
+      <td>The highest price in the last 24 hours (<code>5344655.41 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>l</strong></td>
+      <td>The lowest price in the last 24 hours (<code>5079790.8 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>v</strong></td>
+      <td>The total traded volume in the last 24 hours (<code>274282.584 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>q</strong></td>
+      <td>The total traded quote asset volume in the last 24 hours (<code>16265932028.08 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>O</strong></td>
+      <td>The start time of the 24-hour period in milliseconds since epoch (<code>1726226760000</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>C</strong></td>
+      <td>The end time of the 24-hour period in milliseconds since epoch (<code>1726313209120</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>The first trade ID in the 24-hour period (<code>5380307688</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>L</strong></td>
+      <td>The last trade ID in the 24-hour period (<code>5383597456</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>n</strong></td>
+      <td>The number of trades in the 24-hour period (<code>3289757</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id='agg-trade-update'>Aggregate Trade Update</h2>
 
@@ -136,6 +244,76 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         </tr>
     </tbody>
 </table>
+<h3 id='response-2'>Response</h3>
+<p>The response body parameters are described as follows:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aggTrade"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"E"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313202969</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"a"</span><span class="p">:</span><span class="w"> </span><span class="mi">2329235556</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"s"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCINR"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"p"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5271343.57"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"q"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.002"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"f"</span><span class="p">:</span><span class="w"> </span><span class="mi">5383597285</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"l"</span><span class="p">:</span><span class="w"> </span><span class="mi">5383597285</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"T"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313202966</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"m"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>aggTrade</code>), indicating an aggregated trade event.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313202969</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>a</strong></td>
+      <td>The aggregate trade ID (<code>2329235556</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>p</strong></td>
+      <td>The price of the trade (<code>5271343.57 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>q</strong></td>
+      <td>The quantity of the trade (<code>0.002 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>f</strong></td>
+      <td>The first trade ID in the aggregate trade (<code>5383597285</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>l</strong></td>
+      <td>The last trade ID in the aggregate trade (<code>5383597285</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>The trade time in milliseconds since epoch (<code>1726313202966</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>m</strong></td>
+      <td>Whether the buyer is the market maker (<code>true</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id='depth-update'>Depth Update</h2>
 
@@ -198,6 +376,79 @@ Below is an overview of the public endpoints available in Pi42, their typical us
             <td>The trading pair for which to fetch the order book depth data (e.g., BTCINR)</td>
         </tr>
     </tbody>
+</table>
+<h3 id='response-3'>Response</h3>
+<p>The parameters contained in the response body are as follows:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"depthUpdate"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"E"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313210012</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"T"</span><span class="p">:</span><span class="w"> </span><span class="mi">1726313210009</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"s"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCINR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"U"</span><span class="p">:</span><span class="w"> </span><span class="mi">5339856484581</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"u"</span><span class="p">:</span><span class="w"> </span><span class="mi">5339856497601</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pu"</span><span class="p">:</span><span class="w"> </span><span class="mi">5339856483867</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"b"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"5271043.69"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"0.554"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"a"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"5271396.49"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"0.866"</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>depthUpdate</code>), indicating a market depth update.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313210012</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>The transaction time in milliseconds since epoch (<code>1726313210009</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>U</strong></td>
+      <td>The first update ID in the update (<code>5339856484581</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>u</strong></td>
+      <td>The last update ID in the update (<code>5339856497601</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>pu</strong></td>
+      <td>The previous update ID (<code>5339856483867</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>b</strong></td>
+      <td>Current bid prices and quantities. Each entry is an array where the first element is the price and the second element is the quantity. Example: <code>[["5271043.69", "0.554"]]</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>a</strong></td>
+      <td>Current ask prices and quantities. Each entry is an array where the first element is the price and the second element is the quantity. Example: <code>[["5271396.49", "0.866"]]</code>.</td>
+    </tr>
+  </tbody>
 </table>
 
 <h2 id='klines'>Get Klines</h2>
@@ -302,4 +553,56 @@ Below is an overview of the public endpoints available in Pi42, their typical us
             <td>The maximum number of kline records to return</td>
         </tr>
     </tbody>
+</table>
+<h3 id='response-4'>Response</h3>
+<p>The response parameters are described below:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"startTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1726312200000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"open"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5270382.19"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"high"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5270408.64"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"low"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5270382.19"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"close"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5270382.19"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"endTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1726312259999"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"volume"</span><span class="p">:</span><span class="w"> </span><span class="s2">"59.102"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>startTime</strong></td>
+      <td>The start time of the interval in milliseconds since epoch (<code>1726312200000</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>open</strong></td>
+      <td>The opening price of the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>high</strong></td>
+      <td>The highest price during the interval (<code>5270408.64 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>low</strong></td>
+      <td>The lowest price during the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>close</strong></td>
+      <td>The closing price of the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>endTime</strong></td>
+      <td>The end time of the interval in milliseconds since epoch (<code>1726312259999</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>volume</strong></td>
+      <td>The trading volume during the interval (<code>59.102 BTC</code>).</td>
+    </tr>
+  </tbody>
 </table>
