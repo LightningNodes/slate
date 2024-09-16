@@ -52,12 +52,11 @@
 <p>APIs that require trade permissions:</p>
 
 <table>
-<tr>
-<td>/v1/order/place-order</td></tr>
-<tr><td>/v1/order/delete-order</td></tr>
-<tr><td>/v1/order/add-margin</td></tr>
-<tr><td>/v1/order/reduce-margin</td></tr>
-<tr><td>/v1/exchange/update/leverage</td></tr>
+<tr><td><code>/v1/order/place-order</code></td></tr>
+<tr><td><code>/v1/order/delete-order</code></td></tr>
+<tr><td><code>/v1/order/add-margin</code></td></tr>
+<tr><td><code>/v1/order/reduce-margin</code></td></tr>
+<tr><td><code>/v1/exchange/update/leverage</code></td></tr>
 </table>
 <h3 id='public-apis'>Public APIs</h3>
 <p>The Public endpoints are accessible without any authentication, allowing open access to certain resources or information. These endpoints are designed to handle requests that do not require user identification or secure access, such as fetching general information, retrieving publicly available data, or providing status updates. While public, these endpoints are still subject to rate limiting and monitoring to prevent abuse or misuse of the system.</p>
@@ -66,16 +65,16 @@
 
 <table>
 <tr>
-<td>/v1/market/klines</td></tr>
-<tr><td>/v1/market/depth</td></tr>
-<tr><td>/v1/market/aggTrade</td></tr>
-<tr><td>/v1/market/ticker24Hr</td></tr>
+<td><code>/v1/market/klines</code></td></tr>
+<tr><td><code>/v1/market/depth</code></td></tr>
+<tr><td><code>/v1/market/aggTrade</code></td></tr>
+<tr><td><code>/v1/market/ticker24Hr</code></td></tr>
 </table>
 
 <aside class="notice"> 
 Base URLs for: <br/>
-- Authenticated endpoints: `https://fapi.pi42.com/` <br/>
-- Public endpoints: `https://api.pi42.com/`
+- Authenticated endpoints: <code>https://fapi.pi42.com/ </code> <br/>
+- Public endpoints: <code> https://api.pi42.com/ </code>
 </aside>
 
 <p>To begin using Pi42 Authenticated APIs, follow these steps:</p>

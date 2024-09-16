@@ -12,7 +12,7 @@
 
 <aside class="notice"> Notes:
 <ul>
-  <li>Authenticated Web Socket stream base URL `https://fawss.pi42.com/auth-stream`</li>
+  <li>Authenticated Web Socket stream base URL <code>https://fawss.pi42.com/auth-stream </code></li>
   <li>Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a></li>
 </ul>
 </aside>
@@ -163,7 +163,7 @@
 
 <aside class="notice">
 
-  Public Web Socket URL `https://fawss.pi42.com/`
+  Public Web Socket URL <code>https://fawss.pi42.com/</code>
 
 </aside>
 

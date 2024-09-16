@@ -12,12 +12,12 @@
 </tr>
 </thead><tbody>
 <tr>
-<td>v1/order/place-order</td>
+<td><code>v1/order/place-order</code></td>
 <td>1 second (1s)</td>
 <td>20 requests</td>
 </tr>
 <tr>
-<td>v1/order/delete-order</td>
+<td><code>v1/order/delete-order</code></td>
 <td>10 seconds (10s)</td>
 <td>5 requests </td>
 </tr>
