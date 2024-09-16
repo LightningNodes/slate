@@ -75,6 +75,118 @@ def get_24hr_ticker_update():
     </tbody>
 </table>
 
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+{
+  "data": {
+    "e": "24hrTicker",
+    "E": 1726313209122,
+    "s": "BTCINR",
+    "p": "139470.66",
+    "P": "2.718",
+    "w": "5230573.12",
+    "c": "5271387.66",
+    "Q": "0.081",
+    "o": "5131917",
+    "h": "5344655.41",
+    "l": "5079790.8",
+    "v": "274282.584",
+    "q": "16265932028.08",
+    "O": 1726226760000,
+    "C": 1726313209120,
+    "F": 5380307688,
+    "L": 5383597456,
+    "n": 3289757
+  }
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>24hrTicker</code>), indicating a 24-hour ticker event.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313209122</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>p</strong></td>
+      <td>The price change in the last 24 hours (<code>139470.66 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>P</strong></td>
+      <td>The percentage price change in the last 24 hours (<code>2.718%</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>w</strong></td>
+      <td>The weighted average price in the last 24 hours (<code>5230573.12 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>c</strong></td>
+      <td>The last price (<code>5271387.66 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>Q</strong></td>
+      <td>The last quantity traded (<code>0.081 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>o</strong></td>
+      <td>The open price of the 24-hour period (<code>5131917 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>h</strong></td>
+      <td>The highest price in the last 24 hours (<code>5344655.41 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>l</strong></td>
+      <td>The lowest price in the last 24 hours (<code>5079790.8 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>v</strong></td>
+      <td>The total traded volume in the last 24 hours (<code>274282.584 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>q</strong></td>
+      <td>The total traded quote asset volume in the last 24 hours (<code>16265932028.08 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>O</strong></td>
+      <td>The start time of the 24-hour period in milliseconds since epoch (<code>1726226760000</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>C</strong></td>
+      <td>The end time of the 24-hour period in milliseconds since epoch (<code>1726313209120</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>F</strong></td>
+      <td>The first trade ID in the 24-hour period (<code>5380307688</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>L</strong></td>
+      <td>The last trade ID in the 24-hour period (<code>5383597456</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>n</strong></td>
+      <td>The number of trades in the 24-hour period (<code>3289757</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id='agg-trade-update'>Aggregate Trade Update</h2>
 
@@ -151,6 +263,81 @@ def get_trade_updates():
     </tbody>
 </table>
 
+### Response
+
+The response body parameters are described as follows:
+
+```json
+// Response
+{
+  "data": [
+    {
+      "e": "aggTrade",
+      "E": 1726313202969,
+      "a": 2329235556,
+      "s": "BTCINR",
+      "p": "5271343.57",
+      "q": "0.002",
+      "f": 5383597285,
+      "l": 5383597285,
+      "T": 1726313202966,
+      "m": true
+    }
+  ]
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>aggTrade</code>), indicating an aggregated trade event.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313202969</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>a</strong></td>
+      <td>The aggregate trade ID (<code>2329235556</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>p</strong></td>
+      <td>The price of the trade (<code>5271343.57 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>q</strong></td>
+      <td>The quantity of the trade (<code>0.002 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>f</strong></td>
+      <td>The first trade ID in the aggregate trade (<code>5383597285</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>l</strong></td>
+      <td>The last trade ID in the aggregate trade (<code>5383597285</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>The trade time in milliseconds since epoch (<code>1726313202966</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>m</strong></td>
+      <td>Whether the buyer is the market maker (<code>true</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
 
 <h2 id='depth-update'>Depth Update</h2>
 
@@ -218,6 +405,84 @@ def get_depth_update():
             <td>The trading pair for which to fetch the order book depth data (e.g., BTCINR)</td>
         </tr>
     </tbody>
+</table>
+
+### Response
+
+The parameters contained in the response body are as follows:
+
+```json
+// Response
+{
+  "data": {
+    "e": "depthUpdate",
+    "E": 1726313210012,
+    "T": 1726313210009,
+    "s": "BTCINR",
+    "U": 5339856484581,
+    "u": 5339856497601,
+    "pu": 5339856483867,
+    "b": [
+      [
+        "5271043.69",
+        "0.554"
+      ]
+    ],
+    "a": [
+      [
+        "5271396.49",
+        "0.866"
+      ]
+    ]
+  }
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>e</strong></td>
+      <td>The event type (<code>depthUpdate</code>), indicating a market depth update.</td>
+    </tr>
+    <tr>
+      <td><strong>E</strong></td>
+      <td>The event time in milliseconds since epoch (<code>1726313210012</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>T</strong></td>
+      <td>The transaction time in milliseconds since epoch (<code>1726313210009</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>s</strong></td>
+      <td>The trading pair symbol (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>U</strong></td>
+      <td>The first update ID in the update (<code>5339856484581</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>u</strong></td>
+      <td>The last update ID in the update (<code>5339856497601</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>pu</strong></td>
+      <td>The previous update ID (<code>5339856483867</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>b</strong></td>
+      <td>Current bid prices and quantities. Each entry is an array where the first element is the price and the second element is the quantity. Example: <code>[["5271043.69", "0.554"]]</code>.</td>
+    </tr>
+    <tr>
+      <td><strong>a</strong></td>
+      <td>Current ask prices and quantities. Each entry is an array where the first element is the price and the second element is the quantity. Example: <code>[["5271396.49", "0.866"]]</code>.</td>
+    </tr>
+  </tbody>
 </table>
 
 
@@ -331,5 +596,61 @@ def get_kline_data():
     </tbody>
 </table>
 
+
+### Response
+
+The response parameters are described below:
+
+```json
+[
+  {
+    "startTime": "1726312200000",
+    "open": "5270382.19",
+    "high": "5270408.64",
+    "low": "5270382.19",
+    "close": "5270382.19",
+    "endTime": "1726312259999",
+    "volume": "59.102"
+  },
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>startTime</strong></td>
+      <td>The start time of the interval in milliseconds since epoch (<code>1726312200000</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>open</strong></td>
+      <td>The opening price of the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>high</strong></td>
+      <td>The highest price during the interval (<code>5270408.64 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>low</strong></td>
+      <td>The lowest price during the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>close</strong></td>
+      <td>The closing price of the interval (<code>5270382.19 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>endTime</strong></td>
+      <td>The end time of the interval in milliseconds since epoch (<code>1726312259999</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>volume</strong></td>
+      <td>The trading volume during the interval (<code>59.102 BTC</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 

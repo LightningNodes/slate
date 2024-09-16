@@ -228,6 +228,115 @@ def place_order():
 
 The response parameters are described below: 
 
+```json
+{
+    "clientOrderId": "19db8caf3cd3e5a08cfa-6895-ext",
+    "time": "2024-09-13T08:19:18.029Z",
+    "symbol": "BTCUSDT",
+    "contractType": "PERPETUAL",
+    "type": "MARKET",
+    "side": "BUY",
+    "price": 58002,
+    "orderAmount": 0.003,
+    "filledAmount": 0,
+    "availableBalance": 8564.64,
+    "linkId": "19db8caf3cd3e5a08cfa-6895-ext",
+    "linkType": "ORDER",
+    "subType": "PRIMARY",
+    "placeType": "ORDER_FORM",
+    "lockedMargin": 19.5274,
+    "baseAsset": "BTC",
+    "quoteAsset": "USDT",
+    "marginAsset": "INR",
+    "lockedMarginInMarginAsset": 1698.88
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client order (<code>19db8caf3cd3e5a08cfa-6895-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td>Timestamp when the order was placed (<code>2024-09-13T08:19:18.029Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>The trading pair for the order (<code>BTCUSDT</code>), indicating Bitcoin (BTC) traded against USDT (Tether).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The type of order (<code>MARKET</code>), indicating a market order.</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>The side of the order (<code>BUY</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>The price at which the order is to be executed (<code>58002 USDT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>orderAmount</strong></td>
+      <td>The amount of the order (<code>0.003 BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>filledAmount</strong></td>
+      <td>The amount of the order that has been filled (<code>0</code>, indicating no amount has been filled yet).</td>
+    </tr>
+    <tr>
+      <td><strong>availableBalance</strong></td>
+      <td>The available balance for the order (<code>8564.64 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Link identifier associated with the order (<code>19db8caf3cd3e5a08cfa-6895-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>The type of link for the order (<code>ORDER</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>Subtype of the order (<code>PRIMARY</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>The method used to place the order (<code>ORDER_FORM</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>The amount of margin locked for the order (<code>19.5274 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset being traded (<code>BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>USDT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>The amount of margin locked in the margin asset (<code>1698.88 INR</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -1955,6 +2064,102 @@ except requests.exceptions.HTTPError as err:
     </tbody>
 </table>
 
+### Response
+
+The response parameters are as follows:
+
+```json
+[
+  {
+    "id": 26260,
+    "time": "2024-09-16T09:39:41.675Z",
+    "symbol": "GRTINR",
+    "type": "LIMIT",
+    "side": "BUY",
+    "price": 12.541,
+    "quantity": 36,
+    "role": "MAKER",
+    "fee": 0,
+    "realizedProfit": 0,
+    "contractType": "PERPETUAL",
+    "clientOrderId": "8acc0af94a3516126cdf-6238-ext",
+    "baseAsset": "GRT",
+    "quoteAsset": "INR",
+    "marginAsset": "INR"
+  }
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the order (<code>26260</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td>Timestamp when the order was placed (<code>2024-09-16T09:39:41.675Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>The trading pair for the order (<code>GRTINR</code>), indicating GRT (The Graph) traded against INR (Indian Rupee).</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The type of order (<code>LIMIT</code>), indicating a limit order.</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>The side of the order (<code>BUY</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>The price at which the order is to be executed (<code>12.541 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>The quantity of the order (<code>36 GRT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>role</strong></td>
+      <td>The role of the order in the trade (<code>MAKER</code>), indicating the order added liquidity to the market.</td>
+    </tr>
+    <tr>
+      <td><strong>fee</strong></td>
+      <td>The fee charged for the order (<code>0</code>, indicating no fee).</td>
+    </tr>
+    <tr>
+      <td><strong>realizedProfit</strong></td>
+      <td>The profit realized from the order (<code>0</code>, indicating no realized profit yet).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client order (<code>8acc0af94a3516126cdf-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset being traded (<code>GRT</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>The asset used for margin (<code>INR</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="get-transaction-history">Get User's Transaction History</h2>
 
 `GET/v1/user-data/transaction-history`
@@ -2110,6 +2315,73 @@ async function fetchUserTransactionHistory() {
     </tbody>
 </table>
 
+### Response
+
+```json
+[
+  {
+    "id": 109884,
+    "time": "2024-09-16T09:39:28.754Z",
+    "type": "COMMISSION",
+    "amount": -2.1,
+    "asset": "INR",
+    "symbol": "BTCINR",
+    "contractType": "PERPETUAL",
+    "baseAsset": "BTC",
+    "quoteAsset": "INR"
+  }
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the transaction (<code>109884</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>time</strong></td>
+      <td>Timestamp when the transaction occurred (<code>2024-09-16T09:39:28.754Z</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>The type of the transaction (<code>COMMISSION</code>), indicating a commission fee.</td>
+    </tr>
+    <tr>
+      <td><strong>amount</strong></td>
+      <td>The amount of the commission fee (<code>-2.1 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>asset</strong></td>
+      <td>The asset for the commission fee (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>The trading pair associated with the transaction (<code>BTCINR</code>), indicating Bitcoin (BTC) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>The type of contract for the transaction (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>The base asset in the trading pair (<code>BTC</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>The currency used for the transaction (<code>INR</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
 
 <h2 id='exchange-update-leverage'>Update Leverage</h2>
 
@@ -2219,6 +2491,35 @@ def update_leverage():
     </tbody>
 </table>
 
+### Response
+
+The response parameters are described below:
+
+```json
+// Response
+{
+  "updatedLeverage": 10,
+  "contractName": "ETHINR"
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>updatedLeverage</strong></td>
+      <td>The updated leverage for the contract (<code>10</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>contractName</strong></td>
+      <td>The name of the contract (<code>ETHINR</code>), indicating Ethereum (ETH) traded against Indian Rupee (INR).</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="delete-order"> Deleting an Order</h2>
 
@@ -2302,4 +2603,41 @@ def delete_order():
 <aside class="notice">
 Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
 </aside>
+
+### Response
+
+```json
+{
+  "clientOrderId": "93513fe2a8af44157234-6238-ext",
+  "orderId": 24717,
+  "status": "CANCELED",
+  "success": true
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client order (<code>93513fe2a8af44157234-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>orderId</strong></td>
+      <td>Unique identifier for the order (<code>24717</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>The status of the order (<code>CANCELED</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>success</strong></td>
+      <td>Indicates whether the operation was successful (<code>true</code>).</td>
+    </tr>
+  </tbody>
+</table>
 

@@ -390,6 +390,32 @@ The `createListenKey` function also requires an `apiKey` and `apiSecret` for aut
 
 The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.
 
+### Reponse
+
+The response parameters are described below:
+
+```json
+// Response
+
+{
+  "listenKey": "c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>listenKey</strong></td>
+      <td>The unique identifier for the Listen Key, used to maintain a persistent connection for real-time data streams. Example: <code>c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc</code>.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="get-listen-key">Get Listen Key</h2>
 
@@ -521,6 +547,16 @@ def update_listen_key_expiry():
       print(f"Failed {response.status_code}: {response.text}")
 ```
 
+### Response
+
+The response contains a message as shown:
+
+```json
+// Response
+   Listen Key expiry time updated successfully.
+
+```
+
 <h2 id="delete-listen-key">Delete Listen Key</h2>
 
 `DELETE /v1/retail/listen-key`
@@ -593,3 +629,9 @@ def delete_listen_key():
     </tbody>
 </table>
 
+### Response
+The response body contains the message as shown in the snippet:
+
+```
+Listen key deleted successfully.
+```
