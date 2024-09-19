@@ -68,7 +68,7 @@ placeOrder("LIMIT", 38, 11.9);
 def place_order():
     # Generate the current timestamp in milliseconds
     timestamp = str(int(time.time() * 1000))
-    
+
     # Define the order parameters
     params = {
         'timestamp': timestamp,        # Current timestamp in milliseconds
@@ -83,36 +83,36 @@ def place_order():
         'userCategory': 'EXTERNAL',    # User category (e.g., EXTERNAL, INTERNAL)
         'price': 50000,                # Price for the limit order (included here but irrelevant for market orders)
     }
-    
+
     # Convert the parameters to a JSON string to sign
     data_to_sign = json.dumps(params, separators=(',', ':'))
-    
+
     # Generate the signature for authentication
     signature = generate_signature(api_secret, data_to_sign)
-    
+
     # Define the headers including the API key and the signature
     headers = {
         'api-key': api_key,
         'signature': signature,
     }
-    
+
     try:
         # Send the POST request to place the order
         response = requests.post(f'{base_url}/v1/order/place-order', json=params, headers=headers)
-        
+
         # Raise an HTTPError if the response status is 4xx or 5xx
         response.raise_for_status()
-        
+
         # Parse the JSON response data
         response_data = response.json()
-        
+
         # Print the success message with the order details
         print('Order placed successfully:', json.dumps(response_data, indent=4))
-    
+
     except requests.exceptions.HTTPError as err:
         # Handle HTTP errors specifically
         print(f"Error: {err.response.text if err.response else err}")
-    
+
     except Exception as e:
         # Handle any other unexpected errors
         print(f"An unexpected error occurred: {str(e)}")
@@ -187,7 +187,7 @@ def place_order():
 
 ### Response
 
-The response parameters are described below: 
+The response parameters are described below:
 
 ```json
 # Response
@@ -471,39 +471,39 @@ def reduce_margin():
     # Collect position ID and amount to reduce from user input
     position_id = input("Enter the positionId: ")
     amountInput = input("Enter the amount to reduce: ")
-    
+
     try:
         # Convert input to integer or float as necessary
         amount = int(amountInput)
     except ValueError:
         amount = float(amountInput)
-    
+
     # Generate current timestamp in milliseconds
     timestamp = str(int(time.time() * 1000))
-    
+
     # Prepare the request payload (JSON)
     params = {
         'positionId': position_id,
         'amount': amount,
         'timestamp': timestamp
     }
-    
+
     # Convert the payload to a JSON string for signature
     data_to_sign = json.dumps(params, separators=(',', ':'))
-    
+
     # Generate the signature using a helper function
     signature = generate_signature(api_secret, data_to_sign)
-    
+
     # Set the headers for the POST request
     headers = {
         'api-key': api_key,
         'Content-Type': 'application/json',
         'signature': signature
     }
-    
+
     # Construct the full API endpoint URL
     reduce_margin_url = f"{base_url}/v1/order/reduce-margin"
-    
+
     try:
         # Send the POST request to reduce margin
         response = requests.post(reduce_margin_url, json=params, headers=headers)
@@ -601,7 +601,7 @@ def get_open_orders():
 
 # Prepare parameters with the current timestamp
     params = f"timestamp={timestamp}"
-    
+
 # Generate the signature using the current timestamp
     signature = generate_signature(api_secret, params)
 
@@ -638,9 +638,9 @@ const params = {
     endTimestamp: endTimestamp,
     symbol: symbol,
     };
- 
+
 const endpoint = "/v1/order/open-orders"; // Your endpoint for fetching open orders
- 
+
 // Call the postRequest function
 return await getRequest(endpoint, params);
 }
@@ -792,9 +792,9 @@ The response parameters are described below:
 
 `GET /v1/order/order-history`
 
-Provides historical order data for a given account. 
+Provides historical order data for a given account.
 
-It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair. 
+It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair.
 
 This endpoint is helpful for reviewing past orders and analyzing historical trading activity.
 
@@ -1036,7 +1036,7 @@ The details of the JSON object returned in the response body are as follows:
 
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
-`GET /v1/order/linked-orders` 
+`GET /v1/order/linked-orders`
 
 Retrieves orders that are linked by a specific link ID. It is used to fetch all orders associated with a given link ID, which can help in tracking related orders or managing linked order groups.
 
@@ -1245,7 +1245,7 @@ The details returned in the response body as are as follows:
 
 Retrieves the margin history for an account.
 
-It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol. 
+It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol.
 
 This endpoint is useful for analyzing past margin activities and historical changes in margin levels.
 
@@ -1253,7 +1253,7 @@ This endpoint is useful for analyzing past margin activities and historical chan
 def fetch_margin_history():
     endpoint = "/v1/order/fetch-margin-history"
     symbol = input("Enter the symbol (e.g., BTCUSDT): ").upper()
-    
+
     pageSize = 100
     sortOrder = "desc"
 
@@ -1449,9 +1449,9 @@ The response details are as follows:
 
 `GET /v1/positions`
 
-Retrieves positions based on their status. 
+Retrieves positions based on their status.
 
-It allows filtering positions by their status (e.g., "OPEN") and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol. 
+It allows filtering positions by their status (e.g., "OPEN") and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol.
 
 This endpoint is useful for fetching current or historical positions and managing your trading portfolio.
 
@@ -1712,7 +1712,7 @@ The response parameters are described below:
 
 `GET /v1/positions/{positionStatus}`
 
-Retrieves details for a specific position identified by its unique position ID. 
+Retrieves details for a specific position identified by its unique position ID.
 
 It returns information related to the specified position, such as current status, asset details, and other relevant data.
 
@@ -1922,7 +1922,7 @@ async function getPosition() {
 
 `GET /v1/user-data/trade-history`
 
-Retrieves the trade history for a user. 
+Retrieves the trade history for a user.
 
 
 It supports optional filtering parameters such as timestamps, sorting order, page size, and trading symbol to help users access their historical trade data efficiently.
@@ -2126,7 +2126,7 @@ The response parameters are as follows:
 
 `GET/v1/user-data/transaction-history`
 
-Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters. 
+Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters.
 
 It provides detailed records of transactions within the specified time range and can be filtered by trading symbol, trade ID, and position ID.
 
@@ -2368,7 +2368,7 @@ This endpoint is used to adjust the leverage settings for risk management and tr
 </ol>
 </aside>
 
- 
+
 ```javascript
 async function updateLeverage() {
     const endpoint = "/v1/exchange/update/leverage";
@@ -2487,7 +2487,7 @@ The response parameters are described below:
 
 `DELETE /v1/order/delete-order`
 
-deletes a specific order based on its client order ID. 
+deletes a specific order based on its client order ID.
 
 It requires the client order ID (`clientOrderID`) to identify the order to be deleted and a timestamp for request validation.
 
