@@ -178,7 +178,7 @@
   </tbody>
 </table>
 <h3 id='response'>Response</h3>
-<p>The response parameters are described below: </p>
+<p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
     </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"19db8caf3cd3e5a08cfa-6895-ext"</span><span class="p">,</span><span class="w">
@@ -743,9 +743,9 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 
 <p><code>GET /v1/order/order-history</code></p>
 
-<p>Provides historical order data for a given account. </p>
+<p>Provides historical order data for a given account.</p>
 
-<p>It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair. </p>
+<p>It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair.</p>
 
 <p>This endpoint is helpful for reviewing past orders and analyzing historical trading activity.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch and display order history
@@ -977,7 +977,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
-<p><code>GET /v1/order/linked-orders</code> </p>
+<p><code>GET /v1/order/linked-orders</code></p>
 
 <p>Retrieves orders that are linked by a specific link ID. It is used to fetch all orders associated with a given link ID, which can help in tracking related orders or managing linked order groups.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch linked orders based on linkId
@@ -1174,7 +1174,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p>Retrieves the margin history for an account.</p>
 
-<p>It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol. </p>
+<p>It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol.</p>
 
 <p>This endpoint is useful for analyzing past margin activities and historical changes in margin levels.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">fetch_margin_history</span><span class="p">():</span>
@@ -1366,9 +1366,9 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/positions</code></p>
 
-<p>Retrieves positions based on their status. </p>
+<p>Retrieves positions based on their status.</p>
 
-<p>It allows filtering positions by their status (e.g., &quot;OPEN&quot;) and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol. </p>
+<p>It allows filtering positions by their status (e.g., &quot;OPEN&quot;) and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol.</p>
 
 <p>This endpoint is useful for fetching current or historical positions and managing your trading portfolio.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to fetch positions
@@ -1617,7 +1617,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/positions/{positionStatus}</code></p>
 
-<p>Retrieves details for a specific position identified by its unique position ID. </p>
+<p>Retrieves details for a specific position identified by its unique position ID.</p>
 
 <p>It returns information related to the specified position, such as current status, asset details, and other relevant data.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_positions</span><span class="p">():</span>
@@ -1815,7 +1815,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/user-data/trade-history</code></p>
 
-<p>Retrieves the trade history for a user. </p>
+<p>Retrieves the trade history for a user.</p>
 
 <p>It supports optional filtering parameters such as timestamps, sorting order, page size, and trading symbol to help users access their historical trade data efficiently.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTradeHistory</span><span class="p">()</span> <span class="p">{</span>
@@ -2007,7 +2007,7 @@ except requests.exceptions.HTTPError as err:
 
 <p><code>GET/v1/user-data/transaction-history</code></p>
 
-<p>Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters. </p>
+<p>Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters.</p>
 
 <p>It provides detailed records of transactions within the specified time range and can be filtered by trading symbol, trade ID, and position ID.</p>
 <div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">get_transaction_history</span><span class="p">():</span>
@@ -2345,7 +2345,7 @@ except requests.exceptions.HTTPError as err:
 
 <p><code>DELETE /v1/order/delete-order</code></p>
 
-<p>deletes a specific order based on its client order ID. </p>
+<p>deletes a specific order based on its client order ID.</p>
 
 <p>It requires the client order ID (<code>clientOrderID</code>) to identify the order to be deleted and a timestamp for request validation.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">deleteOrder</span><span class="p">()</span> <span class="p">{</span>

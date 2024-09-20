@@ -286,7 +286,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-9c19b03a.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-257f3f58.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-024da600.js"></script>
 
@@ -316,6 +316,9 @@
           <li>
             <a href="#change-log" class="toc-h1 toc-link" data-title="Change Log">Change Log</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#17-09-2024" class="toc-h2 toc-link" data-title="17-09-2024">17-09-2024</a>
+                  </li>
                   <li>
                     <a href="#17-07-2024" class="toc-h2 toc-link" data-title="17-07-2024">17-07-2024</a>
                   </li>
@@ -454,9 +457,32 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <p><h1 id='change-log'>Change Log</h1><h2 id='17-07-2024'>17-07-2024</h2>
+        <p><h1 id='change-log'>Change Log</h1><h2 id='17-09-2024'>17-09-2024</h2>
 <ol>
-<li>Added Enum Value GST_ON_Funding FEE in TransactionType</li>
+<li>Additional authentication method with private web socket using listen key.</li>
+<li>New Endpoints for listen key</li></p>
+
+<ul>
+  <li>Create new listen key for web-socket connection <code>(POST /v1/retail/listen-key)</code></li>
+  <li>Update expiry time for listen key <code>(PUT /v1/retail/listen-key)</code></li>
+  <li>Delete listen key <code>(DELETE /v1/retail/listen-key)</code></li>
+</ul>
+
+<p><li>Endpoints for CRUD Operations on api-key which are typically done through UI </li>
+<ul>
+  <li>Create a new api-key <code>(POST /v1/retail/create-api-key)</code></li>
+  <li>Get all api-keys for user <code>(GET /v1/retail/all-api-keys)</code></li>
+  <li>Delete api-key for user <code>(DELETE /retail/delete-api-key)</code></li>
+  <li>Update api-key trading permissions <code>(POST /v1/retail/update-api-key-permissions)</code></li>
+  <li>Whitelist IPs for api-key <code>(POST /v1/retail/add-allowed-ips)</code></li>
+  <li>Remove whitelisted IPs for api-key <code>(POST /v1/retail/remove-allowed-ips)</code></li>
+</ul></p>
+
+<p><br/>
+</ol>
+<h2 id='17-07-2024'>17-07-2024</h2>
+<ol>
+<li>Added Enum Value <code>GST_ON_FUNDING_FEE</code> in TransactionType</li>
 <li>Exchange Info <br/></p>
 
 <p><ul>
@@ -544,7 +570,7 @@ response</li>
 <li> Response: <code>nextTimestamp</code> which is used in the next paginated API call.</li>
 <li>Examples added in the API descriptions section in the doc.</li>
 </ul></li>
-<li>New Endpoint </p>
+<li>New Endpoint</p>
 
 <p><ul>
 <li>Margin History ( GET /v1/order/fetch-margin-history)</li>
@@ -1153,7 +1179,7 @@ Returns the response data for further use.<br/></p>
 
 <h3 id='response'>Response</h3>
 
-<p>The response parameters are described below: </p>
+<p>The response parameters are described below:</p>
 
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -1738,9 +1764,9 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 
 <p><code>GET /v1/order/order-history</code></p>
 
-<p>Provides historical order data for a given account. </p>
+<p>Provides historical order data for a given account.</p>
 
-<p>It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair. </p>
+<p>It supports optional filtering by page size, sorting order, and timestamps to narrow down the results. The symbol parameter allows filtering the results to a specific trading pair.</p>
 
 <p>This endpoint is helpful for reviewing past orders and analyzing historical trading activity.</p>
 
@@ -1978,7 +2004,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 
 <h2 id="get-linked-orders">Get Linked Orders</h2>
 
-<p><code>GET /v1/order/linked-orders</code> </p>
+<p><code>GET /v1/order/linked-orders</code></p>
 
 <p>Retrieves orders that are linked by a specific link ID. It is used to fetch all orders associated with a given link ID, which can help in tracking related orders or managing linked order groups.</p>
 
@@ -2181,7 +2207,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p>Retrieves the margin history for an account.</p>
 
-<p>It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol. </p>
+<p>It supports optional filtering parameters like page size, sorting order, timestamps, and trading symbol.</p>
 
 <p>This endpoint is useful for analyzing past margin activities and historical changes in margin levels.</p>
 
@@ -2379,9 +2405,9 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/positions</code></p>
 
-<p>Retrieves positions based on their status. </p>
+<p>Retrieves positions based on their status.</p>
 
-<p>It allows filtering positions by their status (e.g., &quot;OPEN&quot;) and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol. </p>
+<p>It allows filtering positions by their status (e.g., &quot;OPEN&quot;) and supports additional optional parameters such as timestamps, sorting order, page size, and trading symbol.</p>
 
 <p>This endpoint is useful for fetching current or historical positions and managing your trading portfolio.</p>
 
@@ -2636,7 +2662,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/positions/{positionStatus}</code></p>
 
-<p>Retrieves details for a specific position identified by its unique position ID. </p>
+<p>Retrieves details for a specific position identified by its unique position ID.</p>
 
 <p>It returns information related to the specified position, such as current status, asset details, and other relevant data.</p>
 
@@ -2837,7 +2863,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
 
 <p><code>GET /v1/user-data/trade-history</code></p>
 
-<p>Retrieves the trade history for a user. </p>
+<p>Retrieves the trade history for a user.</p>
 
 <p>It supports optional filtering parameters such as timestamps, sorting order, page size, and trading symbol to help users access their historical trade data efficiently.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">fetchUserTradeHistory</span><span class="p">()</span> <span class="p">{</span>
@@ -3032,7 +3058,7 @@ except requests.exceptions.HTTPError as err:
 
 <p><code>GET/v1/user-data/transaction-history</code></p>
 
-<p>Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters. </p>
+<p>Retrieves the transaction history for a user, allowing filtering and sorting based on optional parameters.</p>
 
 <p>It provides detailed records of transactions within the specified time range and can be filtered by trading symbol, trade ID, and position ID.</p>
 
@@ -3376,7 +3402,7 @@ except requests.exceptions.HTTPError as err:
 
 <p><code>DELETE /v1/order/delete-order</code></p>
 
-<p>deletes a specific order based on its client order ID. </p>
+<p>deletes a specific order based on its client order ID.</p>
 
 <p>It requires the client order ID (<code>clientOrderID</code>) to identify the order to be deleted and a timestamp for request validation.</p>
 
