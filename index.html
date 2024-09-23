@@ -472,7 +472,7 @@
 <ul>
   <li>Create a new api-key <code>(POST /v1/retail/create-api-key)</code></li>
   <li>Get all api-keys for user <code>(GET /v1/retail/all-api-keys)</code></li>
-  <li>Delete api-key for user <code>(DELETE /retail/delete-api-key)</code></li>
+  <li>Delete api-key for user <code>(DELETE /v1/retail/delete-api-key)</code></li>
   <li>Update api-key trading permissions <code>(POST /v1/retail/update-api-key-permissions)</code></li>
   <li>Whitelist IPs for api-key <code>(POST /v1/retail/add-allowed-ips)</code></li>
   <li>Remove whitelisted IPs for api-key <code>(POST /v1/retail/remove-allowed-ips)</code></li>
@@ -1172,6 +1172,18 @@ Returns the response data for further use.<br/></p>
       <td>type</td>
       <td>string</td>
       <td>Yes</td>
+      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+    </tr>
+        <tr>
+      <td>takeProfitPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+    </tr>
+        <tr>
+      <td>stopLossPrice</td>
+      <td>number</td>
+      <td>No</td>
       <td>The type of order to place, based on the value of <code>orderType</code>.</td>
     </tr>
   </tbody>

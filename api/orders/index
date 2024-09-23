@@ -175,6 +175,18 @@
       <td>Yes</td>
       <td>The type of order to place, based on the value of <code>orderType</code>.</td>
     </tr>
+        <tr>
+      <td>takeProfitPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+    </tr>
+        <tr>
+      <td>stopLossPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+    </tr>
   </tbody>
 </table>
 <h3 id='response'>Response</h3>
