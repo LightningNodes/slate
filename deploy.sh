@@ -20,9 +20,9 @@ Options:
 "
 
 
-run_build() {
-  bundle exec middleman build --clean
-}
+# run_build() {
+#   bundle exec middleman build --clean
+# }
 
 parse_args() {
   # Set args from a local environment file.
@@ -217,10 +217,11 @@ sanitize() {
 parse_args "$@"
 
 if [[ ${source_only} ]]; then
-  run_build
+  # run_build
+  continue
 elif [[ ${push_only} ]]; then
   main "$@"
 else
-  run_build
+  # run_build
   main "$@"
 fi
