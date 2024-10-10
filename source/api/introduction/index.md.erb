@@ -73,7 +73,7 @@ Endpoints which **DO NOT** require `api-key` and `signature` authentication:
 </table>
 
 
-<aside class="notice"> 
+<aside class="notice">
 Base URLs for: <br/>
 - Authenticated endpoints: <code>https://fapi.pi42.com/ </code> <br/>
 - Public endpoints: <code> https://api.pi42.com/ </code>
@@ -105,7 +105,7 @@ Sends a GET request to the specified endpoint with the given parameters:
 ```javascript
 /**
  * Sends a GET request to the specified endpoint with the given parameters.
- * 
+ *
  * @param {string} endpoint - The API endpoint to send the request to.
  * @param {Object} [params={}] - The query parameters to include in the request.
  * @returns {Promise<Object>} - The response data from the API.
@@ -118,16 +118,20 @@ async function getRequest(endpoint, params = {}) {
     // Determine if the endpoint is a market endpoint
     const isMarketEndpoint = endpoint.startsWith("/v1/market");
     let url = "";
+    const queryString = new URLSearchParams(params).toString();
 
     // Construct the URL based on the endpoint type
     if (isMarketEndpoint) {
         url = `${publicBaseUrl}${endpoint}`;
     } else {
-        url = `${baseUrl}${endpoint}?${new URLSearchParams(params).toString()}`;
+        url = `${baseUrl}${endpoint}?${queryString}`;
     }
 
     // Generate a signature for the request
-    const signature = generateSignature(params, apiSecret);
+    const signature = crypto
+      .createHmac("sha256", apiSecret)
+      .update(queryString)
+      .digest("hex");
 
     try {
         // Send the GET request
