@@ -71,7 +71,7 @@
 <tr><td><code>/v1/market/ticker24Hr</code></td></tr>
 </table>
 
-<aside class="notice"> 
+<aside class="notice">
 Base URLs for: <br/>
 - Authenticated endpoints: <code>https://fapi.pi42.com/ </code> <br/>
 - Public endpoints: <code> https://api.pi42.com/ </code>
@@ -106,7 +106,7 @@ fields. <br/></li>
 </ul>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="cm">/**
  * Sends a GET request to the specified endpoint with the given parameters.
- * 
+ *
  * @param {string} endpoint - The API endpoint to send the request to.
  * @param {Object} [params={}] - The query parameters to include in the request.
  * @returns {Promise&lt;Object&gt;} - The response data from the API.
@@ -119,16 +119,20 @@ fields. <br/></li>
     <span class="c1">// Determine if the endpoint is a market endpoint</span>
     <span class="kd">const</span> <span class="nx">isMarketEndpoint</span> <span class="o">=</span> <span class="nx">endpoint</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="dl">"</span><span class="s2">/v1/market</span><span class="dl">"</span><span class="p">);</span>
     <span class="kd">let</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">queryString</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">URLSearchParams</span><span class="p">(</span><span class="nx">params</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
 
     <span class="c1">// Construct the URL based on the endpoint type</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">isMarketEndpoint</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">publicBaseUrl</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">baseUrl</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?</span><span class="p">${</span><span class="k">new</span> <span class="nx">URLSearchParams</span><span class="p">(</span><span class="nx">params</span><span class="p">).</span><span class="nx">toString</span><span class="p">()}</span><span class="s2">`</span><span class="p">;</span>
+        <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">baseUrl</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">?</span><span class="p">${</span><span class="nx">queryString</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
     <span class="p">}</span>
 
     <span class="c1">// Generate a signature for the request</span>
-    <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">generateSignature</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">crypto</span>
+      <span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="dl">"</span><span class="s2">sha256</span><span class="dl">"</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">queryString</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
 
     <span class="k">try</span> <span class="p">{</span>
         <span class="c1">// Send the GET request</span>
