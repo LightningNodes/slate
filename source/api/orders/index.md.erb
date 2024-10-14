@@ -2354,6 +2354,162 @@ async function fetchUserTransactionHistory() {
 </table>
 
 
+<h2 id='exchange-update-preference'>Update Preference</h2>
+
+`POST /v1/exchange/update/preference`
+
+Updates the leverage and margin-mode(Cross or Isolated) for a specified contract. It allows setting the leverage level and margin-mode for trading a particular asset or trading pair.
+
+<aside class="notice">Notes:
+<ol>
+<li><strong>Update Leverage and Margin Mode for Specific Symbols</strong></li>
+<ul>
+<li>Users can adjust the leverage and margin mode for individual symbols using the <code>/update/preference</code> endpoint.</li>
+<li>This adjustment applies only to the specified symbol.</li>
+</ul>
+<li><strong>Placing Orders</strong></li>
+<ul>
+<li>Orders will be executed with the leverage and margin mode that was previously set for the symbol.</li>
+<li>To use a different leverage or margin mode for an order, users must first update the leverage or margin mode for the symbol via the <code>/update/preference</code> endpoint.</li>
+</ul>
+</ol>
+</aside>
+
+
+```javascript
+async function updatePreference() {
+    const endpoint = "/v1/exchange/update/preference";
+
+    const leverage = 10;
+    const contractName = "BTCINR";
+    const marginMode = "CROSSED"
+
+    // Prepare request payload
+    const params = {
+        leverage: leverage,       // Ensure leverage is an integer
+        marginMode: marginMode,   // Ensure marginMode is ISOLATED or CROSSED
+        contractName: contractName,
+    };
+
+    // Call the postRequest function
+    return await postRequest(endpoint, params);
+}
+```
+```python
+import time
+import json
+import requests
+
+def update_preference():
+    endpoint = "/v1/exchange/update/preference"
+
+    leverage = 10  # Ensure leverage is an integer
+    contract_name = "BTCINR"  # Replace with the appropriate contract name
+    margin_mode = "CROSSED"  # Ensure marginMode is either 'ISOLATED' or 'CROSSED'
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare the request body (JSON)
+    params = {
+        'leverage': leverage,
+        'marginMode': margin_mode,
+        'contractName': contract_name,
+        'timestamp': timestamp
+    }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the POST request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    update_preference_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the POST request to update the preference
+        response = requests.post(update_preference_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('Preference updated successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Error: {err.response.text if err.response else err}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>leverage</td>
+            <td>number</td>
+            <td>Yes</td>
+            <td>The leverage level to set for the contract (e.g., 10). Must be an integer.</td>
+        </tr>
+        <tr>
+            <td>marginMode</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Margin mode to set for the contract (CROSSED/ISOLATED). Must be a string</td>
+        </tr>
+        <tr>
+            <td>contractName</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The trading pair or contract name to which the leverage applies (e.g., BTCINR)</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+The response parameters are described below:
+
+```json
+// Response
+{
+  "contractName": "ETHINR",
+  "marginMode": "CROSSED",
+  "updatedLeverage": 10
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>contractName</strong></td>
+      <td>The name of the contract (<code>ETHINR</code>), indicating Ethereum (ETH) traded against Indian Rupee (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>marginMode</strong></td>
+      <td>Updated margin mode for (<code>ETHINR</code>) is (</code>CROSSED</code>)</td>
+    </tr>
+    <tr>
+      <td><strong>updatedLeverage</strong></td>
+      <td>The updated leverage for the contract (<code>10</code>).</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -2611,6 +2767,249 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
     <tr>
       <td><strong>success</strong></td>
       <td>Indicates whether the operation was successful (<code>true</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="cancel-all-orders">Cancel all the orders</h2>
+
+`DELETE /v1/order/cancel-all-orders`
+
+Deletes all the open orders.
+
+```javascript
+async function cancelAllOrders() {
+    const endpoint = "/v1/order/cancel-all-orders";
+    const timestamp = Date.now().toString();
+
+    // Prepare request payload
+    const params = {
+        timestamp: timestamp,
+    };
+
+    // Call the deleteRequest function
+    return await deleteRequest(endpoint, params);
+}
+```
+
+```python
+import time
+import json
+import requests
+
+def cancel_all_orders():
+    endpoint = "/v1/order/cancel-all-orders"
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare the request payload
+    params = {
+        'timestamp': timestamp
+    }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the DELETE request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    cancel_orders_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the DELETE request to cancel all orders
+        response = requests.delete(cancel_orders_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('All orders canceled successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "clientOrderId": "02f8c7b42c904b5475b6-6238-ext",
+      "status": "CANCELED",
+      "message": "Order is cancelled"
+    },
+  ]
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Unique identifier for the client order (<code>93513fe2a8af44157234-6238-ext</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>The status of the order (<code>CANCELED</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>message</strong></td>
+      <td>Order is cancelled.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h2 id="close-all-positions">Close all the positions</h2>
+
+`DELETE /v1/order/close-all-positions'`
+
+Closes all the Positions.
+
+```javascript
+async function closeAllPositions() {
+    const endpoint = "/v1/order/close-all-positions";
+    const timestamp = Date.now().toString();
+
+    // Prepare request payload
+    const params = {
+        timestamp: timestamp,
+    };
+
+    // Call the deleteRequest function
+    return await deleteRequest(endpoint, params);
+}
+```
+
+```python
+import time
+import json
+import requests
+
+def close_all_positions():
+    endpoint = "/v1/order/close-all-positions"
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare the request payload
+    params = {
+        'timestamp': timestamp
+    }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the DELETE request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    cancel_orders_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the DELETE request to cancel all orders
+        response = requests.delete(cancel_orders_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('All orders canceled successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "positionId": "2d29687c-2aab-4378-ada3-f18ecb73b332",
+      "status": "CLOSED",
+      "message": "Position is closed."
+    }
+  ]
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>positionId</strong></td>
+      <td>Unique identifier for the position (<code>2d29687c-2aab-4378-ada3-f18ecb73b332</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>The status of the order (<code>CLOSED</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>message</strong></td>
+      <td>Position is closed.</td>
     </tr>
   </tbody>
 </table>
