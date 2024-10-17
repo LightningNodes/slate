@@ -2382,12 +2382,12 @@ async function updatePreference() {
 
     const leverage = 10;
     const contractName = "BTCINR";
-    const marginMode = "CROSSED"
+    const marginMode = "CROSS"
 
     // Prepare request payload
     const params = {
         leverage: leverage,       // Ensure leverage is an integer
-        marginMode: marginMode,   // Ensure marginMode is ISOLATED or CROSSED
+        marginMode: marginMode,   // Ensure marginMode is ISOLATED or CROSS
         contractName: contractName,
     };
 
@@ -2405,7 +2405,7 @@ def update_preference():
 
     leverage = 10  # Ensure leverage is an integer
     contract_name = "BTCINR"  # Replace with the appropriate contract name
-    margin_mode = "CROSSED"  # Ensure marginMode is either 'ISOLATED' or 'CROSSED'
+    margin_mode = "CROSS"  # Ensure marginMode is either 'ISOLATED' or 'CROSS'
 
     # Generate the current timestamp
     timestamp = str(int(time.time() * 1000))
@@ -2465,7 +2465,7 @@ def update_preference():
             <td>marginMode</td>
             <td>string</td>
             <td>Yes</td>
-            <td>Margin mode to set for the contract (CROSSED/ISOLATED). Must be a string</td>
+            <td>Margin mode to set for the contract (CROSS/ISOLATED). Must be a string</td>
         </tr>
         <tr>
             <td>contractName</td>
@@ -2484,7 +2484,7 @@ The response parameters are described below:
 // Response
 {
   "contractName": "ETHINR",
-  "marginMode": "CROSSED",
+  "marginMode": "CROSS",
   "updatedLeverage": 10
 }
 ```
@@ -2502,7 +2502,7 @@ The response parameters are described below:
     </tr>
     <tr>
       <td><strong>marginMode</strong></td>
-      <td>Updated margin mode for (<code>ETHINR</code>) is (</code>CROSSED</code>)</td>
+      <td>Updated margin mode for (<code>ETHINR</code>) is (</code>CROSS</code>)</td>
     </tr>
     <tr>
       <td><strong>updatedLeverage</strong></td>
@@ -2895,7 +2895,7 @@ def cancel_all_orders():
 
 <h2 id="close-all-positions">Close all the positions</h2>
 
-`DELETE /v1/order/close-all-positions'`
+`DELETE /v1/order/close-all-positions`
 
 Closes all the Positions.
 
@@ -3010,6 +3010,134 @@ def close_all_positions():
     <tr>
       <td><strong>message</strong></td>
       <td>Position is closed.</td>
+    </tr>
+  </tbody>
+</table>
+
+<%# Wallets %>
+
+<h2 id="futures-wallet-details">Get futures wallet details</h2>
+
+`GET /v1/futures-wallet/details`
+
+Get all details of Futures wallet.
+
+```javascript
+..
+```
+
+```python
+..
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+        <tr>
+            <td>marginAsset</td>
+            <td>string</td>
+            <td>No</td>
+            <td>MarginAsset of Futures wallet (<code>INR</code>).</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+```json
+{
+  "inrBalance": "1941.50",
+  "walletBalance": "1941.50",
+  "withdrawableBalance": "1468.50",
+  "maintenanceMargin": "0.00",
+  "unrealisedPnlCross": "0.00",
+  "unrealisedPnlIsolated": "0.00",
+  "maxWithdrawableBalance": "1468.50",
+  "lockedBalance": "473.00",
+  "marginBalance": "1468.52",
+  "pnlPercentCross": "0.00",
+  "pnlPercentIsolated": "0.00",
+  "lockedBalanceCross": "0.00",
+  "lockedBalanceIsolated": "473.00",
+  "marginAsset": "INR"
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>inrBalance</strong></td>
+      <td>INR balance of Futures wallet (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>walletBalance</strong></td>
+      <td>Total wallet balance in INR.</td>
+    </tr>
+    <tr>
+      <td><strong>withdrawableBalance</strong></td>
+      <td>Amount of INR that can be withdrawn from the wallet.</td>
+    </tr>
+    <tr>
+      <td><strong>maintenanceMargin</strong></td>
+      <td>Amount of INR locked as maintenance margin.</td>
+    </tr>
+    <tr>
+      <td><strong>unrealisedPnlCross</strong></td>
+      <td>Unrealized profit and loss (PnL) in cross margin mode in INR.</td>
+    </tr>
+    <tr>
+      <td><strong>unrealisedPnlIsolated</strong></td>
+      <td>Unrealized profit and loss (PnL) in isolated margin mode in INR.</td>
+    </tr>
+    <tr>
+      <td><strong>maxWithdrawableBalance</strong></td>
+      <td>Maximum amount of INR that can be withdrawn, factoring in margins and locked funds.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedBalance</strong></td>
+      <td>Total locked balance in INR, which cannot be withdrawn or used.</td>
+    </tr>
+    <tr>
+      <td><strong>marginBalance</strong></td>
+      <td>Total margin balance in INR, including any unrealized PnL.</td>
+    </tr>
+    <tr>
+      <td><strong>pnlPercentCross</strong></td>
+      <td>Percentage of unrealized PnL in cross margin mode.</td>
+    </tr>
+    <tr>
+      <td><strong>pnlPercentIsolated</strong></td>
+      <td>Percentage of unrealized PnL in isolated margin mode.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedBalanceCross</strong></td>
+      <td>Amount of INR locked in cross margin mode.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedBalanceIsolated</strong></td>
+      <td>Amount of INR locked in isolated margin mode.</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>Asset type used for margin, in this case, INR.</td>
     </tr>
   </tbody>
 </table>
