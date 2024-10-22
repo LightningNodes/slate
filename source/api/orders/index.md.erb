@@ -2,10 +2,14 @@
 
 <h2 id="place-order">Place an Order </h2>
 
+```python
+def generate_signature(api_secret, data_to_sign):
+    return hmac.new(api_secret.encode('utf-8'), data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
+```
+
 `POST /v1/order/place-order`
 
 Place an order (either a market order or a limit order) on Pi42's trading platform. It allows users to submit an order to buy or sell a specific asset.
-
 <aside class="notice"> Note:
 <ul>
 <li>Price is compulsory to place a limit order.</li>
@@ -3018,16 +3022,68 @@ def close_all_positions():
 
 <h2 id="futures-wallet-details">Get futures wallet details</h2>
 
-`GET /v1/futures-wallet/details`
+`GET /v1/wallet/futures-wallet/details`
 
 Get all details of Futures wallet.
 
 ```javascript
-..
+async function getFuturesWallet() {
+  const params = {
+    // Optional Params
+    marginAsset: "INR"
+  };
+
+  const endpoint = "/v1/wallet/futures-wallet/details";
+
+  // Call the postRequest function
+  return await getRequest(endpoint, params);
+}
 ```
 
 ```python
-..
+import time
+import json
+import requests
+
+def get_futures_wallet_details():
+    endpoint = "/v1/wallet/futures-wallet/details"
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Optional parameters with timestamp
+    params = {
+        'marginAsset': 'INR',
+        'timestamp': timestamp
+    }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the GET request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    wallet_details_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the GET request to fetch the futures wallet details
+        response = requests.get(wallet_details_url, headers=headers, params=params)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('Futures wallet details:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
 ```
 
 <table>
@@ -3058,6 +3114,7 @@ Get all details of Futures wallet.
 ### Response
 
 ```json
+// Response
 {
   "inrBalance": "1941.50",
   "walletBalance": "1941.50",
@@ -3142,3 +3199,135 @@ Get all details of Futures wallet.
   </tbody>
 </table>
 
+
+<h2 id="funding-wallet-details">Get funding wallet details</h2>
+
+`GET /v1/wallet/funding-wallet/details`
+
+Get details of funding wallet.
+
+```javascript
+async function getFundingWallet() {
+  const params = {
+    // Optional Params
+    marginAsset: "INR"
+  };
+
+  const endpoint = "/v1/wallet/funding-wallet/details";
+
+  // Call the postRequest function
+  return await getRequest(endpoint, params);
+}
+```
+
+```python
+import time
+import json
+import requests
+
+def get_funding_wallet_details():
+    endpoint = "/v1/wallet/funding-wallet/details"
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Optional parameters with timestamp
+    params = {
+        'marginAsset': 'INR',
+        'timestamp': timestamp
+    }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the GET request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    funding_wallet_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the GET request to fetch the funding wallet details
+        response = requests.get(funding_wallet_url, headers=headers, params=params)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('Funding wallet details:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp (in milliseconds) for request validation</td>
+        </tr>
+        <tr>
+            <td>marginAsset</td>
+            <td>string</td>
+            <td>No</td>
+            <td>MarginAsset of Futures wallet (<code>INR</code>).</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+```json
+// Response
+{
+  "inrBalance": "601.00",
+  "walletBalance": "601.00",
+  "withdrawableBalance": "601.00",
+  "lockedBalance": "0.00",
+  "marginAsset": "INR"
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>inrBalance</strong></td>
+      <td>INR balance of Futures wallet (<code>INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>walletBalance</strong></td>
+      <td>Total wallet balance in INR.</td>
+    </tr>
+    <tr>
+      <td><strong>withdrawableBalance</strong></td>
+      <td>Amount of INR that can be withdrawn from the wallet.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedBalance</strong></td>
+      <td>Total locked balance in INR, which cannot be withdrawn or used.</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>Asset type used for margin, in this case, INR.</td>
+    </tr>
+  </tbody>
+</table>

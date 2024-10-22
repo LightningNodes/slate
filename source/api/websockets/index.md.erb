@@ -1,6 +1,6 @@
 <h1 id='web-sockets'>Web Sockets</h1>
 
-WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges). 
+WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges).
 
 Here's how different web sockets work:
 
@@ -56,7 +56,11 @@ Event listeners are described below:
             </tr>
             <tr>
                 <td>newOrder</td>
-                <td>Triggered when a new order is created.</td>
+                <td>Triggered when a stop order is executed.</td>
+            </tr>
+            <tr>
+                <td>updateOrder</td>
+                <td>Triggered when a stop limit order is executed.</td>
             </tr>
             <tr>
                 <td>updatePosition</td>
@@ -321,7 +325,7 @@ function subscribeToTopics() {
 
 `POST /v1/retail/listen-key`
 
-Creates a new listen key for WebSocket connections. 
+Creates a new listen key for WebSocket connections.
 
 A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
 
@@ -421,7 +425,7 @@ The response parameters are described below:
 
 `POST /v1/retail/listen-key`
 
-Retrieves a new listen key for WebSocket connections. 
+Retrieves a new listen key for WebSocket connections.
 
 A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.
 
@@ -486,7 +490,7 @@ def create_or_update_listen_key():
 
 `PUT /v1/retail/listen-key`
 
-Updates the listen key for WebSocket connections. 
+Updates the listen key for WebSocket connections.
 
 
 Updating the listen key is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.
@@ -514,7 +518,7 @@ Updating the listen key is necessary to maintain an active WebSocket connection 
 ```javascript
 async function updateListenKey() {
     const endpoint = "/v1/retail/listen-key";
-    
+
     // Call the getRequest function
     return await putRequest(endpoint, {});
 }
@@ -523,22 +527,22 @@ async function updateListenKey() {
 ```python
 def update_listen_key_expiry():
   timestamp = str(int(time.time() * 1000))
-  
+
   params = {
       'timestamp': timestamp
   }
-  
+
   data_to_sign = json.dumps(params, separators=(',', ':'))
-  
+
   # Generate the signature using the provided helper function
   signature = generate_signature(api_secret, data_to_sign)
-  
+
   # Headers for the PUT request
   headers = {
       'api-key': api_key,
       'signature': signature,
   }
-  
+
   try:
       # Send the PUT request to update the listen key expiry
       response = requests.put(listen_key_url, json=params, headers=headers)
@@ -569,7 +573,7 @@ This action terminates the connection and stops the receipt of real-time updates
 ```javascript
 async function deleteListenKey() {
     const endpoint = "/v1/retail/listen-key";
-    
+
     // Call the deleteRequest function
     return await deleteRequest(endpoint, {});
 }
@@ -579,26 +583,26 @@ async function deleteListenKey() {
 def delete_listen_key():
   # Generate the current timestamp
   timestamp = str(int(time.time() * 1000))
-  
+
   # Prepare the data for the request (listenKey is passed in the URL path)
   params = {
       'timestamp': timestamp
   }
-  
+
   # Generate the signature based on the params
   data_to_sign = json.dumps(params, separators=(',', ':'))
   signature = generate_signature(api_secret, data_to_sign)
-  
+
   # Headers for the DELETE request
   headers = {
       'api-key': api_key,
       'signature': signature,
       'accept': '*/*'
   }
-  
+
   # Construct the full URL, inserting the listenKey into the path
   delete_listen_key_url = f"{base_url}/v1/retail/listen-key/"
-  
+
   try:
       # Send the DELETE request to delete the listen key
       response = requests.delete(delete_listen_key_url, json=params, headers=headers)
