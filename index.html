@@ -1039,8 +1039,8 @@ Returns the response data for further use.<br/></p>
 </aside></p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">placeOrder</span><span class="p">(</span><span class="nx">orderType</span><span class="p">,</span> <span class="nx">quantity</span> <span class="o">=</span> <span class="mi">38</span><span class="p">,</span> <span class="nx">price</span> <span class="o">=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
   <span class="c1">// Validate orderType</span>
-  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">LIMIT</span><span class="dl">"</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">orderType</span><span class="p">))</span> <span class="p">{</span>
-    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid order type. Must be 'MARKET' or 'LIMIT'.</span><span class="dl">"</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="dl">"</span><span class="s2">MARKET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">LIMIT</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">STOP_MARKET</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">STOP_LIMIT</span><span class="dl">"</span><span class="p">].</span><span class="nx">includes</span><span class="p">(</span><span class="nx">orderType</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Invalid order type. Must be MARKET, LIMIT, STOP_MARKET or STOP_LIMIT.</span><span class="dl">"</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="c1">// Validate quantity</span>
@@ -1146,12 +1146,6 @@ Returns the response data for further use.<br/></p>
   </thead>
   <tbody>
     <tr>
-      <td>orderType</td>
-      <td>string</td>
-      <td>Yes</td>
-      <td>The type of the order. It can be "MARKET" or "LIMIT".</td>
-    </tr>
-    <tr>
       <td>quantity</td>
       <td>number</td>
       <td>No</td>
@@ -1161,7 +1155,7 @@ Returns the response data for further use.<br/></p>
       <td>price</td>
       <td>number</td>
       <td>Conditional</td>
-      <td>The price at which to place the LIMIT order. Must be specified if orderType is "LIMIT".</td>
+      <td>The price at which to place the LIMIT/STOP_LIMIT order. Must be specified if orderType is "LIMIT" or "STOP_LIMIT".</td>
     </tr>
     <tr>
       <td>placeType</td>
@@ -1194,10 +1188,12 @@ Returns the response data for further use.<br/></p>
       <td>The asset used for margin, such as "INR".</td>
     </tr>
     <tr>
-      <td>type</td>
+    <tr>
+      <td>orderType</td>
       <td>string</td>
       <td>Yes</td>
-      <td>The type of order to place, based on the value of <code>orderType</code>.</td>
+      <td>The type of the order. It can be MARKET, LIMIT, STOP_MARKET or STOP_LIMIT.</td>
+    </tr>
     </tr>
         <tr>
       <td>takeProfitPrice</td>
@@ -1210,6 +1206,12 @@ Returns the response data for further use.<br/></p>
       <td>number</td>
       <td>No</td>
       <td>Price at which stop loss order should be executed.</td>
+    </tr>
+    <tr>
+      <td>stopPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Compulsory for STOP_MARKET and STOP_LIMIT orders</td>
     </tr>
   </tbody>
 </table>
