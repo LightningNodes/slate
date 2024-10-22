@@ -57,6 +57,9 @@
 <tr><td><code>/v1/order/add-margin</code></td></tr>
 <tr><td><code>/v1/order/reduce-margin</code></td></tr>
 <tr><td><code>/v1/exchange/update/leverage</code></td></tr>
+<tr><td><code>/v1/order/cancel-all-orders</code></td></tr>
+<tr><td><code>/v1/order/close-all-positions</code></td></tr>
+
 </table>
 <h3 id='public-apis'>Public APIs</h3>
 <p>The Public endpoints are accessible without any authentication, allowing open access to certain resources or information. These endpoints are designed to handle requests that do not require user identification or secure access, such as fetching general information, retrieving publicly available data, or providing status updates. While public, these endpoints are still subject to rate limiting and monitoring to prevent abuse or misuse of the system.</p>

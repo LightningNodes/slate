@@ -1,6 +1,6 @@
 <h1 id='web-sockets'>Web Sockets</h1>
 
-<p>WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges). </p>
+<p>WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges).</p>
 
 <p>Here&#39;s how different web sockets work:</p>
 
@@ -55,7 +55,11 @@
             </tr>
             <tr>
                 <td>newOrder</td>
-                <td>Triggered when a new order is created.</td>
+                <td>Triggered when a stop order is executed.</td>
+            </tr>
+            <tr>
+                <td>updateOrder</td>
+                <td>Triggered when a stop limit order is executed.</td>
             </tr>
             <tr>
                 <td>updatePosition</td>
@@ -315,7 +319,7 @@ function subscribeToTopics() {
 
 <p><code>POST /v1/retail/listen-key</code></p>
 
-<p>Creates a new listen key for WebSocket connections. </p>
+<p>Creates a new listen key for WebSocket connections.</p>
 
 <p>A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.</p>
 <div class="highlight"><pre class="highlight plaintext"><code>const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
@@ -409,7 +413,7 @@ async function createListenKey(apiKey: string, apiSecret: string) {
 
 <p><code>POST /v1/retail/listen-key</code></p>
 
-<p>Retrieves a new listen key for WebSocket connections. </p>
+<p>Retrieves a new listen key for WebSocket connections.</p>
 
 <p>A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getListenKey</span><span class="p">()</span> <span class="p">{</span>
@@ -468,7 +472,7 @@ async function createListenKey(apiKey: string, apiSecret: string) {
 
 <p><code>PUT /v1/retail/listen-key</code></p>
 
-<p>Updates the listen key for WebSocket connections. </p>
+<p>Updates the listen key for WebSocket connections.</p>
 
 <p>Updating the listen key is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.</p>
 
