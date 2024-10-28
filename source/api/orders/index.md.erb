@@ -2901,13 +2901,13 @@ def cancel_all_orders():
 
 <h2 id="close-all-positions">Close all the positions</h2>
 
-`DELETE /v1/order/close-all-positions`
+`DELETE /v1/positions/close-all-positions`
 
 Closes all the Positions.
 
 ```javascript
 async function closeAllPositions() {
-    const endpoint = "/v1/order/close-all-positions";
+    const endpoint = "/v1/positions/close-all-positions";
     const timestamp = Date.now().toString();
 
     // Prepare request payload
@@ -2926,7 +2926,7 @@ import json
 import requests
 
 def close_all_positions():
-    endpoint = "/v1/order/close-all-positions"
+    endpoint = "/v1/positions/close-all-positions"
 
     # Generate the current timestamp
     timestamp = str(int(time.time() * 1000))
