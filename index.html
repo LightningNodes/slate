@@ -735,7 +735,7 @@ c. New Events:</li>
 <tr><td><code>/v1/order/reduce-margin</code></td></tr>
 <tr><td><code>/v1/exchange/update/leverage</code></td></tr>
 <tr><td><code>/v1/order/cancel-all-orders</code></td></tr>
-<tr><td><code>/v1/order/close-all-positions</code></td></tr>
+<tr><td><code>/v1/positions/close-all-positions</code></td></tr>
 
 </table>
 
@@ -3817,11 +3817,11 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
 
 <h2 id="close-all-positions">Close all the positions</h2>
 
-<p><code>DELETE /v1/order/close-all-positions</code></p>
+<p><code>DELETE /v1/positions/close-all-positions</code></p>
 
 <p>Closes all the Positions.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">closeAllPositions</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/order/close-all-positions</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/positions/close-all-positions</span><span class="dl">"</span><span class="p">;</span>
     <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
 
     <span class="c1">// Prepare request payload</span>
@@ -3837,7 +3837,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
 <span class="kn">import</span> <span class="nn">requests</span>
 
 <span class="k">def</span> <span class="nf">close_all_positions</span><span class="p">():</span>
-    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"/v1/order/close-all-positions"</span>
+    <span class="n">endpoint</span> <span class="o">=</span> <span class="s">"/v1/positions/close-all-positions"</span>
 
     <span class="c1"># Generate the current timestamp
 </span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
