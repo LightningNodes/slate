@@ -164,6 +164,107 @@ socket.on('disconnect', () => {
 });
 ```
 
+```python
+# Required installations:
+# python-socketio asyncio aiohttp
+
+import socketio
+import asyncio
+
+# WebSocket server URL (without namespace)
+server_url = 'Pi42-Authenticated-websocket-url'
+
+# Namespace path for authorized streaming
+namespace_path = '/auth-stream/your-listen-key'
+
+# Create a new asynchronous Socket.IO client
+sio = socketio.AsyncClient()
+
+# Event listener for a successful connection to the server
+@sio.event
+async def connect():
+    print('Successfully connected to the WebSocket server')
+
+# Event listener for when the connection to the server is closed
+@sio.event
+async def disconnect():
+    print('Disconnected from the WebSocket server')
+
+# Event handler for receiving a new position update from the server
+@sio.on('newPosition', namespace=namespace_path)
+async def on_new_position(data):
+    print("New position received:", data)
+
+# Event handler for receiving an order filled notification
+@sio.on('orderFilled', namespace=namespace_path)
+async def on_order_filled(data):  # Accept data parameter
+    print("Order filled:", data)
+
+# Event handler for receiving a partially filled order update
+@sio.on('orderPartiallyFilled', namespace=namespace_path)
+async def on_order_partially_filled(data):
+    print("Order partially filled:", data)
+
+# Event handler for receiving a cancelled order notification
+@sio.on('orderCancelled', namespace=namespace_path)
+async def on_order_cancelled(data):
+    print("Order cancelled:", data)
+
+# Event handler for receiving a failed order notification
+@sio.on('orderFailed', namespace=namespace_path)
+async def on_order_failed(data):
+    print("Order failed:", data)
+
+# Event handler for receiving a new order(TP/SL) notification
+@sio.on('newOrder', namespace=namespace_path)
+async def on_new_order(data):
+    print("New order:", data)
+
+# Event handler for receiving a position update
+@sio.on('updatePosition', namespace=namespace_path)
+async def on_update_position(data):
+    print("Position updated:", data)
+
+# Event handler for receiving a position close notification
+@sio.on('closePosition', namespace=namespace_path)
+async def on_close_position(data):
+    print("Position closed:", data)
+
+# Event handler for balance update notifications
+@sio.on('balanceUpdate', namespace=namespace_path)
+async def on_balance_update(data):
+    print("Balance updated:", data)
+
+# Event handler for receiving a new trade notification
+@sio.on('newTrade', namespace=namespace_path)
+async def on_new_trade(data):
+    print("New trade:", data)
+
+# Event handler for session expiration notifications
+@sio.on('sessionExpired', namespace=namespace_path)
+async def on_session_expired(data):
+    print("Session expired:", data)
+
+# Event listener for connection errors
+@sio.event
+async def connect_error(data):
+    print('Failed to connect to the WebSocket server:', data)
+
+# Main function to initiate and maintain the WebSocket connection
+async def main():
+    try:
+        # Attempt to connect to the server with specified transports
+        await sio.connect(server_url, transports=["websocket"])
+        await sio.wait()  # Keeps the connection open to listen for events
+    except Exception as e:
+        print("Connection error:", e)
+
+# Entry point for the asyncio program
+# Uses asyncio.run() to execute the main coroutine
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
 <h2 id="public-web-sockets">Public Web Sockets</h2>
 
 Public WebSockets are open to all clients and do not require authentication to establish a connection. They are useful for scenarios where the data being transmitted is not sensitive or where the application does not require user-specific interactions.
