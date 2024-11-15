@@ -670,11 +670,11 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 </thead><tbody>
 <tr>
 <td>market</td>
-<td>A list of markets included in the response. In this case, it is [&quot;INR&quot;].</td>
+<td>A list of markets included in the response.</td>
 </tr>
 <tr>
 <td>contracts</td>
-<td>An array of contract objects that contain detailed information about specific trading contracts available in the INR market.</td>
+<td>An array of contract objects that contain detailed information about specific trading contracts.</td>
 </tr>
 <tr>
 <td>name</td>
