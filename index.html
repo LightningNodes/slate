@@ -444,6 +444,9 @@
                   <li>
                     <a href="#klines" class="toc-h2 toc-link" data-title="Get Klines">Get Klines</a>
                   </li>
+                  <li>
+                    <a href="#exchange" class="toc-h2 toc-link" data-title="Exchange">Exchange</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -4891,6 +4894,240 @@ Below is an overview of the public endpoints available in Pi42, their typical us
     </tr>
   </tbody>
 </table>
+
+<h2 id='exchange'>Exchange</h2>
+
+<p><code>GET /v1/exchange/exchangeInfo</code></p>
+
+<p>Retrieve exchange information</p>
+
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getExchangeInfo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/exchange/exchangeInfo</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1">// Optional</span>
+        <span class="na">market</span><span class="p">:</span><span class="dl">"</span><span class="s2">INR</span><span class="dl">"</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Call the postRequest function</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">getRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code>
+<span class="k">def</span> <span class="nf">get_exchange_info</span><span class="p">():</span>
+
+  <span class="c1"># Construct the URL
+</span>  <span class="n">full_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/exchange/exchangeInfo"</span>
+
+  <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># Send the GET request to fetch exchange information
+</span>      <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">full_url</span><span class="p">)</span>
+      <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an error for 4xx/5xx responses
+</span>      <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">'Exchange information fetched successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+  <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Error: </span><span class="si">{</span><span class="n">err</span><span class="p">.</span><span class="n">response</span><span class="p">.</span><span class="n">text</span> <span class="k">if</span> <span class="n">err</span><span class="p">.</span><span class="n">response</span> <span class="k">else</span> <span class="n">err</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+  <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>market</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Will return exchangeInfo for market (e.g., INR/USDT)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 id='response-5'>Response</h3>
+
+<p>The response parameters are described below:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>market</td>
+<td>A list of markets included in the response. In this case, it is [&quot;INR&quot;].</td>
+</tr>
+<tr>
+<td>contracts</td>
+<td>An array of contract objects that contain detailed information about specific trading contracts available in the INR market.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name of the trading pair (e.g., &quot;BTCINR&quot; for Bitcoin to INR)</td>
+</tr>
+<tr>
+<td>contractName</td>
+<td>The full name of the contract (e.g., &quot;Bitcoin&quot;).</td>
+</tr>
+<tr>
+<td>filters</td>
+<td>A list of filters that apply to the contract, detailing quantity and order constraints</td>
+</tr>
+<tr>
+<td>maxQty</td>
+<td>The maximum quantity allowed</td>
+</tr>
+<tr>
+<td>minQty</td>
+<td>The minimum quantity allowed</td>
+</tr>
+<tr>
+<td>filterType</td>
+<td>The type of filter (e.g., &quot;MARKET_QTY_SIZE&quot;, &quot;LIMIT_QTY_SIZE&quot;, &quot;MAX_NUM_ORDERS&quot;, &quot;MIN_NOTIONAL&quot;).</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>The maximum number of orders allowed.</td>
+</tr>
+<tr>
+<td>notional</td>
+<td>The minimum notional value.</td>
+</tr>
+<tr>
+<td>makerFee</td>
+<td>The fee percentage for makers.</td>
+</tr>
+<tr>
+<td>takerFee</td>
+<td>The fee percentage for takers.</td>
+</tr>
+<tr>
+<td>baseAsset</td>
+<td>The base asset for the contract (e.g., &quot;BTC&quot;).</td>
+</tr>
+<tr>
+<td>orderTypes</td>
+<td>The types of orders supported (e.g., &quot;LIMIT&quot;, &quot;MARKET&quot;).</td>
+</tr>
+<tr>
+<td>quoteAsset</td>
+<td>The quote asset for the contract (e.g., &quot;INR&quot;).</td>
+</tr>
+<tr>
+<td>maxLeverage</td>
+<td>The maximum leverage allowed (e.g., &quot;20&quot;).</td>
+</tr>
+<tr>
+<td>contractType</td>
+<td>The type of contract (e.g., &quot;PERPETUAL&quot;).</td>
+</tr>
+<tr>
+<td>marginBuffer</td>
+<td>The margin buffer value.</td>
+</tr>
+<tr>
+<td>depthGrouping</td>
+<td>The grouping for order book depth (e.g., [&quot;0.1&quot;]).</td>
+</tr>
+<tr>
+<td>liquidationFee</td>
+<td>The fee percentage for liquidation (e.g., &quot;0.020000&quot;).</td>
+</tr>
+<tr>
+<td>pricePrecision</td>
+<td>The number of decimal places for prices.</td>
+</tr>
+<tr>
+<td>isDefaultContract</td>
+<td>A boolean indicating if this is the default contract (e.g., true).</td>
+</tr>
+<tr>
+<td>quantityPrecision</td>
+<td>The number of decimal places for quantities.</td>
+</tr>
+<tr>
+<td>limitPriceVarAllowed</td>
+<td>The allowed price variation for limit orders (e.g., &quot;0.2&quot;).</td>
+</tr>
+<tr>
+<td>marginBufferPercentage</td>
+<td>The percentage for margin buffer (e.g., &quot;1&quot;).</td>
+</tr>
+<tr>
+<td>maintenanceMarginPercentage</td>
+<td>The percentage for maintenance margin (e.g., &quot;1&quot;).</td>
+</tr>
+<tr>
+<td>iconUrl</td>
+<td>The URL for the contract&#39;s icon (e.g., &quot;string&quot;).</td>
+</tr>
+<tr>
+<td>reduceMarginAllowedRatioPercent</td>
+<td>The allowed ratio percentage for reducing margin (e.g., 0.2).</td>
+</tr>
+<tr>
+<td>market</td>
+<td>The market identifier</td>
+</tr>
+<tr>
+<td>marginAssetsSupported</td>
+<td>A list of supported margin assets (e.g., [&quot;INR&quot;]).</td>
+</tr>
+<tr>
+<td>fundingFeeInterval</td>
+<td>The interval for funding fees (e.g., 8).</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>A list of tags associated with the market or contracts (e.g., [&quot;MEME&quot;, &quot;DECENTRALIZED&quot;]).</td>
+</tr>
+<tr>
+<td>assetPrecisions</td>
+<td>An object that specifies the precision for assets.</td>
+</tr>
+<tr>
+<td>INR</td>
+<td>The precision for INR (e.g., 2 decimal places).</td>
+</tr>
+<tr>
+<td>USDT</td>
+<td>The precision for USDT (e.g., 4 decimal places).</td>
+</tr>
+<tr>
+<td>conversionRates</td>
+<td>An object that specifies conversion rates for margin and settlement.</td>
+</tr>
+<tr>
+<td>INR_MARGIN_USDT</td>
+<td>The conversion rate for INR margin to USDT (e.g., 88).</td>
+</tr>
+<tr>
+<td>INR_MARGIN_INR</td>
+<td>The conversion rate for INR margin to INR (e.g., 1)</td>
+</tr>
+<td>INR_SETTLEMENT_USDT</td>
+<td>The conversion rate for INR settlement to USDT (e.g., 88).</td>
+</tr>
+<tr>
+<td>INR_SETTLEMENT_INR</td>
+<td>The conversion rate for INR settlement to INR (e.g., 1)</td>
+</tr>
+<td>USDT_SETTLEMENT_USDT</td>
+<td>The conversion rate for USDT settlement to USDT (e.g., 1).</td>
+</tr>
+<tr>
+<td>USDT_MARGIN_USDT</td>
+<td>The conversion rate for USDT margin to USDT (e.g., 1)</td>
+</tr>
+</tbody></table>
+
 
 <h1 id='web-sockets'>Web Sockets</h1>
 
