@@ -342,76 +342,159 @@
 <li>Intervals: The intervals for kline (candlestick) data can be <code>1m</code>, <code>3m</code>, <code>5m</code>, <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>2h</code>, <code>4h</code>, <code>6h</code>, <code>8h</code>, <code>12h</code>, <code>1d</code>, <code>3d</code>, <code>1w</code>, <code>1M</code>.</li>
 <li>MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.</li>
 </ul>
-<div class="highlight"><pre class="highlight plaintext"><code>import { io } from 'socket.io-client';
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">io</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">socket.io-client</span><span class="dl">'</span><span class="p">;</span>
 
-// WebSocket server URL
-const serverUrl = 'https://fawss.pi42.com/';
+<span class="c1">// WebSocket server URL</span>
+<span class="kd">const</span> <span class="nx">serverUrl</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">https://fawss.pi42.com/</span><span class="dl">'</span><span class="p">;</span>
 
-// Create a new socket connection
-const socket = io(serverUrl);
+<span class="c1">// Create a new socket connection</span>
+<span class="kd">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">(</span><span class="nx">serverUrl</span><span class="p">);</span>
 
-// Event listener for when the connection is open
-socket.on('connect', () =&gt; {
-  console.log('Connected to WebSocket server');
-  subscribeToTopics();
-});
+<span class="c1">// Event listener for when the connection is open</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">connect</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Connected to WebSocket server</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">subscribeToTopics</span><span class="p">();</span>
+<span class="p">});</span>
 
-// Event listener for when the connection is closed
-socket.on('disconnect', () =&gt; {
-  console.log('Disconnected from WebSocket server');
-});
+<span class="c1">// Event listener for when the connection is closed</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">disconnect</span><span class="dl">'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Disconnected from WebSocket server</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Event listener for errors
-socket.on('error', (error: any) =&gt; {
-  console.error('Socket.IO error:', error);
-});
+<span class="c1">// Event listener for errors</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">:</span> <span class="nx">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Socket.IO error:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+<span class="p">});</span>
 
-// Function to subscribe to various WebSocket topics
-function subscribeToTopics() {
-  const topics = ['btcinr@depth_0.1', 'btcinr@markPrice']; // List of topics you want to subscribe to
+<span class="c1">// Function to subscribe to various WebSocket topics</span>
+<span class="kd">function</span> <span class="nx">subscribeToTopics</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">topics</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">btcinr@depth_0.1</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">btcinr@markPrice</span><span class="dl">'</span><span class="p">];</span> <span class="c1">// List of topics you want to subscribe to</span>
 
-  // Subscribe to each topic
-  socket.emit('subscribe', {
-    params: topics, // Sends the topics array to the WebSocket server
-  });
+  <span class="c1">// Subscribe to each topic</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">subscribe</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">params</span><span class="p">:</span> <span class="nx">topics</span><span class="p">,</span> <span class="c1">// Sends the topics array to the WebSocket server</span>
+  <span class="p">});</span>
 
-  // Event listener for updates on various data topics
-  socket.on('depthUpdate', (data) =&gt; {
-    console.log('depthUpdate: ', data);
-  });
+  <span class="c1">// Event listener for updates on various data topics</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">depthUpdate</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">depthUpdate: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('kline', (data) =&gt; {
-    console.log('kline: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">kline</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">kline: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('markPriceUpdate', (data) =&gt; {
-    console.log('markPriceUpdate: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">markPriceUpdate</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">markPriceUpdate: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('aggTrade', (data) =&gt; {
-    console.log('aggTrade: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">aggTrade</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">aggTrade: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('24hrTicker', (data) =&gt; {
-    console.log('24hrTicker: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">24hrTicker</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">24hrTicker: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('marketInfo', (data) =&gt; {
-    console.log('marketInfo: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">marketInfo</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">marketInfo: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('markPriceArr', (data) =&gt; {
-    console.log('markPriceArr: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">markPriceArr</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">markPriceArr: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('tickerArr', (data) =&gt; {
-    console.log('tickerArr: ', data);
-  });
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">tickerArr</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">tickerArr: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
 
-  socket.on('marginRate', (data) =&gt; {
-    console.log('marginRate: ', data);
-  });
-}
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">marginRate</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">marginRate: </span><span class="dl">'</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Required installations:
+# pip install python-socketio
+</span>
+<span class="kn">import</span> <span class="nn">socketio</span>
+
+<span class="c1"># WebSocket server URL
+</span><span class="n">server_url</span> <span class="o">=</span> <span class="s">'https://fawss.pi42.com/'</span>
+
+<span class="c1"># Create a new Socket.IO client
+</span><span class="n">sio</span> <span class="o">=</span> <span class="n">socketio</span><span class="p">.</span><span class="n">Client</span><span class="p">()</span>
+
+<span class="c1"># Event listener for when the connection is open
+</span><span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">connect</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Connected to WebSocket server'</span><span class="p">)</span>
+    <span class="n">subscribe_to_topics</span><span class="p">()</span>
+
+<span class="c1"># Event listener for when the connection is closed
+</span><span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">disconnect</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Disconnected from WebSocket server'</span><span class="p">)</span>
+
+<span class="c1"># Event listener for errors
+</span><span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">event</span>
+<span class="k">def</span> <span class="nf">connect_error</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Socket.IO connection error:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Event listener for general errors
+</span><span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'error'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handle_error</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'Socket.IO error:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Function to subscribe to various WebSocket topics
+</span><span class="k">def</span> <span class="nf">subscribe_to_topics</span><span class="p">():</span>
+    <span class="n">topics</span> <span class="o">=</span> <span class="p">[</span><span class="s">'btcinr@depth_0.1'</span><span class="p">,</span> <span class="s">'btcinr@markPrice'</span><span class="p">]</span>  <span class="c1"># List of topics to subscribe to
+</span>
+    <span class="c1"># Subscribe to each topic
+</span>    <span class="n">sio</span><span class="p">.</span><span class="n">emit</span><span class="p">(</span><span class="s">'subscribe'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'params'</span><span class="p">:</span> <span class="n">topics</span>  <span class="c1"># Sends the topics array to the WebSocket server
+</span>    <span class="p">})</span>
+
+    <span class="c1"># Event listeners for updates on various data topics
+</span>    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'depthUpdate'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_depth_update</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'depthUpdate:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'kline'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_kline</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'kline:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'markPriceUpdate'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_mark_price_update</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'markPriceUpdate:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'aggTrade'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_agg_trade</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'aggTrade:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'24hrTicker'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_24hr_ticker</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'24hrTicker:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'marketInfo'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_market_info</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'marketInfo:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'markPriceArr'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_mark_price_arr</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'markPriceArr:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'tickerArr'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_ticker_arr</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'tickerArr:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="o">@</span><span class="n">sio</span><span class="p">.</span><span class="n">on</span><span class="p">(</span><span class="s">'marginRate'</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_margin_rate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'marginRate:'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c1"># Connect to the WebSocket server
+</span><span class="n">sio</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">server_url</span><span class="p">)</span>
+
+<span class="c1"># Keep the connection open
+</span><span class="n">sio</span><span class="p">.</span><span class="n">wait</span><span class="p">()</span>
 </code></pre></div>
 <h2 id="create-listen-key"> Create Listen Key </h2>
 
@@ -420,42 +503,42 @@ function subscribeToTopics() {
 <p>Creates a new listen key for WebSocket connections.</p>
 
 <p>A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">baseUrl</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PI42_BASE_URL</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">/v1/retail/listen-key</span><span class="dl">'</span><span class="p">;</span>
 
-// Function to generate a signature for the request
-const generateSignature = (params: object, apiSecret: string) =&gt; {
-  return crypto
-    .createHmac('sha256', apiSecret)
-    .update(JSON.stringify(params))
-    .digest('hex');
-};
+<span class="c1">// Function to generate a signature for the request</span>
+<span class="kd">const</span> <span class="nx">generateSignature</span> <span class="o">=</span> <span class="p">(</span><span class="nx">params</span><span class="p">:</span> <span class="nx">object</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">crypto</span>
+    <span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="dl">'</span><span class="s1">sha256</span><span class="dl">'</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">params</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">'</span><span class="s1">hex</span><span class="dl">'</span><span class="p">);</span>
+<span class="p">};</span>
 
-// Function to call Create Listen Key API
-async function createListenKey(apiKey: string, apiSecret: string) {
-  const params = {
-    timestamp: Date.now().toString(),
-  };
+<span class="c1">// Function to call Create Listen Key API</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">createListenKey</span><span class="p">(</span><span class="nx">apiKey</span><span class="p">:</span> <span class="nx">string</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">timestamp</span><span class="p">:</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">toString</span><span class="p">(),</span>
+  <span class="p">};</span>
 
-  const signature = generateSignature(params, apiSecret);
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">generateSignature</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">);</span>
 
-  try {
-    const response = await axios.post(baseUrl, params, {
-      headers: {
-        'api-key': apiKey,
-        'Content-Type': 'application/json',
-        'signature': signature,
-      },
-    });
-    console.log('Create Listen Key Response:', response.data);
-    return response.data.listenKey;
-  } catch (error) {
-    console.error(
-      'Error creating Listen Key:',
-      error.response ? error.response.data : error.message
-    );
-    throw error; // Rethrow the error for further handling
-  }
-}
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">baseUrl</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="p">{</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">'</span><span class="s1">api-key</span><span class="dl">'</span><span class="p">:</span> <span class="nx">apiKey</span><span class="p">,</span>
+        <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span><span class="p">,</span>
+        <span class="dl">'</span><span class="s1">signature</span><span class="dl">'</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">});</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Create Listen Key Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">listenKey</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+      <span class="dl">'</span><span class="s1">Error creating Listen Key:</span><span class="dl">'</span><span class="p">,</span>
+      <span class="nx">error</span><span class="p">.</span><span class="nx">response</span> <span class="p">?</span> <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span> <span class="p">:</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span>
+    <span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span> <span class="c1">// Rethrow the error for further handling</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <table>
     <thead>
