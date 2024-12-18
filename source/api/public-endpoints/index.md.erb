@@ -653,4 +653,241 @@ The response parameters are described below:
   </tbody>
 </table>
 
+<h2 id='exchange'>Exchange</h2>
+
+`GET /v1/exchange/exchangeInfo`
+
+Retrieve exchange information
+
+```javascript
+async function getExchangeInfo() {
+    const endpoint = "/v1/exchange/exchangeInfo";
+
+    // Prepare request payload
+    const params = {
+        // Optional
+        market:"INR"
+    };
+
+    // Call the postRequest function
+    return await getRequest(endpoint, params);
+}
+```
+
+```python
+
+def get_exchange_info():
+
+  # Construct the URL
+  full_url = f"{base_url}/v1/exchange/exchangeInfo"
+
+  try:
+      # Send the GET request to fetch exchange information
+      response = requests.get(full_url)
+      response.raise_for_status()  # Raises an error for 4xx/5xx responses
+      response_data = response.json()
+      print('Exchange information fetched successfully:', json.dumps(response_data, indent=4))
+  except requests.exceptions.HTTPError as err:
+      print(f"Error: {err.response.text if err.response else err}")
+  except Exception as e:
+      print(f"An unexpected error occurred: {str(e)}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>market</td>
+            <td>string</td>
+            <td>No</td>
+            <td>Will return exchangeInfo for market (e.g., INR/USDT)</td>
+        </tr>
+    </tbody>
+</table>
+
+
+### Response
+
+The response parameters are described below:
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>market</td>
+<td>A list of markets included in the response.</td>
+</tr>
+<tr>
+<td>contracts</td>
+<td>An array of contract objects that contain detailed information about specific trading contracts.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>The name of the trading pair (e.g., &quot;BTCINR&quot; for Bitcoin to INR)</td>
+</tr>
+<tr>
+<td>contractName</td>
+<td>The full name of the contract (e.g., &quot;Bitcoin&quot;).</td>
+</tr>
+<tr>
+<td>filters</td>
+<td>A list of filters that apply to the contract, detailing quantity and order constraints</td>
+</tr>
+<tr>
+<td>maxQty</td>
+<td>The maximum quantity allowed</td>
+</tr>
+<tr>
+<td>minQty</td>
+<td>The minimum quantity allowed</td>
+</tr>
+<tr>
+<td>filterType</td>
+<td>The type of filter (e.g., &quot;MARKET_QTY_SIZE&quot;, &quot;LIMIT_QTY_SIZE&quot;, &quot;MAX_NUM_ORDERS&quot;, &quot;MIN_NOTIONAL&quot;).</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>The maximum number of orders allowed.</td>
+</tr>
+<tr>
+<td>notional</td>
+<td>The minimum notional value.</td>
+</tr>
+<tr>
+<td>makerFee</td>
+<td>The fee percentage for makers.</td>
+</tr>
+<tr>
+<td>takerFee</td>
+<td>The fee percentage for takers.</td>
+</tr>
+<tr>
+<td>baseAsset</td>
+<td>The base asset for the contract (e.g., &quot;BTC&quot;).</td>
+</tr>
+<tr>
+<td>orderTypes</td>
+<td>The types of orders supported (e.g., &quot;LIMIT&quot;, &quot;MARKET&quot;).</td>
+</tr>
+<tr>
+<td>quoteAsset</td>
+<td>The quote asset for the contract (e.g., &quot;INR&quot;).</td>
+</tr>
+<tr>
+<td>maxLeverage</td>
+<td>The maximum leverage allowed (e.g., &quot;20&quot;).</td>
+</tr>
+<tr>
+<td>contractType</td>
+<td>The type of contract (e.g., &quot;PERPETUAL&quot;).</td>
+</tr>
+<tr>
+<td>marginBuffer</td>
+<td>The margin buffer value.</td>
+</tr>
+<tr>
+<td>depthGrouping</td>
+<td>The grouping for order book depth (e.g., [&quot;0.1&quot;]).</td>
+</tr>
+<tr>
+<td>liquidationFee</td>
+<td>The fee percentage for liquidation (e.g., &quot;0.020000&quot;).</td>
+</tr>
+<tr>
+<td>pricePrecision</td>
+<td>The number of decimal places for prices.</td>
+</tr>
+<tr>
+<td>isDefaultContract</td>
+<td>A boolean indicating if this is the default contract (e.g., true).</td>
+</tr>
+<tr>
+<td>quantityPrecision</td>
+<td>The number of decimal places for quantities.</td>
+</tr>
+<tr>
+<td>limitPriceVarAllowed</td>
+<td>The allowed price variation for limit orders (e.g., &quot;0.2&quot;).</td>
+</tr>
+<tr>
+<td>marginBufferPercentage</td>
+<td>The percentage for margin buffer (e.g., &quot;1&quot;).</td>
+</tr>
+<tr>
+<td>maintenanceMarginPercentage</td>
+<td>The percentage for maintenance margin (e.g., &quot;1&quot;).</td>
+</tr>
+<tr>
+<td>iconUrl</td>
+<td>The URL for the contract&#39;s icon (e.g., &quot;string&quot;).</td>
+</tr>
+<tr>
+<td>reduceMarginAllowedRatioPercent</td>
+<td>The allowed ratio percentage for reducing margin (e.g., 0.2).</td>
+</tr>
+<tr>
+<td>market</td>
+<td>The market identifier</td>
+</tr>
+<tr>
+<td>marginAssetsSupported</td>
+<td>A list of supported margin assets (e.g., [&quot;INR&quot;]).</td>
+</tr>
+<tr>
+<td>fundingFeeInterval</td>
+<td>The interval for funding fees (e.g., 8).</td>
+</tr>
+<tr>
+<td>tags</td>
+<td>A list of tags associated with the market or contracts (e.g., [&quot;MEME&quot;, &quot;DECENTRALIZED&quot;]).</td>
+</tr>
+<tr>
+<td>assetPrecisions</td>
+<td>An object that specifies the precision for assets.</td>
+</tr>
+<tr>
+<td>INR</td>
+<td>The precision for INR (e.g., 2 decimal places).</td>
+</tr>
+<tr>
+<td>USDT</td>
+<td>The precision for USDT (e.g., 4 decimal places).</td>
+</tr>
+<tr>
+<td>conversionRates</td>
+<td>An object that specifies conversion rates for margin and settlement.</td>
+</tr>
+<tr>
+<td>INR_MARGIN_USDT</td>
+<td>The conversion rate for INR margin to USDT (e.g., 88).</td>
+</tr>
+<tr>
+<td>INR_MARGIN_INR</td>
+<td>The conversion rate for INR margin to INR (e.g., 1)</td>
+</tr>
+<td>INR_SETTLEMENT_USDT</td>
+<td>The conversion rate for INR settlement to USDT (e.g., 88).</td>
+</tr>
+<tr>
+<td>INR_SETTLEMENT_INR</td>
+<td>The conversion rate for INR settlement to INR (e.g., 1)</td>
+</tr>
+<td>USDT_SETTLEMENT_USDT</td>
+<td>The conversion rate for USDT settlement to USDT (e.g., 1).</td>
+</tr>
+<tr>
+<td>USDT_MARGIN_USDT</td>
+<td>The conversion rate for USDT margin to USDT (e.g., 1)</td>
+</tr>
+</tbody></table>
 

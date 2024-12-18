@@ -13,7 +13,7 @@ For example,  balance changes, order executions, or margin updates.
 
 <aside class="notice"> Notes:
 <ul>
-  <li>Authenticated Web Socket stream base URL <code>https://fawss.pi42.com/auth-stream </code></li>
+  <li>Authenticated Web Socket stream base URL <code>https://fawss-uds.pi42.com/auth-stream </code></li>
   <li>Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a></li>
 </ul>
 </aside>
@@ -91,7 +91,7 @@ Event listeners are described below:
 
 
 ```javascript
-const serverUrl = `https://fawss.pi42.com/auth-stream/${listenKey}`;
+const serverUrl = `https://fawss-uds.pi42.com/auth-stream/${listenKey}`;
 
 // Create a new socket connection
 const socket = io(serverUrl);
@@ -349,7 +349,7 @@ Once connected, users can subscribe to different topics mentioned below:
 - Intervals: The intervals for kline (candlestick) data can be `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `6h`, `8h`, `12h`, `1d`, `3d`, `1w`, `1M`.
 - MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.
 
-```code
+```javascript
 import { io } from 'socket.io-client';
 
 // WebSocket server URL
@@ -422,6 +422,92 @@ function subscribeToTopics() {
 }
 ```
 
+```python
+# Required installations:
+# pip install python-socketio
+
+import socketio
+
+# WebSocket server URL
+server_url = 'https://fawss.pi42.com/'
+
+# Create a new Socket.IO client
+sio = socketio.Client()
+
+# Event listener for when the connection is open
+@sio.event
+def connect():
+    print('Connected to WebSocket server')
+    subscribe_to_topics()
+
+# Event listener for when the connection is closed
+@sio.event
+def disconnect():
+    print('Disconnected from WebSocket server')
+
+# Event listener for errors
+@sio.event
+def connect_error(data):
+    print('Socket.IO connection error:', data)
+
+# Event listener for general errors
+@sio.on('error')
+def handle_error(data):
+    print('Socket.IO error:', data)
+
+# Function to subscribe to various WebSocket topics
+def subscribe_to_topics():
+    topics = ['btcinr@depth_0.1', 'btcinr@markPrice']  # List of topics to subscribe to
+
+    # Subscribe to each topic
+    sio.emit('subscribe', {
+        'params': topics  # Sends the topics array to the WebSocket server
+    })
+
+    # Event listeners for updates on various data topics
+    @sio.on('depthUpdate')
+    def on_depth_update(data):
+        print('depthUpdate:', data)
+
+    @sio.on('kline')
+    def on_kline(data):
+        print('kline:', data)
+
+    @sio.on('markPriceUpdate')
+    def on_mark_price_update(data):
+        print('markPriceUpdate:', data)
+
+    @sio.on('aggTrade')
+    def on_agg_trade(data):
+        print('aggTrade:', data)
+
+    @sio.on('24hrTicker')
+    def on_24hr_ticker(data):
+        print('24hrTicker:', data)
+
+    @sio.on('marketInfo')
+    def on_market_info(data):
+        print('marketInfo:', data)
+
+    @sio.on('markPriceArr')
+    def on_mark_price_arr(data):
+        print('markPriceArr:', data)
+
+    @sio.on('tickerArr')
+    def on_ticker_arr(data):
+        print('tickerArr:', data)
+
+    @sio.on('marginRate')
+    def on_margin_rate(data):
+        print('marginRate:', data)
+
+# Connect to the WebSocket server
+sio.connect(server_url)
+
+# Keep the connection open
+sio.wait()
+```
+
 <h2 id="create-listen-key"> Create Listen Key </h2>
 
 `POST /v1/retail/listen-key`
@@ -431,7 +517,7 @@ Creates a new listen key for WebSocket connections.
 A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
 
 
-```code
+```javascript
 const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
 
 // Function to generate a signature for the request
