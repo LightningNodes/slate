@@ -319,6 +319,9 @@
             <a href="#change-log" class="toc-h1 toc-link" data-title="Change Log">Change Log</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#19-12-2024" class="toc-h2 toc-link" data-title="19-12-2024">19-12-2024</a>
+                  </li>
+                  <li>
                     <a href="#25-10-2024" class="toc-h2 toc-link" data-title="25-10-2024">25-10-2024</a>
                   </li>
                   <li>
@@ -480,30 +483,43 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <p><h1 id='change-log'>Change Log</h1><h2 id='25-10-2024'>25-10-2024</h2>
+        <p><h1 id='change-log'>Change Log</h1><h2 id='19-12-2024'>19-12-2024</h2>
 <ol>
-<li>New Endpoints to get wallet balance:</li></p>
+<li>New FAWSS_UDS to emit user specific events:</li>
+<ul>
+  <li>FAWSS_UDS Link:<code>(https://fawss-uds.pi42.com/auth-stream)</code></li>
+  <li>FAWSS will only send market data events.</li>
+</ul></p>
+
+<p><br/>
+</ol></p>
+
+<h2 id='25-10-2024'>25-10-2024</h2>
+
+<ol>
+<li>New Endpoints to get wallet balance:</li>
 
 <ul>
   <li>Get futures wallet details<code>(GET /v1/wallet/futures-wallet/details)</code></li>
   <li>Get funding wallet details<code>(GET /v1/wallet/funding-wallet/details)</code></li>
 </ul>
 
-<p><li>New Endpoints for close all positions and open orders:</li></p>
+<li>New Endpoints for close all positions and open orders:</li>
 
 <ul>
   <li>Cancel all the orders<code>(DELETE /v1/order/cancel-all-orders)</code></li>
   <li>Close all the positions<code>(DELETE /v1/positions/close-all-positions)</code></li>
 </ul>
 
-<p><li>New update preference endpoint:</li></p>
+<li>New update preference endpoint:</li>
 
 <ul>
   <li>To Update leverage and margin-mode<code>(POST /v1/exchange/update/preference)</code></li>
 </ul>
 
-<p><br/>
-</ol></p>
+
+<br/>
+</ol>
 
 <h2 id='17-09-2024'>17-09-2024</h2>
 
@@ -5143,7 +5159,7 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 
 <aside class="notice"> Notes:
 <ul>
-  <li>Authenticated Web Socket stream base URL <code>https://fawss.pi42.com/auth-stream </code></li>
+  <li>Authenticated Web Socket stream base URL <code>https://fawss-uds.pi42.com/auth-stream </code></li>
   <li>Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a></li>
 </ul>
 </aside>
@@ -5219,7 +5235,7 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         </tbody>
 </table>
 
-<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">serverUrl</span> <span class="o">=</span> <span class="s2">`https://fawss.pi42.com/auth-stream/</span><span class="p">${</span><span class="nx">listenKey</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">serverUrl</span> <span class="o">=</span> <span class="s2">`https://fawss-uds.pi42.com/auth-stream/</span><span class="p">${</span><span class="nx">listenKey</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
 
 <span class="c1">// Create a new socket connection</span>
 <span class="kd">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">(</span><span class="nx">serverUrl</span><span class="p">);</span>

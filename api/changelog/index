@@ -1,27 +1,40 @@
-<p><h1 id='change-log'>Change Log</h1><h2 id='25-10-2024'>25-10-2024</h2>
+<p><h1 id='change-log'>Change Log</h1><h2 id='19-12-2024'>19-12-2024</h2>
 <ol>
-<li>New Endpoints to get wallet balance:</li></p>
+<li>New FAWSS_UDS to emit user specific events:</li>
+<ul>
+  <li>FAWSS_UDS Link:<code>(https://fawss-uds.pi42.com/auth-stream)</code></li>
+  <li>FAWSS will only send market data events.</li>
+</ul></p>
+
+<p><br/>
+</ol></p>
+
+<h2 id='25-10-2024'>25-10-2024</h2>
+
+<ol>
+<li>New Endpoints to get wallet balance:</li>
 
 <ul>
   <li>Get futures wallet details<code>(GET /v1/wallet/futures-wallet/details)</code></li>
   <li>Get funding wallet details<code>(GET /v1/wallet/funding-wallet/details)</code></li>
 </ul>
 
-<p><li>New Endpoints for close all positions and open orders:</li></p>
+<li>New Endpoints for close all positions and open orders:</li>
 
 <ul>
   <li>Cancel all the orders<code>(DELETE /v1/order/cancel-all-orders)</code></li>
   <li>Close all the positions<code>(DELETE /v1/positions/close-all-positions)</code></li>
 </ul>
 
-<p><li>New update preference endpoint:</li></p>
+<li>New update preference endpoint:</li>
 
 <ul>
   <li>To Update leverage and margin-mode<code>(POST /v1/exchange/update/preference)</code></li>
 </ul>
 
-<p><br/>
-</ol></p>
+
+<br/>
+</ol>
 
 <h2 id='17-09-2024'>17-09-2024</h2>
 
