@@ -1,13 +1,25 @@
-<p><h1 id='change-log'>Change Log</h1><h2 id='19-12-2024'>19-12-2024</h2>
+<p><h1 id='change-log'>Change Log</h1><h2 id='23-1-2025'>23-1-2025</h2>
+<ol>
+<li>New fields:</li>
+<ul>
+  <li><code>leverage</code> and <code>lockedMargin</code> in <code>/v1/order/open-orders</code> api response.</li>
+  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li></p>
+
+<p></ul>
+<br/>
+</ol></p>
+
+<h2 id='19-12-2024'>19-12-2024</h2>
+
 <ol>
 <li>New FAWSS_UDS to emit user specific events:</li>
 <ul>
   <li>FAWSS_UDS Link:<code>(https://fawss-uds.pi42.com/auth-stream)</code></li>
   <li>FAWSS will only send market data events.</li>
-</ul></p>
+</ul>
 
-<p><br/>
-</ol></p>
+<br/>
+</ol>
 
 <h2 id='25-10-2024'>25-10-2024</h2>
 
