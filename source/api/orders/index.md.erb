@@ -229,6 +229,7 @@ The response parameters are described below:
     "quoteAsset": "USDT",
     "marginAsset": "INR",
     "lockedMarginInMarginAsset": 1698.88
+    "leverage": 10
 }
 ```
 <table>
@@ -314,6 +315,10 @@ The response parameters are described below:
     <tr>
       <td><strong>lockedMarginInMarginAsset</strong></td>
       <td>The amount of margin locked in the margin asset (<code>1698.88 INR</code>).</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>Leverage set for contract pair.</td>
     </tr>
   </tbody>
 </table>
@@ -729,7 +734,9 @@ The response parameters are described below:
     "subType": "PRIMARY",
     "placeType": "ORDER_FORM",
     "baseAsset": "BTC",
-    "quoteAsset": "INR"
+    "quoteAsset": "INR",
+    "leverage": 10,
+    "lockedMargin": 1034.8
   }
 ]
 ```
@@ -801,6 +808,14 @@ The response parameters are described below:
     <tr>
       <td><strong>quoteAsset</strong></td>
       <td>The currency used for the transaction (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>Leverage set for contract pair.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Margin locked in the order.</td>
     </tr>
   </tbody>
 </table>
