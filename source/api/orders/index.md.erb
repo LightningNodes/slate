@@ -13,7 +13,7 @@ Place an order (either a market order or a limit order) on Pi42's trading platfo
 <aside class="notice"> Note:
 <ul>
 <li>Price is compulsory to place a limit order.</li>
-<li>To successfully place an order from a position, you need to pass the <code>positionId</code> in the request payload, which can be obtained calling the
+<li>To successfully place an order from a position, you need to pass the <code>placeType</code> as <code>POSITION</code> and <code>positionId</code> in the request payload, which can be obtained calling the
 <a href="#get-positions">Get Positions API</a></li>
 </ul>
 </aside>
@@ -147,7 +147,7 @@ def place_order():
       <td>placeType</td>
       <td>string</td>
       <td>Yes</td>
-      <td>Fixed value "ORDER_FORM". Indicates the type of order placement.</td>
+      <td>Can be either "ORDER_FORM" or "POSITION". Indicates the type of order placement.</td>
     </tr>
     <tr>
       <td>side</td>
@@ -3058,49 +3058,51 @@ async function getFuturesWallet() {
 ```
 
 ```python
+import requests
+import hmac
+import hashlib
 import time
 import json
-import requests
+
+def generate_signature(api_secret, data_to_sign):
+  return hmac.new(api_secret.encode('utf-8'), data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
 
 def get_futures_wallet_details():
-    endpoint = "/v1/wallet/futures-wallet/details"
+  endpoint = "/v1/wallet/futures-wallet/details"
 
-    # Generate the current timestamp
-    timestamp = str(int(time.time() * 1000))
+  # Generate the current timestamp
+  timestamp = str(int(time.time() * 1000))
 
-    # Optional parameters with timestamp
-    params = {
-        'marginAsset': 'INR',
-        'timestamp': timestamp
-    }
+  # Optional parameters with timestamp
+  params = {
+      'marginAsset': 'INR',
+      'timestamp': timestamp
+  }
 
-    # Convert the request body to a JSON string for signing
-    data_to_sign = json.dumps(params, separators=(',', ':'))
+  query_string = f"marginAsset={params['marginAsset']}&timestamp={params['timestamp']}"
 
-    # Generate the signature (ensure `generate_signature` is properly defined)
-    signature = generate_signature(api_secret, data_to_sign)
+  # Generate the signature (ensure `generate_signature` is properly defined)
+  signature = generate_signature(api_secret, query_string)
 
-    # Headers for the GET request
-    headers = {
-        'api-key': api_key,
-        'Content-Type': 'application/json',
-        'signature': signature
-    }
+  # Headers for the GET request
+  headers = {
+      'api-key': api_key,
+      'signature': signature
+  }
 
-    # Construct the full URL
-    wallet_details_url = f"{base_url}{endpoint}"
+  # Construct the full URL
+  wallet_details_url = f"{base_url}{endpoint}?{query_string}"
 
-    try:
-        # Send the GET request to fetch the futures wallet details
-        response = requests.get(wallet_details_url, headers=headers, params=params)
-        response.raise_for_status()  # Raises an error for 4xx/5xx responses
-        response_data = response.json()
-        print('Futures wallet details:', json.dumps(response_data, indent=4))
-    except requests.exceptions.HTTPError as err:
-        print(f"Failed {response.status_code}: {response.text}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
-
+  try:
+      # Send the GET request to fetch the futures wallet details
+      response = requests.get(wallet_details_url, headers=headers)
+      response.raise_for_status()  # Raises an error for 4xx/5xx responses
+      response_data = response.json()
+      print('Futures wallet details:', json.dumps(response_data, indent=4))
+  except requests.exceptions.HTTPError as err:
+      print(f"Failed {response.status_code}: {response.text}")
+  except Exception as e:
+      print(f"An unexpected error occurred: {str(e)}")
 ```
 
 <table>
@@ -3238,48 +3240,51 @@ async function getFundingWallet() {
 ```
 
 ```python
+import requests
+import hmac
+import hashlib
 import time
 import json
-import requests
 
-def get_funding_wallet_details():
-    endpoint = "/v1/wallet/funding-wallet/details"
+def generate_signature(api_secret, data_to_sign):
+  return hmac.new(api_secret.encode('utf-8'), data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
 
-    # Generate the current timestamp
-    timestamp = str(int(time.time() * 1000))
+def get_futures_wallet_details():
+  endpoint = "/v1/wallet/funding-wallet/details"
 
-    # Optional parameters with timestamp
-    params = {
-        'marginAsset': 'INR',
-        'timestamp': timestamp
-    }
+  # Generate the current timestamp
+  timestamp = str(int(time.time() * 1000))
 
-    # Convert the request body to a JSON string for signing
-    data_to_sign = json.dumps(params, separators=(',', ':'))
+  # Optional parameters with timestamp
+  params = {
+      'marginAsset': 'INR',
+      'timestamp': timestamp
+  }
 
-    # Generate the signature (ensure `generate_signature` is properly defined)
-    signature = generate_signature(api_secret, data_to_sign)
+  query_string = f"marginAsset={params['marginAsset']}&timestamp={params['timestamp']}"
 
-    # Headers for the GET request
-    headers = {
-        'api-key': api_key,
-        'Content-Type': 'application/json',
-        'signature': signature
-    }
+  # Generate the signature (ensure `generate_signature` is properly defined)
+  signature = generate_signature(api_secret, query_string)
 
-    # Construct the full URL
-    funding_wallet_url = f"{base_url}{endpoint}"
+  # Headers for the GET request
+  headers = {
+      'api-key': api_key,
+      'signature': signature
+  }
 
-    try:
-        # Send the GET request to fetch the funding wallet details
-        response = requests.get(funding_wallet_url, headers=headers, params=params)
-        response.raise_for_status()  # Raises an error for 4xx/5xx responses
-        response_data = response.json()
-        print('Funding wallet details:', json.dumps(response_data, indent=4))
-    except requests.exceptions.HTTPError as err:
-        print(f"Failed {response.status_code}: {response.text}")
-    except Exception as e:
-        print(f"An unexpected error occurred: {str(e)}")
+  # Construct the full URL
+  wallet_details_url = f"{base_url}{endpoint}?{query_string}"
+
+  try:
+      # Send the GET request to fetch the futures wallet details
+      response = requests.get(wallet_details_url, headers=headers)
+      response.raise_for_status()  # Raises an error for 4xx/5xx responses
+      response_data = response.json()
+      print('Funding wallet details:', json.dumps(response_data, indent=4))
+  except requests.exceptions.HTTPError as err:
+      print(f"Failed {response.status_code}: {response.text}")
+  except Exception as e:
+      print(f"An unexpected error occurred: {str(e)}")
 ```
 <table>
     <thead>
