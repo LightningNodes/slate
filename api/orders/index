@@ -10,7 +10,7 @@
 <aside class="notice"> Note:
 <ul>
 <li>Price is compulsory to place a limit order.</li>
-<li>To successfully place an order from a position, you need to pass the <code>positionId</code> in the request payload, which can be obtained calling the
+<li>To successfully place an order from a position, you need to pass the <code>placeType</code> as <code>POSITION</code> and <code>positionId</code> in the request payload, which can be obtained calling the
 <a href="#get-positions">Get Positions API</a></li>
 </ul>
 </aside></p>
@@ -138,7 +138,7 @@
       <td>placeType</td>
       <td>string</td>
       <td>Yes</td>
-      <td>Fixed value "ORDER_FORM". Indicates the type of order placement.</td>
+      <td>Can be either "ORDER_FORM" or "POSITION". Indicates the type of order placement.</td>
     </tr>
     <tr>
       <td>side</td>

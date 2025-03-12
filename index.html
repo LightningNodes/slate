@@ -1110,7 +1110,7 @@ Returns the response data for further use.<br/></p>
 <aside class="notice"> Note:
 <ul>
 <li>Price is compulsory to place a limit order.</li>
-<li>To successfully place an order from a position, you need to pass the <code>positionId</code> in the request payload, which can be obtained calling the
+<li>To successfully place an order from a position, you need to pass the <code>placeType</code> as <code>POSITION</code> and <code>positionId</code> in the request payload, which can be obtained calling the
 <a href="#get-positions">Get Positions API</a></li>
 </ul>
 </aside></p>
@@ -1238,7 +1238,7 @@ Returns the response data for further use.<br/></p>
       <td>placeType</td>
       <td>string</td>
       <td>Yes</td>
-      <td>Fixed value "ORDER_FORM". Indicates the type of order placement.</td>
+      <td>Can be either "ORDER_FORM" or "POSITION". Indicates the type of order placement.</td>
     </tr>
     <tr>
       <td>side</td>
@@ -5525,6 +5525,8 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 <ul>
 <li>Intervals: The intervals for kline (candlestick) data can be <code>1m</code>, <code>3m</code>, <code>5m</code>, <code>15m</code>, <code>30m</code>, <code>1h</code>, <code>2h</code>, <code>4h</code>, <code>6h</code>, <code>8h</code>, <code>12h</code>, <code>1d</code>, <code>3d</code>, <code>1w</code>, <code>1M</code>.</li>
 <li>MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.</li>
+<li>Get <code>depthGrouping</code> value of each contract from
+<a href="#exchange">Exchange Info API</a></li>
 </ul>
 
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">io</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">socket.io-client</span><span class="dl">'</span><span class="p">;</span>
