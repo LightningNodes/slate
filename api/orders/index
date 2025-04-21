@@ -424,7 +424,7 @@
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
-    </span><span class="err">status:</span><span class="w"> </span><span class="s2">"Edit request submitted successfully"</span><span class="p">,</span><span class="w">  
+  </span><span class="err">status:</span><span class="w"> </span><span class="s2">"Edit request submitted successfully"</span><span class="p">,</span><span class="w">    
   </span><span class="err">availableBalance:</span><span class="w"> </span><span class="mi">700</span><span class="p">,</span><span class="w">
   </span><span class="err">lockedMargin:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
   </span><span class="err">lockedMarginInMarginAsset:</span><span class="w"> </span><span class="mi">200</span><span class="w">
