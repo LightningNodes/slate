@@ -325,6 +325,178 @@ The response parameters are described below:
 
 
 
+
+
+<h2 id="edit-order">Edit an Order </h2>
+
+`PATCH /v1/order/edit-order`
+
+Edit a LIMIT or STOP order.
+<aside class="notice"> Note:
+<ul>
+<li>When the new quantity, price or stopPrice does not satisfy validations, or there is not enough available balance for editing order, the edit request will be rejected and the order will stay as it is.
+</li>
+</ul>
+</aside>
+
+
+```javascript
+async function editOrder() {
+  const endpoint = '/v1/order/edit-order';
+  const params = {
+    clientOrderId: '3er5a07975b9851cd592-0000-int', // The clientOrderId of the order to be edited
+    quantity: 0.002, // New quantity for the order (optional)
+    stopPrice: 58000, // New stop price for the order (optional)
+    price: 58002, // New price for the order (optional)
+  };
+
+  try {
+    const response = await patchRequest(endpoint, params);
+    return response;
+  } catch (error) {
+    console.error('Failed to edit order:', error);
+    throw error;
+  }
+}
+```
+
+```python
+# Function to edit/update order
+def edit_order(client_order_id,quantity=None,stop_price=None, price=None):
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare the request body (JSON)
+    params = {
+        'clientOrderId' : str(client_order_id),
+        'timestamp': timestamp
+    }
+    if(quantity) :
+      params['quantity'] = int(quantity)
+    if(stop_price) :
+      params['stopPrice'] = int(stop_price)
+    if(price) :
+      params['price'] = int(price)
+
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the PATCH request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    edit_order_url = f"{base_url}/v1/order/edit-order"
+
+    try:
+        # Send the PATCH request to edit the order
+        response = requests.patch(edit_order_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('Order edit request sent', json.dumps(response_data, indent=4), "for:", quantity)
+    except requests.exceptions.HTTPError as err:
+        print(response)
+        # print(f"Error: {err.response.text if err.response else err}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+<table style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>clientOrderId</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The clientOrderId of the “LIMIT”, “STOP_LIMIT” or “STOP_MARKET” order</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The amount of the asset to be ordered. Specify the desired quantity.</td>
+    </tr>
+    <tr>
+      <td>price</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “LIMIT” or “STOP_LIMIT”</td>
+    </tr>
+
+      <td>stopPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “STOP_LIMIT” or “STOP_MARKET”</td>
+    </tr>
+  </tbody>
+</table>
+
+
+### Response
+
+The response parameters are described below:
+
+```json
+# Response
+{
+{
+ 	status: "Edit request submitted successfully",	
+  availableBalance: 700,
+  lockedMargin: 200,
+  lockedMarginInMarginAsset: 200
+	}
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Information about the submitted request (Edit request submitted successfully).</td>
+    </tr>
+    <tr>
+      <td><strong>availableBalance</strong></td>
+      <td>Updated available balance if extra margin is locked for the edit request (700 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Updated locked margin for the order if extra margin is locked for the edit request (300 INR)</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Updated locked margin in margin asset for the order if extra margin is locked for the edit request. (300 INR)</td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
 <h2 id="add-margin"> Add Margin </h2>
 
 `POST /v1/order/add-margin`

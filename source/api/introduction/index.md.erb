@@ -222,6 +222,67 @@ Logs the response data to the console. <br/>
 Returns the response data for further use.<br/>
 
 
+
+<h2 id="patch-request">patchRequest Function</h2>
+
+The function sends PATCH requests to an API endpoint.
+
+- endpoint (string): The API endpoint to which the PATCH request is sent.
+- params (object): The parameters to be included in the PATCH request body. This is optional and defaults to an empty object.
+
+```javascript
+// Generic PATCH request function
+async function patchRequest(endpoint, params = {}) {
+  const timestamp = Date.now().toString();
+  const isMarketEndpoint = endpoint.startsWith('/v1/market');
+  const baseUrlToUse = isMarketEndpoint ? publicBaseUrl : baseUrl;
+  const url = `${baseUrlToUse}${endpoint}`;
+
+  if (!isMarketEndpoint) {
+    params.timestamp = timestamp;
+  }
+
+  const signature = crypto
+    .createHmac('sha256', apiSecret)
+    .update(JSON.stringify(params))
+    .digest('hex');
+
+  try {
+    const response = await axios.patch(
+      url,
+      params,
+      isMarketEndpoint
+        ? {}
+        : {
+            headers: {
+              'api-key': apiKey,
+              signature: signature,
+            },
+          },
+    );
+    console.log('Response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      'Error:',
+      error.response ? error.response.data : error.message,
+    );
+    throw error; // Optional: re-throw the error if you want to handle it further up the call stack
+  }
+}
+```
+### Response
+
+`console.log("Response:", response.data);` <br/>
+Logs the response data to the console. <br/>
+
+`return response.data;` <br/>
+Returns the response data for further use.<br/>
+
+
+
+
+
 <h2 id="put-request">putRequest Function</h2>
 
 This function, `putRequest`, is an asynchronous JavaScript function designed to send a signed `PUT` HTTP request to a specified API endpoint. Here's a breakdown of its components and behavior:
