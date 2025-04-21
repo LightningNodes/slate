@@ -309,6 +309,157 @@
   </tbody>
 </table>
 
+<h2 id="edit-order">Edit an Order </h2>
+
+<p><code>PATCH /v1/order/edit-order</code></p>
+
+<p>Edit a LIMIT or STOP order.
+<aside class="notice"> Note:
+<ul>
+<li>When the new quantity, price or stopPrice does not satisfy validations, or there is not enough available balance for editing order, the edit request will be rejected and the order will stay as it is.
+</li>
+</ul>
+</aside></p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">editOrder</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">/v1/order/edit-order</span><span class="dl">'</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">clientOrderId</span><span class="p">:</span> <span class="dl">'</span><span class="s1">3er5a07975b9851cd592-0000-int</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// The clientOrderId of the order to be edited</span>
+    <span class="na">quantity</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">,</span> <span class="c1">// New quantity for the order (optional)</span>
+    <span class="na">stopPrice</span><span class="p">:</span> <span class="mi">58000</span><span class="p">,</span> <span class="c1">// New stop price for the order (optional)</span>
+    <span class="na">price</span><span class="p">:</span> <span class="mi">58002</span><span class="p">,</span> <span class="c1">// New price for the order (optional)</span>
+  <span class="p">};</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">patchRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to edit order:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to edit/update order
+</span><span class="k">def</span> <span class="nf">edit_order</span><span class="p">(</span><span class="n">client_order_id</span><span class="p">,</span><span class="n">quantity</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">stop_price</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="c1"># Generate the current timestamp
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># Prepare the request body (JSON)
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'clientOrderId'</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">client_order_id</span><span class="p">),</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'quantity'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'stopPrice'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+
+
+    <span class="c1"># Convert the request body to a JSON string for signing
+</span>    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+
+    <span class="c1"># Generate the signature
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="c1"># Headers for the PATCH request
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Construct the full URL
+</span>    <span class="n">edit_order_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/order/edit-order"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Send the PATCH request to edit the order
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">patch</span><span class="p">(</span><span class="n">edit_order_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an error for 4xx/5xx responses
+</span>        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Order edit request sent'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="s">"for:"</span><span class="p">,</span> <span class="n">quantity</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="c1"># print(f"Error: {err.response.text if err.response else err}")
+</span>    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+<table style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>clientOrderId</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The clientOrderId of the “LIMIT”, “STOP_LIMIT” or “STOP_MARKET” order</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The amount of the asset to be ordered. Specify the desired quantity.</td>
+    </tr>
+    <tr>
+      <td>price</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “LIMIT” or “STOP_LIMIT”</td>
+    </tr>
+
+      <td>stopPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “STOP_LIMIT” or “STOP_MARKET”</td>
+    </tr>
+  </tbody>
+</table>
+<h3 id='response-2'>Response</h3>
+<p>The response parameters are described below:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="err">status:</span><span class="w"> </span><span class="s2">"Edit request submitted successfully"</span><span class="p">,</span><span class="w">  
+  </span><span class="err">availableBalance:</span><span class="w"> </span><span class="mi">700</span><span class="p">,</span><span class="w">
+  </span><span class="err">lockedMargin:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="err">lockedMarginInMarginAsset:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Information about the submitted request (Edit request submitted successfully).</td>
+    </tr>
+    <tr>
+      <td><strong>availableBalance</strong></td>
+      <td>Updated available balance if extra margin is locked for the edit request (700 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Updated locked margin for the order if extra margin is locked for the edit request (300 INR)</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Updated locked margin in margin asset for the order if extra margin is locked for the edit request. (300 INR)</td>
+    </tr>
+
+  </tbody>
+</table>
+
 <h2 id="add-margin"> Add Margin </h2>
 
 <p><code>POST /v1/order/add-margin</code></p>
@@ -398,7 +549,7 @@
 <aside class="notice">
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
-<h3 id='response-2'>Response</h3>
+<h3 id='response-3'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -533,7 +684,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 <aside class="notice">
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
-<h3 id='response-3'>Response</h3>
+<h3 id='response-4'>Response</h3>
 <p>The JSON body returned in the response is as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="w">
 </span><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
@@ -666,7 +817,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
         </tr>
     </tbody>
 </table>
-<h3 id='response-4'>Response</h3>
+<h3 id='response-5'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -867,7 +1018,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
         </tr>
     </tbody>
 </table>
-<h3 id='response-5'>Response</h3>
+<h3 id='response-6'>Response</h3>
 <p>The details of the JSON object returned in the response body are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -1088,7 +1239,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 <aside class="notice">
 Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
 </aside>
-<h3 id='response-6'>Response</h3>
+<h3 id='response-7'>Response</h3>
 <p>The details returned in the response body as are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="w">
 </span><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
@@ -1316,7 +1467,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-7'>Response</h3>
+<h3 id='response-8'>Response</h3>
 <p>The response details are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -1522,7 +1673,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-8'>Response</h3>
+<h3 id='response-9'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5454</span><span class="p">,</span><span class="w">
@@ -1724,7 +1875,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-9'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-10'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
         </span><span class="nl">"contractPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCUSDT"</span><span class="p">,</span><span class="w">
@@ -1940,7 +2091,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-10'>Response</h3>
+<h3 id='response-11'>Response</h3>
 <p>The response parameters are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -2181,7 +2332,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-11'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+<h3 id='response-12'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">109884</span><span class="p">,</span><span class="w">
     </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-09-16T09:39:28.754Z"</span><span class="p">,</span><span class="w">
@@ -2358,7 +2509,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-12'>Response</h3>
+<h3 id='response-13'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -2492,7 +2643,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-13'>Response</h3>
+<h3 id='response-14'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -2595,7 +2746,7 @@ except requests.exceptions.HTTPError as err:
 <aside class="notice">
 Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
 </aside>
-<h3 id='response-14'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-15'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"93513fe2a8af44157234-6238-ext"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">24717</span><span class="p">,</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CANCELED"</span><span class="p">,</span><span class="w">
@@ -2706,7 +2857,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-15'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -2817,7 +2968,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -2937,7 +3088,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
@@ -3108,7 +3259,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-19'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">

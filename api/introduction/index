@@ -218,6 +218,60 @@ Logs the response data to the console. <br/></p>
 <p><code>return response.data;</code> <br/>
 Returns the response data for further use.<br/></p>
 
+<h2 id="patch-request">patchRequest Function</h2>
+
+<p>The function sends PATCH requests to an API endpoint.</p>
+
+<ul>
+<li>endpoint (string): The API endpoint to which the PATCH request is sent.</li>
+<li>params (object): The parameters to be included in the PATCH request body. This is optional and defaults to an empty object.</li>
+</ul>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Generic PATCH request function</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">patchRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">isMarketEndpoint</span> <span class="o">=</span> <span class="nx">endpoint</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="dl">'</span><span class="s1">/v1/market</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">baseUrlToUse</span> <span class="o">=</span> <span class="nx">isMarketEndpoint</span> <span class="p">?</span> <span class="nx">publicBaseUrl</span> <span class="p">:</span> <span class="nx">baseUrl</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">baseUrlToUse</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isMarketEndpoint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">=</span> <span class="nx">timestamp</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">crypto</span>
+    <span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="dl">'</span><span class="s1">sha256</span><span class="dl">'</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">params</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">'</span><span class="s1">hex</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
+      <span class="nx">url</span><span class="p">,</span>
+      <span class="nx">params</span><span class="p">,</span>
+      <span class="nx">isMarketEndpoint</span>
+        <span class="p">?</span> <span class="p">{}</span>
+        <span class="p">:</span> <span class="p">{</span>
+            <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+              <span class="dl">'</span><span class="s1">api-key</span><span class="dl">'</span><span class="p">:</span> <span class="nx">apiKey</span><span class="p">,</span>
+              <span class="na">signature</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+            <span class="p">},</span>
+          <span class="p">},</span>
+    <span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+      <span class="dl">'</span><span class="s1">Error:</span><span class="dl">'</span><span class="p">,</span>
+      <span class="nx">error</span><span class="p">.</span><span class="nx">response</span> <span class="p">?</span> <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span> <span class="p">:</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span>
+    <span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span> <span class="c1">// Optional: re-throw the error if you want to handle it further up the call stack</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id='response-3'>Response</h3>
+<p><code>console.log(&quot;Response:&quot;, response.data);</code> <br/>
+Logs the response data to the console. <br/></p>
+
+<p><code>return response.data;</code> <br/>
+Returns the response data for further use.<br/></p>
+
 <h2 id="put-request">putRequest Function</h2>
 
 <p>This function, <code>putRequest</code>, is an asynchronous JavaScript function designed to send a signed <code>PUT</code> HTTP request to a specified API endpoint. Here&#39;s a breakdown of its components and behavior:</p>
@@ -258,7 +312,7 @@ Returns the response data for further use.<br/></p>
     <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><h3 id='response-3'>Response</h3>
+</code></pre></div><h3 id='response-4'>Response</h3>
 <p>If the request is successful, the response data is logged to the console and returned by the function.</p>
 
 <h2 id="delete-request">deleteRequest Function</h2>

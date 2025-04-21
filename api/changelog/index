@@ -1,13 +1,23 @@
-<p><h1 id='change-log'>Change Log</h1><h2 id='23-1-2025'>23-1-2025</h2>
+<p><h1 id='change-log'>Change Log</h1><h2 id='21-4-2025'>21-4-2025</h2>
+<ol>
+<li>New Endpoint:</li>
+<ul>
+<li>Edit an existing open order <code>(PATCH /v1/order/edit-order)</code></li>
+</ul>
+<br/>
+</ol></p>
+
+<h2 id='23-1-2025'>23-1-2025</h2>
+
 <ol>
 <li>New fields:</li>
 <ul>
   <li><code>leverage</code> and <code>lockedMargin</code> in <code>/v1/order/open-orders</code> api response.</li>
-  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li></p>
+  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li>
 
-<p></ul>
+</ul>
 <br/>
-</ol></p>
+</ol>
 
 <h2 id='19-12-2024'>19-12-2024</h2>
 

@@ -319,6 +319,9 @@
             <a href="#change-log" class="toc-h1 toc-link" data-title="Change Log">Change Log</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#21-4-2025" class="toc-h2 toc-link" data-title="21-4-2025">21-4-2025</a>
+                  </li>
+                  <li>
                     <a href="#23-1-2025" class="toc-h2 toc-link" data-title="23-1-2025">23-1-2025</a>
                   </li>
                   <li>
@@ -366,6 +369,9 @@
                     <a href="#post-request" class="toc-h2 toc-link" data-title="postRequest Function">postRequest Function</a>
                   </li>
                   <li>
+                    <a href="#patch-request" class="toc-h2 toc-link" data-title="patchRequest Function">patchRequest Function</a>
+                  </li>
+                  <li>
                     <a href="#put-request" class="toc-h2 toc-link" data-title="putRequest Function">putRequest Function</a>
                   </li>
                   <li>
@@ -381,6 +387,9 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#place-order" class="toc-h2 toc-link" data-title="Place an Order ">Place an Order </a>
+                  </li>
+                  <li>
+                    <a href="#edit-order" class="toc-h2 toc-link" data-title="Edit an Order ">Edit an Order </a>
                   </li>
                   <li>
                     <a href="#add-margin" class="toc-h2 toc-link" data-title=" Add Margin "> Add Margin </a>
@@ -486,16 +495,26 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <p><h1 id='change-log'>Change Log</h1><h2 id='23-1-2025'>23-1-2025</h2>
+        <p><h1 id='change-log'>Change Log</h1><h2 id='21-4-2025'>21-4-2025</h2>
+<ol>
+<li>New Endpoint:</li>
+<ul>
+<li>Edit an existing open order <code>(PATCH /v1/order/edit-order)</code></li>
+</ul>
+<br/>
+</ol></p>
+
+<h2 id='23-1-2025'>23-1-2025</h2>
+
 <ol>
 <li>New fields:</li>
 <ul>
   <li><code>leverage</code> and <code>lockedMargin</code> in <code>/v1/order/open-orders</code> api response.</li>
-  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li></p>
+  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li>
 
-<p></ul>
+</ul>
 <br/>
-</ol></p>
+</ol>
 
 <h2 id='19-12-2024'>19-12-2024</h2>
 
@@ -975,6 +994,60 @@ Logs the response data to the console. <br/></p>
 <p><code>return response.data;</code> <br/>
 Returns the response data for further use.<br/></p>
 
+<h2 id="patch-request">patchRequest Function</h2>
+
+<p>The function sends PATCH requests to an API endpoint.</p>
+
+<ul>
+<li>endpoint (string): The API endpoint to which the PATCH request is sent.</li>
+<li>params (object): The parameters to be included in the PATCH request body. This is optional and defaults to an empty object.</li>
+</ul>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// Generic PATCH request function</span>
+<span class="k">async</span> <span class="kd">function</span> <span class="nx">patchRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">isMarketEndpoint</span> <span class="o">=</span> <span class="nx">endpoint</span><span class="p">.</span><span class="nx">startsWith</span><span class="p">(</span><span class="dl">'</span><span class="s1">/v1/market</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">baseUrlToUse</span> <span class="o">=</span> <span class="nx">isMarketEndpoint</span> <span class="p">?</span> <span class="nx">publicBaseUrl</span> <span class="p">:</span> <span class="nx">baseUrl</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">`</span><span class="p">${</span><span class="nx">baseUrlToUse</span><span class="p">}${</span><span class="nx">endpoint</span><span class="p">}</span><span class="s2">`</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isMarketEndpoint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">params</span><span class="p">.</span><span class="nx">timestamp</span> <span class="o">=</span> <span class="nx">timestamp</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">crypto</span>
+    <span class="p">.</span><span class="nx">createHmac</span><span class="p">(</span><span class="dl">'</span><span class="s1">sha256</span><span class="dl">'</span><span class="p">,</span> <span class="nx">apiSecret</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">params</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">digest</span><span class="p">(</span><span class="dl">'</span><span class="s1">hex</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">patch</span><span class="p">(</span>
+      <span class="nx">url</span><span class="p">,</span>
+      <span class="nx">params</span><span class="p">,</span>
+      <span class="nx">isMarketEndpoint</span>
+        <span class="p">?</span> <span class="p">{}</span>
+        <span class="p">:</span> <span class="p">{</span>
+            <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+              <span class="dl">'</span><span class="s1">api-key</span><span class="dl">'</span><span class="p">:</span> <span class="nx">apiKey</span><span class="p">,</span>
+              <span class="na">signature</span><span class="p">:</span> <span class="nx">signature</span><span class="p">,</span>
+            <span class="p">},</span>
+          <span class="p">},</span>
+    <span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">Response:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span>
+      <span class="dl">'</span><span class="s1">Error:</span><span class="dl">'</span><span class="p">,</span>
+      <span class="nx">error</span><span class="p">.</span><span class="nx">response</span> <span class="p">?</span> <span class="nx">error</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span> <span class="p">:</span> <span class="nx">error</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span>
+    <span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span> <span class="c1">// Optional: re-throw the error if you want to handle it further up the call stack</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><h3 id='response-3'>Response</h3>
+<p><code>console.log(&quot;Response:&quot;, response.data);</code> <br/>
+Logs the response data to the console. <br/></p>
+
+<p><code>return response.data;</code> <br/>
+Returns the response data for further use.<br/></p>
+
 <h2 id="put-request">putRequest Function</h2>
 
 <p>This function, <code>putRequest</code>, is an asynchronous JavaScript function designed to send a signed <code>PUT</code> HTTP request to a specified API endpoint. Here&#39;s a breakdown of its components and behavior:</p>
@@ -1015,7 +1088,7 @@ Returns the response data for further use.<br/></p>
     <span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div><h3 id='response-3'>Response</h3>
+</code></pre></div><h3 id='response-4'>Response</h3>
 <p>If the request is successful, the response data is logged to the console and returned by the function.</p>
 
 <h2 id="delete-request">deleteRequest Function</h2>
@@ -1413,6 +1486,163 @@ Returns the response data for further use.<br/></p>
   </tbody>
 </table>
 
+<h2 id="edit-order">Edit an Order </h2>
+
+<p><code>PATCH /v1/order/edit-order</code></p>
+
+<p>Edit a LIMIT or STOP order.
+<aside class="notice"> Note:
+<ul>
+<li>When the new quantity, price or stopPrice does not satisfy validations, or there is not enough available balance for editing order, the edit request will be rejected and the order will stay as it is.
+</li>
+</ul>
+</aside></p>
+
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">editOrder</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">/v1/order/edit-order</span><span class="dl">'</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">clientOrderId</span><span class="p">:</span> <span class="dl">'</span><span class="s1">3er5a07975b9851cd592-0000-int</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// The clientOrderId of the order to be edited</span>
+    <span class="na">quantity</span><span class="p">:</span> <span class="mf">0.002</span><span class="p">,</span> <span class="c1">// New quantity for the order (optional)</span>
+    <span class="na">stopPrice</span><span class="p">:</span> <span class="mi">58000</span><span class="p">,</span> <span class="c1">// New stop price for the order (optional)</span>
+    <span class="na">price</span><span class="p">:</span> <span class="mi">58002</span><span class="p">,</span> <span class="c1">// New price for the order (optional)</span>
+  <span class="p">};</span>
+
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">patchRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">response</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to edit order:</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Function to edit/update order
+</span><span class="k">def</span> <span class="nf">edit_order</span><span class="p">(</span><span class="n">client_order_id</span><span class="p">,</span><span class="n">quantity</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">stop_price</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">price</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+    <span class="c1"># Generate the current timestamp
+</span>    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="c1"># Prepare the request body (JSON)
+</span>    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'clientOrderId'</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">client_order_id</span><span class="p">),</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'quantity'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">quantity</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'stopPrice'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop_price</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">price</span><span class="p">)</span> <span class="p">:</span>
+      <span class="n">params</span><span class="p">[</span><span class="s">'price'</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+
+
+    <span class="c1"># Convert the request body to a JSON string for signing
+</span>    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+
+    <span class="c1"># Generate the signature
+</span>    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="c1"># Headers for the PATCH request
+</span>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Construct the full URL
+</span>    <span class="n">edit_order_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s">/v1/order/edit-order"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Send the PATCH request to edit the order
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">patch</span><span class="p">(</span><span class="n">edit_order_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raises an error for 4xx/5xx responses
+</span>        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Order edit request sent'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span> <span class="s">"for:"</span><span class="p">,</span> <span class="n">quantity</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="c1"># print(f"Error: {err.response.text if err.response else err}")
+</span>    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+
+<table style="border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>clientOrderId</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>The clientOrderId of the “LIMIT”, “STOP_LIMIT” or “STOP_MARKET” order</td>
+    </tr>
+    <tr>
+      <td>quantity</td>
+      <td>number</td>
+      <td>No</td>
+      <td>The amount of the asset to be ordered. Specify the desired quantity.</td>
+    </tr>
+    <tr>
+      <td>price</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “LIMIT” or “STOP_LIMIT”</td>
+    </tr>
+
+      <td>stopPrice</td>
+      <td>number</td>
+      <td>No</td>
+      <td>Can only be sent if order is “STOP_LIMIT” or “STOP_MARKET”</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id='response-2'>Response</h3>
+
+<p>The response parameters are described below:</p>
+
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="err">status:</span><span class="w"> </span><span class="s2">"Edit request submitted successfully"</span><span class="p">,</span><span class="w">  
+  </span><span class="err">availableBalance:</span><span class="w"> </span><span class="mi">700</span><span class="p">,</span><span class="w">
+  </span><span class="err">lockedMargin:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+  </span><span class="err">lockedMarginInMarginAsset:</span><span class="w"> </span><span class="mi">200</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Information about the submitted request (Edit request submitted successfully).</td>
+    </tr>
+    <tr>
+      <td><strong>availableBalance</strong></td>
+      <td>Updated available balance if extra margin is locked for the edit request (700 INR).</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Updated locked margin for the order if extra margin is locked for the edit request (300 INR)</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Updated locked margin in margin asset for the order if extra margin is locked for the edit request. (300 INR)</td>
+    </tr>
+
+  </tbody>
+</table>
+
 <h2 id="add-margin"> Add Margin </h2>
 
 <p><code>POST /v1/order/add-margin</code></p>
@@ -1505,7 +1735,7 @@ Returns the response data for further use.<br/></p>
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
 
-<h3 id='response-2'>Response</h3>
+<h3 id='response-3'>Response</h3>
 
 <p>The response parameters are described below:</p>
 
@@ -1646,7 +1876,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
 
-<h3 id='response-3'>Response</h3>
+<h3 id='response-4'>Response</h3>
 
 <p>The JSON body returned in the response is as follows:</p>
 
@@ -1785,7 +2015,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
     </tbody>
 </table>
 
-<h3 id='response-4'>Response</h3>
+<h3 id='response-5'>Response</h3>
 
 <p>The response parameters are described below:</p>
 
@@ -1992,7 +2222,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
     </tbody>
 </table>
 
-<h3 id='response-5'>Response</h3>
+<h3 id='response-6'>Response</h3>
 
 <p>The details of the JSON object returned in the response body are as follows:</p>
 
@@ -2219,7 +2449,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
 </aside>
 
-<h3 id='response-6'>Response</h3>
+<h3 id='response-7'>Response</h3>
 
 <p>The details returned in the response body as are as follows:</p>
 
@@ -2453,7 +2683,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
     </tbody>
 </table>
 
-<h3 id='response-7'>Response</h3>
+<h3 id='response-8'>Response</h3>
 
 <p>The response details are as follows:</p>
 
@@ -2665,7 +2895,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
     </tbody>
 </table>
 
-<h3 id='response-8'>Response</h3>
+<h3 id='response-9'>Response</h3>
 
 <p>The response parameters are described below:</p>
 
@@ -2873,7 +3103,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
     </tbody>
 </table>
 
-<h3 id='response-9'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-10'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
         </span><span class="nl">"contractPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCUSDT"</span><span class="p">,</span><span class="w">
@@ -3089,7 +3319,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-10'>Response</h3>
+<h3 id='response-11'>Response</h3>
 
 <p>The response parameters are as follows:</p>
 
@@ -3336,7 +3566,7 @@ except requests.exceptions.HTTPError as err:
     </tbody>
 </table>
 
-<h3 id='response-11'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+<h3 id='response-12'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">109884</span><span class="p">,</span><span class="w">
     </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-09-16T09:39:28.754Z"</span><span class="p">,</span><span class="w">
@@ -3513,7 +3743,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-12'>Response</h3>
+<h3 id='response-13'>Response</h3>
 
 <p>The response parameters are described below:</p>
 
@@ -3653,7 +3883,7 @@ except requests.exceptions.HTTPError as err:
     </tbody>
 </table>
 
-<h3 id='response-13'>Response</h3>
+<h3 id='response-14'>Response</h3>
 
 <p>The response parameters are described below:</p>
 
@@ -3762,7 +3992,7 @@ except requests.exceptions.HTTPError as err:
 Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
 </aside>
 
-<h3 id='response-14'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-15'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"93513fe2a8af44157234-6238-ext"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">24717</span><span class="p">,</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CANCELED"</span><span class="p">,</span><span class="w">
@@ -3873,7 +4103,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-15'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -3984,7 +4214,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -4104,7 +4334,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
@@ -4275,7 +4505,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-19'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">
