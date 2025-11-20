@@ -155,7 +155,7 @@
     <tr>
       <td>reduceOnly</td>
       <td>boolean</td>
-      <td>No</td>
+      <td>Yes</td>
       <td>Indicates whether the order should only reduce the position. Default is false.</td>
     </tr>
     <tr>
