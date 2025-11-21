@@ -1,9 +1,332 @@
-<h1 id='public-endpoints'>Public Endpoints</h1>
+<h2 id='options-public-endpoints'>Public Endpoints</h2>
 <p>Public endpoints in Pi42 are designed to facilitate easy access to various functionalities of the Pi42 platform, particularly for integration with external systems and applications. 
 
 Below is an overview of the public endpoints available in Pi42, their typical uses, and example API calls.</p>
 
-<h2 id='ticker-update-24hr'>Ticker Update (24Hr)</h2>
+<h3 id='options-base-pairs'>Base Pairs</h3>
+
+`GET /v1/exchange/basePairs`
+
+Get Base Pairs
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "baseCoin": "BTC",
+    "quoteCoin": "USDT",
+    "displayName": "BTC-USDT",
+    "iconUrl": "https://storage.googleapis.com/pi42-testnet-static/contract-icons/btc.png",
+    "maxImFactorPercentage": 10,
+    "minImFactorPercentage": 5,
+    "mmFactorPercentage": 3,
+    "liquidationFeePercentage": 0.2,
+    "maxProportionOfTxnInOrderPricePercentage": 7,
+    "makerFeePercentage": 0.03,
+    "takerFeePercentage": 0.03,
+    "pricePrecision": 2,
+    "minMaxPriceFactors": {
+      "maxPriceFactor": 1.2,
+      "minPriceFactor": 0.8
+    },
+    "maxBuyMinSellMultipliers": {
+      "deltaMultiplier": 4,
+      "minSellPrice": 5,
+      "multiplierCoefficient": 0.025
+    }
+  }
+]
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>baseCoin</strong></td>
+         <td>The base cryptocurrency symbol, e.g., <code>"BTC"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>quoteCoin</strong></td>
+         <td>The quote currency symbol, e.g., <code>"USDT"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>displayName</strong></td>
+         <td>The display pair name combining base and quote coins, e.g., <code>"BTC-USDT"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>iconUrl</strong></td>
+         <td>URL for the icon representing the base coin.</td>
+      </tr>
+      <tr>
+         <td><strong>maxImFactorPercentage</strong></td>
+         <td>Maximum initial margin factor allowed, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>minImFactorPercentage</strong></td>
+         <td>Minimum initial margin factor allowed, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>mmFactorPercentage</strong></td>
+         <td>Maintenance margin factor, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>liquidationFeePercentage</strong></td>
+         <td>Fee percentage charged at liquidation.</td>
+      </tr>
+      <tr>
+         <td><strong>maxProportionOfTxnInOrderPricePercentage</strong></td>
+         <td>Maximum proportion of the transaction in order price, as percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>makerFeePercentage</strong></td>
+         <td>Maker fee percentage for the market maker.</td>
+      </tr>
+      <tr>
+         <td><strong>takerFeePercentage</strong></td>
+         <td>Taker fee percentage for the market taker.</td>
+      </tr>
+      <tr>
+         <td><strong>pricePrecision</strong></td>
+         <td>Number of decimal places allowed for price.</td>
+      </tr>
+      <tr>
+         <td><strong>minMaxPriceFactors</strong></td>
+         <td>
+            Object containing: 
+            <ul>
+               <li><code>maxPriceFactor</code>: Maximum price multiplier factor.</li>
+               <li><code>minPriceFactor</code>: Minimum price multiplier factor.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>maxBuyMinSellMultipliers</strong></td>
+         <td>
+            Object containing multipliers for buy/sell: 
+            <ul>
+               <li><code>deltaMultiplier</code>: Price delta multiplier.</li>
+               <li><code>minSellPrice</code>: Minimum sell price.</li>
+               <li><code>multiplierCoefficient</code>: Coefficient for multiplier calculation.</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-delivery-times'>Delivery Times</h3>
+
+`GET /v1/market/ticker24Hr`
+
+Get details of all the delivery times available for trading
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>baseCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Base coin for which delivery times needs to be fetched, e.g., BTC</td>
+      </tr>
+      <tr>
+         <td>quoteCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Quote coin for which delivery times needs to be fetched, e.g., USDT</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[1754467200000,1754553600000,1754640000000,1754726400000,1755244800000]
+```
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>Array of timestamps</strong></td>
+         <td>An array of timestamps (in milliseconds since epoch) representing discrete time points of delivery or other related events.</td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-instrument-nfo'>Instrument Info</h3>
+
+`GET /v1/exchange/instrument-info`
+
+Get details of all the instruments available for trading
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>baseCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Base coin for which delivery times needs to be fetched, e.g., BTC</td>
+      </tr>
+      <tr>
+         <td>quoteCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Quote coin for which delivery times needs to be fetched, e.g., USDT</td>
+      </tr>
+      <tr>
+         <td>deliveryTime</td>
+         <td>number</td>
+         <td>No</td>
+         <td>Optional delivery time timestamp in milliseconds since epoch, e.g., 1774598400000</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "symbol": "BTC-27MAR26-130000-P-USDT",
+    "displayName": "BTCUSDT-27MAR26-130000-P",
+    "strikePrice": 130000,
+    "baseCoin": "BTC",
+    "quoteCoin": "USDT",
+    "settleCoin": "INR",
+    "optionsType": "Put",
+    "launchTime": 1752171900100,
+    "deliveryTime": 1774598400000,
+    "deliveryFeeRate": 0.00015,
+    "priceFilter": {
+      "maxPrice": "1110000",
+      "minPrice": "5",
+      "tickSize": "5",
+      "quoteCoinPrecision": 0,
+      "settleCoinPrecision": 2,
+      "pricePrecision": 2
+    },
+    "lotSizeFilter": {
+      "qtyStep": "0.01",
+      "maxOrderQty": "10000",
+      "minOrderQty": "0.01",
+      "quantityPrecision": 2
+    }
+  }
+]
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>symbol</strong></td>
+         <td>The unique symbol of the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>displayName</strong></td>
+         <td>User-friendly display name of the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>strikePrice</strong></td>
+         <td>The strike price value.</td>
+      </tr>
+      <tr>
+         <td><strong>baseCoin</strong></td>
+         <td>The base coin symbol, e.g., BTC.</td>
+      </tr>
+      <tr>
+         <td><strong>quoteCoin</strong></td>
+         <td>The quote coin symbol, e.g., USDT.</td>
+      </tr>
+      <tr>
+         <td><strong>settleCoin</strong></td>
+         <td>The settlement coin symbol, e.g., INR.</td>
+      </tr>
+      <tr>
+         <td><strong>optionsType</strong></td>
+         <td>The option type (e.g., Put, Call).</td>
+      </tr>
+      <tr>
+         <td><strong>launchTime</strong></td>
+         <td>The option launch timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryTime</strong></td>
+         <td>The option delivery timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryFeeRate</strong></td>
+         <td>The delivery fee rate percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>priceFilter</strong></td>
+         <td>
+            Constraints on order price: 
+            <ul>
+               <li><code>maxPrice:</code> Maximum price allowed.</li>
+               <li><code>minPrice:</code> Minimum price allowed.</li>
+               <li><code>tickSize:</code> Price tick size.</li>
+               <li><code>quoteCoinPrecision:</code> Decimal precision for quote coin.</li>
+               <li><code>settleCoinPrecision:</code> Decimal precision for settlement coin.</li>
+               <li><code>pricePrecision:</code> Decimal precision for price.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>lotSizeFilter</strong></td>
+         <td>
+            Constraints on order quantity: 
+            <ul>
+               <li><code>qtyStep:</code> Quantity increment step.</li>
+               <li><code>maxOrderQty:</code> Maximum order quantity.</li>
+               <li><code>minOrderQty:</code> Minimum order quantity.</li>
+               <li><code>quantityPrecision:</code> Decimal precision for quantity.</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-ticker-update-24hr'>Ticker Update (24Hr)</h3>
 
 `GET /v1/market/ticker24Hr`
 
@@ -188,7 +511,7 @@ The response parameters are as follows:
   </tbody>
 </table>
 
-<h2 id='agg-trade-update'>Aggregate Trade Update</h2>
+<h3 id='options-agg-trade-update'>Aggregate Trade Update</h3>
 
 `GET /v1/market/aggTrade`
 
@@ -339,7 +662,7 @@ The response body parameters are described as follows:
 </table>
 
 
-<h2 id='depth-update'>Depth Update</h2>
+<h3 id='options-depth-update'>Depth Update</h3>
 
 `GET /v1/market/depth/`
 
@@ -486,7 +809,7 @@ The parameters contained in the response body are as follows:
 </table>
 
 
-<h2 id='klines'>Get Klines</h2>
+<h3 id='options-klines'>Get Klines</h3>
 
 `POST /v1/market/klines`
 
@@ -653,7 +976,7 @@ The response parameters are described below:
   </tbody>
 </table>
 
-<h2 id='exchange'>Exchange</h2>
+<h3 id='options-exchange'>Exchange</h3>
 
 `GET /v1/exchange/exchangeInfo`
 

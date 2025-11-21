@@ -1,6 +1,6 @@
-<h1 id='orders'>Orders</h1>
+<h2 id='options-orders'>Orders</h2>
 
-<h2 id="place-order">Place an Order </h2>
+<h3 id="options-place-order">Place an Order </h3>
 
 ```python
 def generate_signature(api_secret, data_to_sign):
@@ -254,7 +254,7 @@ The response parameters are described below:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>type</strong></td>
@@ -327,7 +327,7 @@ The response parameters are described below:
 
 
 
-<h2 id="edit-order">Edit an Order </h2>
+<h3 id="options-edit-order">Edit an Order </h3>
 
 `PATCH /v1/order/edit-order`
 
@@ -495,7 +495,7 @@ The response parameters are described below:
 
 
 
-<h2 id="add-margin"> Add Margin </h2>
+<h3 id="options-add-margin"> Add Margin </h3>
 
 `POST /v1/order/add-margin`
 
@@ -633,7 +633,7 @@ The response parameters are described below:
   </tbody>
 </table>
 
-<h2 id="reduce-margin">Reduce Margin</h2>
+<h3 id="options-reduce-margin">Reduce Margin</h3>
 
 `POST /v1/order/reduce-margin`
 
@@ -781,7 +781,7 @@ The JSON body returned in the response is as follows:
 </table>
 
 
-<h2 id="get-open-orders">Get Open Orders</h2>
+<h3 id="options-get-open-orders">Get Open Orders</h3>
 
 `GET /v1/order/open-orders`
 
@@ -933,7 +933,7 @@ The response parameters are described below:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>Type of contract (<code>PERPETUAL</code>), suggests a perpetual futures contract.</td>
+      <td>Type of contract (<code>PERPETUAL</code>), suggests a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>type</strong></td>
@@ -991,7 +991,7 @@ The response parameters are described below:
 </table>
 
 
-<h2 id="get-order-history">Get Order History</h2>
+<h3 id="options-get-order-history">Get Order History</h3>
 
 `GET /v1/order/order-history`
 
@@ -1215,7 +1215,7 @@ The details of the JSON object returned in the response body are as follows:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>iconUrl</strong></td>
@@ -1237,7 +1237,7 @@ The details of the JSON object returned in the response body are as follows:
 </table>
 
 
-<h2 id="get-linked-orders">Get Linked Orders</h2>
+<h3 id="options-get-linked-orders">Get Linked Orders</h3>
 
 `GET /v1/order/linked-orders`
 
@@ -1379,7 +1379,7 @@ The details returned in the response body as are as follows:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>type</strong></td>
@@ -1442,7 +1442,7 @@ The details returned in the response body as are as follows:
 
 
 
-<h2 id="get-margin-history">Fetch Margin History</h2>
+<h3 id="options-get-margin-history">Fetch Margin History</h3>
 
 `GET /v1/order/fetch-margin-history`
 
@@ -1648,7 +1648,7 @@ The response details are as follows:
 </table>
 
 
-<h2 id="get-positions">Get Positions</h2>
+<h3 id="options-get-positions">Get Positions</h3>
 
 `GET /v1/positions`
 
@@ -1833,7 +1833,7 @@ The response parameters are described below:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>entryPrice</strong></td>
@@ -1911,7 +1911,7 @@ The response parameters are described below:
 </table>
 
 
-<h2 id="get-position-status">Get Position Status</h2>
+<h3 id="options-get-position-status">Get Position Status</h3>
 
 `GET /v1/positions/{positionStatus}`
 
@@ -2103,7 +2103,7 @@ async function getPosition() {
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>iconUrl</strong></td>
@@ -2121,7 +2121,7 @@ async function getPosition() {
 </table>
 
 
-<h2 id="trade-history">Get User's Trade History</h2>
+<h3 id="options-trade-history">Get User's Trade History</h3>
 
 `GET /v1/user-data/trade-history`
 
@@ -2304,7 +2304,7 @@ The response parameters are as follows:
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract for the order (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>clientOrderId</strong></td>
@@ -2325,7 +2325,7 @@ The response parameters are as follows:
   </tbody>
 </table>
 
-<h2 id="get-transaction-history">Get User's Transaction History</h2>
+<h3 id="options-get-transaction-history">Get User's Transaction History</h3>
 
 `GET/v1/user-data/transaction-history`
 
@@ -2531,7 +2531,7 @@ async function fetchUserTransactionHistory() {
     </tr>
     <tr>
       <td><strong>contractType</strong></td>
-      <td>The type of contract for the transaction (<code>PERPETUAL</code>), indicating a perpetual futures contract.</td>
+      <td>The type of contract for the transaction (<code>PERPETUAL</code>), indicating a perpetual options contract.</td>
     </tr>
     <tr>
       <td><strong>baseAsset</strong></td>
@@ -2545,7 +2545,7 @@ async function fetchUserTransactionHistory() {
 </table>
 
 
-<h2 id='exchange-update-preference'>Update Preference</h2>
+<h3 id='options-exchange-update-preference'>Update Preference</h3>
 
 `POST /v1/exchange/update/preference`
 
@@ -2704,7 +2704,7 @@ The response parameters are described below:
 
 
 
-<h2 id='exchange-update-leverage'>Update Leverage</h2>
+<h3 id='options-exchange-update-leverage'>Update Leverage</h3>
 
 `POST /v1/exchange/update/leverage`
 
@@ -2842,7 +2842,7 @@ The response parameters are described below:
   </tbody>
 </table>
 
-<h2 id="delete-order"> Deleting an Order</h2>
+<h3 id="options-delete-order"> Deleting an Order</h3>
 
 `DELETE /v1/order/delete-order`
 
@@ -2962,7 +2962,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
   </tbody>
 </table>
 
-<h2 id="cancel-all-orders">Cancel all the orders</h2>
+<h3 id="options-cancel-all-orders">Cancel all the orders</h3>
 
 `DELETE /v1/order/cancel-all-orders`
 
@@ -3084,7 +3084,7 @@ def cancel_all_orders():
 </table>
 
 
-<h2 id="close-all-positions">Close all the positions</h2>
+<h3 id="options-close-all-positions">Close all the positions</h3>
 
 `DELETE /v1/positions/close-all-positions`
 
@@ -3207,20 +3207,20 @@ def close_all_positions():
 
 <%# Wallets %>
 
-<h2 id="futures-wallet-details">Get futures wallet details</h2>
+<h3 id="options-options-wallet-details">Get options wallet details</h3>
 
-`GET /v1/wallet/futures-wallet/details`
+`GET /v1/wallet/options-wallet/details`
 
-Get all details of Futures wallet.
+Get all details of options wallet.
 
 ```javascript
-async function getFuturesWallet() {
+async function getoptionsWallet() {
   const params = {
     // Optional Params
     marginAsset: "INR"
   };
 
-  const endpoint = "/v1/wallet/futures-wallet/details";
+  const endpoint = "/v1/wallet/options-wallet/details";
 
   // Call the postRequest function
   return await getRequest(endpoint, params);
@@ -3237,8 +3237,8 @@ import json
 def generate_signature(api_secret, data_to_sign):
   return hmac.new(api_secret.encode('utf-8'), data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
 
-def get_futures_wallet_details():
-  endpoint = "/v1/wallet/futures-wallet/details"
+def get_options_wallet_details():
+  endpoint = "/v1/wallet/options-wallet/details"
 
   # Generate the current timestamp
   timestamp = str(int(time.time() * 1000))
@@ -3264,11 +3264,11 @@ def get_futures_wallet_details():
   wallet_details_url = f"{base_url}{endpoint}?{query_string}"
 
   try:
-      # Send the GET request to fetch the futures wallet details
+      # Send the GET request to fetch the options wallet details
       response = requests.get(wallet_details_url, headers=headers)
       response.raise_for_status()  # Raises an error for 4xx/5xx responses
       response_data = response.json()
-      print('Futures wallet details:', json.dumps(response_data, indent=4))
+      print('options wallet details:', json.dumps(response_data, indent=4))
   except requests.exceptions.HTTPError as err:
       print(f"Failed {response.status_code}: {response.text}")
   except Exception as e:
@@ -3295,7 +3295,7 @@ def get_futures_wallet_details():
             <td>marginAsset</td>
             <td>string</td>
             <td>No</td>
-            <td>MarginAsset of Futures wallet (<code>INR</code>).</td>
+            <td>MarginAsset of options wallet (<code>INR</code>).</td>
         </tr>
     </tbody>
 </table>
@@ -3331,7 +3331,7 @@ def get_futures_wallet_details():
   <tbody>
     <tr>
       <td><strong>inrBalance</strong></td>
-      <td>INR balance of Futures wallet (<code>INR</code>).</td>
+      <td>INR balance of options wallet (<code>INR</code>).</td>
     </tr>
     <tr>
       <td><strong>walletBalance</strong></td>
@@ -3389,7 +3389,7 @@ def get_futures_wallet_details():
 </table>
 
 
-<h2 id="funding-wallet-details">Get funding wallet details</h2>
+<h3 id="options-funding-wallet-details">Get funding wallet details</h3>
 
 `GET /v1/wallet/funding-wallet/details`
 
@@ -3419,7 +3419,7 @@ import json
 def generate_signature(api_secret, data_to_sign):
   return hmac.new(api_secret.encode('utf-8'), data_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
 
-def get_futures_wallet_details():
+def get_options_wallet_details():
   endpoint = "/v1/wallet/funding-wallet/details"
 
   # Generate the current timestamp
@@ -3446,7 +3446,7 @@ def get_futures_wallet_details():
   wallet_details_url = f"{base_url}{endpoint}?{query_string}"
 
   try:
-      # Send the GET request to fetch the futures wallet details
+      # Send the GET request to fetch the options wallet details
       response = requests.get(wallet_details_url, headers=headers)
       response.raise_for_status()  # Raises an error for 4xx/5xx responses
       response_data = response.json()
@@ -3476,7 +3476,7 @@ def get_futures_wallet_details():
             <td>marginAsset</td>
             <td>string</td>
             <td>No</td>
-            <td>MarginAsset of Futures wallet (<code>INR</code>).</td>
+            <td>MarginAsset of options wallet (<code>INR</code>).</td>
         </tr>
     </tbody>
 </table>
@@ -3503,7 +3503,7 @@ def get_futures_wallet_details():
   <tbody>
     <tr>
       <td><strong>inrBalance</strong></td>
-      <td>INR balance of Futures wallet (<code>INR</code>).</td>
+      <td>INR balance of options wallet (<code>INR</code>).</td>
     </tr>
     <tr>
       <td><strong>walletBalance</strong></td>
