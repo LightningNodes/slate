@@ -14,7 +14,7 @@ For example,  balance changes, order executions, or margin updates.
 <aside class="notice"> Notes:
 <ul>
   <li>Authenticated Web Socket stream base URL <code>https://fawss-uds.pi42.com/auth-stream </code></li>
-  <li>Requires listenkey that can be obtained from the <a href="#create-listen-key">Create Listen Key API</a></li>
+  <li>Requires listenkey that can be obtained from the <a href="#futures-create-listen-key">Create Listen Key API</a></li>
 </ul>
 </aside>
 
@@ -349,7 +349,7 @@ Once connected, users can subscribe to different topics mentioned below:
 - Intervals: The intervals for kline (candlestick) data can be `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `6h`, `8h`, `12h`, `1d`, `3d`, `1w`, `1M`.
 - MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.
 - Get <code>depthGrouping</code> value of each contract from
-<a href="#exchange">Exchange Info API</a>
+<a href="#futures-exchange">Exchange Info API</a>
 
 
 ```javascript

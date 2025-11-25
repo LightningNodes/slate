@@ -14,7 +14,7 @@ Place an order (either a market order or a limit order) on Pi42's trading platfo
 <ul>
 <li>Price is compulsory to place a limit order.</li>
 <li>To successfully place an order from a position, you need to pass the <code>placeType</code> as <code>POSITION</code> and <code>positionId</code> in the request payload, which can be obtained calling the
-<a href="#get-positions">Get Positions API</a></li>
+<a href="#futures-get-positions">Get Positions API</a></li>
 </ul>
 </aside>
 
@@ -589,7 +589,7 @@ def add_margin():
 </table>
 
 <aside class="notice">
-The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
+The required <code>positionId</code> can be obtained calling the <a href="#futures-get-positions">Get Positions API</a>
 </aside>
 
 ### Response
@@ -735,7 +735,7 @@ def reduce_margin():
 </table>
 
 <aside class="notice">
-The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
+The required <code>positionId</code> can be obtained calling the <a href="#futures-get-positions">Get Positions API</a>
 </aside>
 
 ### Response
@@ -1324,7 +1324,7 @@ async function fetchMarginHistory() {
 </table>
 
 <aside class="notice">
-Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
+Requires linkId that can be obtained from <a href="#futures-place-order">Place Order API response.</a>
 </aside>
 
 ### Response
@@ -2922,7 +2922,7 @@ def delete_order():
 </table>
 
 <aside class="notice">
-Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
+Requires <code>clientOrderId</code> that can be retrieved from <a href="#futures-get-open-orders">Get Open Orders API</a>.
 </aside>
 
 ### Response
