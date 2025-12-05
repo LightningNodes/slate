@@ -4,6 +4,63 @@
 Below is an overview of the public endpoints available in Pi42, their typical uses, and example API calls.</p>
 
 <h3 id='options-base-pairs'>Base Pairs</h3>
+```javascript
+async function getBasePairs() {
+  const basePairsUrl = baseUrl + '/v1/exchange/basePairs';
+
+  try {
+    // Headers for the GET request (no authentication required for public endpoint)
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch base pairs
+    const response = await fetch(basePairsUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      // Throws an error for non-2xx responses
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Base pairs fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+   console.error('Error:', error.message);
+    
+  }
+  return null;
+}
+```
+```python
+def get_base_pairs():
+    """
+    Fetches all available base pairs from Pi42 exchange.
+
+    Returns:
+        The JSON response containing base pairs information
+    """
+    try:
+        base_pairs_url = base_url + '/v1/exchange/basePairs'
+        # Headers for the GET request (no authentication required for public endpoint)
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch base pairs
+        response = requests.get(base_pairs_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Base pairs fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 
 `GET /v1/exchange/basePairs`
 
@@ -123,8 +180,73 @@ The response parameters are as follows:
 </table>
 
 <h3 id='options-delivery-times'>Delivery Times</h3>
+```javascript
+async function getDeliveryTimes() {
+  try {
+    // Get user inputs for base and quote coins via prompt in browser
+    const baseCoin = prompt("Enter the base coin (e.g., BTC):").toUpperCase();
+    const quoteCoin = prompt("Enter the quote coin (e.g., USDT):").toUpperCase();
+    // Construct the URL with query parameters
+    const deliveryTimesUrl = `${baseUrl}/v1/exchange/delivery-times?baseCoin=${baseCoin}&quoteCoin=${quoteCoin}`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch delivery times
+    const response = await fetch(deliveryTimesUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Delivery times fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_delivery_times():
+    """
+    Fetches all available delivery times for a specified base and quote coin.
 
-`GET /v1/market/ticker24Hr`
+    Returns:
+        The JSON response containing delivery times information
+    """
+    try:
+        # Get user inputs for base and quote coins
+        base_coin = input("Enter the base coin (e.g., BTC): ").upper()
+        quote_coin = input("Enter the quote coin (e.g., USDT): ").upper()
+
+        # Construct the URL with query parameters
+        delivery_times_url = f"{base_url}/v1/exchange/delivery-times?baseCoin={base_coin}&quoteCoin={quote_coin}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch delivery times
+        response = requests.get(delivery_times_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Delivery times fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+
+`GET /v1/exchange/delivery-times`
 
 Get details of all the delivery times available for trading
 
@@ -176,8 +298,82 @@ The response parameters are as follows:
    </tbody>
 </table>
 
-<h3 id='options-instrument-nfo'>Instrument Info</h3>
+<h3 id='options-instrument-info'>Instrument Info</h3>
+```javascript
+async function getInstrumentInfo() {
+  try {
+    // Get user inputs for base coin and quote coin
+    const baseCoin = prompt("Enter the base coin (e.g., BTC):").toUpperCase();
+    const quoteCoin = prompt("Enter the quote coin (e.g., USDT):").toUpperCase();
+    // Ask if they want to specify delivery time (optional)
+    const includeDeliveryTime = prompt("Do you want to specify a delivery time? (y/n):").toLowerCase();
+    // Build the URL
+    let instrumentInfoUrl = `${baseUrl}/v1/exchange/instrument-info?baseCoin=${baseCoin}&quoteCoin=${quoteCoin}`;
+    if (includeDeliveryTime === 'y') {
+      const deliveryTime = prompt("Enter the delivery time (timestamp in milliseconds, e.g., 1774598400000):");
+      instrumentInfoUrl += `&deliveryTime=${deliveryTime}`;
+    }
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch instrument information
+    const response = await fetch(instrumentInfoUrl, { method: 'GET', headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Instrument information fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_instrument_info():
+    """
+    Fetches details of instruments available for trading.
 
+    Returns:
+        The JSON response containing instrument information
+    """
+    try:
+        # Get user inputs
+        base_coin = input("Enter the base coin (e.g., BTC): ").upper()
+        quote_coin = input("Enter the quote coin (e.g., USDT): ").upper()
+
+        # Ask if they want to specify delivery time (optional)
+        include_delivery_time = input("Do you want to specify a delivery time? (y/n): ").lower()
+
+        # Build the URL
+        instrument_info_url = f"{base_url}/v1/exchange/instrument-info?baseCoin={base_coin}&quoteCoin={quote_coin}"
+
+        if include_delivery_time == 'y':
+            delivery_time = input("Enter the delivery time (timestamp in milliseconds, e.g., 1774598400000): ")
+            instrument_info_url += f"&deliveryTime={delivery_time}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch instrument information
+        response = requests.get(instrument_info_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Instrument information fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/exchange/instrument-info`
 
 Get details of all the instruments available for trading
@@ -327,7 +523,93 @@ The response parameters are as follows:
 </table>
 
 <h3 id='options-instrument-info-symbols'>Instrument Info Symbols</h3>
+```javascript
+async function getInstrumentInfoBySymbols() {
+  try {
+    // Prompt user to enter symbols one by one
+    console.log("Enter symbols one by one (e.g., BTC-27MAR26-50000-C-USDT)");
+    console.log("Press Enter on an empty line when done");
+    const symbols = [];
+    while (true) {
+      const symbol = prompt("Enter symbol (or press Enter to finish):").trim();
+      if (!symbol) break;
+      symbols.push(symbol);
+    }
+    if (symbols.length === 0) {
+      console.log("No symbols provided. Operation cancelled.");
+      return null;
+    }
+    // Prepare payload
+    const payload = { symbols };
+    // Construct URL
+    const instrumentInfoUrl = `${baseUrl}/v1/exchange/instrument-info-symbol`;
+    // Send POST request
+    const response = await fetch(instrumentInfoUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Instrument information fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_instrument_info_by_symbols():
+    """
+    Fetches details of specific instruments by providing their symbols.
 
+    Returns:
+        The JSON response containing instrument information for the specified symbols
+    """
+    try:
+        # Get user inputs for symbols
+        print("Enter symbols one by one (e.g., BTC-27MAR26-50000-C-USDT)")
+        print("Press Enter on an empty line when done")
+
+        symbols = []
+        while True:
+            symbol = input("Enter symbol (or press Enter to finish): ").strip()
+            if not symbol:
+                break
+            symbols.append(symbol)
+
+        if not symbols:
+            print("No symbols provided. Operation cancelled.")
+            return None
+
+        # Prepare the request body
+        payload = {"symbols": symbols}
+
+        # Construct the URL
+        instrument_info_url = f"{base_url}/v1/exchange/instrument-info-symbol"
+
+        # Headers for the POST request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the POST request to fetch instrument information
+        response = requests.post(instrument_info_url, json=payload, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Instrument information fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `POST /v1/exchange/instrument-info-symbol`
 
 Get details of all the symbols in array. The symbols must all be trading currently  (ie options contract should be active)
@@ -474,7 +756,63 @@ The response parameters are as follows:
 </table>
 
 <h3 id='options-conversion-rate'>Conversion Rate</h3>
+```javascript
+async function getConversionRate() {
+  try {
+    // Construct the URL
+    const metaUrl = `${baseUrl}/v1/exchange/meta`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch meta data
+    const response = await fetch(metaUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Meta data fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_conversion_rate():
+    """
+    Fetches meta data including conversion rates.
 
+    Returns:
+        The JSON response containing meta data
+    """
+    try:
+        # Construct the URL
+        meta_url = f"{base_url}/v1/exchange/meta"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch meta data
+        response = requests.get(meta_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Meta data fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/exchange/meta`
 
 Get meta data
@@ -506,7 +844,76 @@ The response parameters are as follows:
 </table>
 
 <h3 id='options-order-book'>Order Book</h3>
+```javascript
+async function getOrderBook() {
+  try {
+    // Prompt user for symbol input
+    const symbol = prompt("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (!symbol) {
+      console.log("No symbol provided. Operation cancelled.");
+      return null;
+    }
+    // Construct the URL with query parameter
+    const orderBookUrl = `${baseUrl}/v1/market/orderBook?symbol=${encodeURIComponent(symbol)}`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch order book
+    const response = await fetch(orderBookUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Order book fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_order_book():
+    """
+    Fetches order book details for a provided symbol.
 
+    Returns:
+        The JSON response containing order book information
+    """
+    try:
+        # Get user input for symbol
+        symbol = input("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+
+        if not symbol:
+            print("No symbol provided. Operation cancelled.")
+            return None
+
+        # Construct the URL with query parameter
+        order_book_url = f"{base_url}/v1/market/orderBook?symbol={symbol}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch order book
+        response = requests.get(order_book_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order book fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/market/orderBook`
 
 Get the order book details for the provided symbol.
@@ -577,7 +984,84 @@ The response parameters are as follows:
 </table>
 
 <h3 id='options-recent-trades'>Recent Trades</h3>
+```javascript
+async function getRecentTrades() {
+  try {
+    // Prompt user for symbol input
+    const symbol = prompt("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
 
+    if (!symbol) {
+      console.log("No symbol provided. Operation cancelled.");
+      return null;
+    }
+
+    // Construct the URL with query parameter
+    const recentTradesUrl = `${baseUrl}/v1/market/recentTrades?symbol=${encodeURIComponent(symbol)}`;
+
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    // Send the GET request to fetch recent trades
+    const response = await fetch(recentTradesUrl, {
+      method: 'GET',
+      headers: headers
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Recent trades fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+
+  return null;
+}
+```
+```python
+def get_recent_trades():
+    """
+    Fetches recent trades details for a provided symbol.
+
+    Returns:
+        The JSON response containing recent trades information
+    """
+    try:
+        # Get user input for symbol
+        symbol = input("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+
+        if not symbol:
+            print("No symbol provided. Operation cancelled.")
+            return None
+
+        # Construct the URL with query parameter
+        recent_trades_url = f"{base_url}/v1/market/recentTrades?symbol={symbol}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch recent trades
+        response = requests.get(recent_trades_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Recent trades fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/market/recentTrades`
 
 Get the recent trades details for the provided symbol.
@@ -624,3 +1108,25 @@ The response parameters are as follows:
   }
 ]
 ```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>execId</td><td>Unique execution identifier for the trade</td></tr>
+    <tr><td>symbol</td><td>Trading symbol of the option, including expiry, strike, type (Put), and margin currency</td></tr>
+    <tr><td>price</td><td>Price at which the option was traded</td></tr>
+    <tr><td>size</td><td>Quantity or size of the option trade</td></tr>
+    <tr><td>side</td><td>Trade side indicating Buy or Sell</td></tr>
+    <tr><td>time</td><td>Timestamp of the trade event in milliseconds since epoch</td></tr>
+    <tr><td>isBlockTrade</td><td>Boolean flag indicating if the trade was a block trade</td></tr>
+    <tr><td>mP</td><td>Marked price of the option at trade time</td></tr>
+    <tr><td>iP</td><td>Index price relevant to the option contract</td></tr>
+    <tr><td>mIv</td><td>Market implied volatility of the option</td></tr>
+    <tr><td>iv</td><td>Implied volatility from the trade data</td></tr>
+    <tr><td>seq</td><td>Sequence number of the event for ordering</td></tr>
+  </tbody>
+</table>

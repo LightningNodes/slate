@@ -1,7 +1,144 @@
 <h2 id='options-orders'>Orders</h2>
 
 <h3 id="options-open-positions">Open Positions</h3>
+```javascript
+async function getOpenPositions() {
+  try {
+    // Generate current timestamp in milliseconds
+    const timestamp = Date.now().toString();
 
+    // Params object initialization
+    const params = { timestamp };
+
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Build query string with URL encoding
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryString);
+
+    // Construct URL with query params
+    const positionsUrl = `${baseUrl}/v1/positions/open-positions?${queryString}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(positionsUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Open positions fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_open_positions():
+    """
+    Fetch open options positions (authenticated endpoint)
+
+    Returns:
+        The JSON response containing open positions
+    """
+    try:
+        # Generate timestamp for the request
+        timestamp = str(int(time.time() * 1000))
+
+        # Create the base parameters
+        params = {
+            'timestamp': timestamp
+        }
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Create query string
+        query_string = '&'.join([f"{key}={params[key]}" for key in params])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters
+        positions_url = f"{base_url}/v1/positions/open-positions?{query_string}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(positions_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Open positions fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/positions/open-positions`
 
 Fetch open options positions
@@ -198,7 +335,158 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-position-history">Position History</h3>
+```javascript
+async function getPositionHistory() {
+  try {
+    // Initialize empty params object for optional filters
+    const params = {};
 
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Generate timestamp after collecting inputs
+    const timestamp = Date.now().toString();
+
+    // Clone params and add timestamp for signature generation
+    const paramsWithTimestamp = { ...params, timestamp };
+
+    // Build sorted query string for signature
+    const queryStringForSignature = Object.keys(paramsWithTimestamp)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(paramsWithTimestamp[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryStringForSignature);
+
+    // Construct query string for URL without timestamp sorted by insertion order
+    const queryStringForUrl = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Build final URL with mandatory timestamp and optional filters
+    const historyUrl = queryStringForUrl
+      ? `${baseUrl}/v1/positions/position-history?timestamp=${encodeURIComponent(timestamp)}&${queryStringForUrl}`
+      : `${baseUrl}/v1/positions/position-history?timestamp=${encodeURIComponent(timestamp)}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(historyUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Position history fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_position_history():
+    """
+    Fetch closed options positions history (authenticated endpoint)
+
+    Returns:
+        The JSON response containing position history
+    """
+    try:
+        # Create parameters dictionary for optional query params only
+        params = {}
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query string with timestamp for signature
+        query_params_with_timestamp = params.copy()
+        query_params_with_timestamp['timestamp'] = timestamp
+        query_string = '&'.join([f"{key}={query_params_with_timestamp[key]}" for key in sorted(query_params_with_timestamp.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters (including timestamp)
+        if params:
+            query_string_for_url = '&'.join([f"{key}={params[key]}" for key in params])
+            history_url = f"{base_url}/v1/positions/position-history?timestamp={timestamp}&{query_string_for_url}"
+        else:
+            history_url = f"{base_url}/v1/positions/position-history?timestamp={timestamp}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(history_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Position history fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/positions/position-history`
 
 Fetch closed options positions history
@@ -356,6 +644,158 @@ The response parameters are described below:
 
 <h3 id="options-trade-history">Trade History</h3>
 
+```javascript
+async function getTradeHistory() {
+  try {
+    // Initialize empty params object for optional filters
+    const params = {};
+
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Generate timestamp after collecting inputs
+    const timestamp = Date.now().toString();
+
+    // Clone params and add timestamp for signature generation
+    const paramsWithTimestamp = { ...params, timestamp };
+
+    // Build sorted query string for signature
+    const queryStringForSignature = Object.keys(paramsWithTimestamp)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(paramsWithTimestamp[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryStringForSignature);
+
+    // Construct query string for URL without timestamp sorted by insertion order
+    const queryStringForUrl = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Build final URL with mandatory timestamp and optional filters
+    const tradeUrl = queryStringForUrl
+      ? `${baseUrl}/v1/user-data/trade-history?timestamp=${encodeURIComponent(timestamp)}&${queryStringForUrl}`
+      : `${baseUrl}/v1/user-data/trade-history?timestamp=${encodeURIComponent(timestamp)}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(tradeUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Trade history fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_trade_history():
+    """
+    Fetch the trade history (authenticated endpoint)
+
+    Returns:
+        The JSON response containing trade history
+    """
+    try:
+        # Create parameters dictionary for optional query params only
+        params = {}
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query string with timestamp for signature
+        query_params_with_timestamp = params.copy()
+        query_params_with_timestamp['timestamp'] = timestamp
+        query_string = '&'.join([f"{key}={query_params_with_timestamp[key]}" for key in sorted(query_params_with_timestamp.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters (including timestamp)
+        if params:
+            query_string_for_url = '&'.join([f"{key}={params[key]}" for key in params])
+            trade_url = f"{base_url}/v1/user-data/trade-history?timestamp={timestamp}&{query_string_for_url}"
+        else:
+            trade_url = f"{base_url}/v1/user-data/trade-history?timestamp={timestamp}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(trade_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Trade history fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/user-data/trade-history`
 
 Fetch the options trade history
@@ -511,7 +951,158 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-transaction-history">Transaction History</h3>
+```javascript
+async function getTransactionHistory() {
+  try {
+    // Initialize empty params object for optional filters
+    const params = {};
 
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Generate timestamp after collecting inputs
+    const timestamp = Date.now().toString();
+
+    // Clone params and add timestamp for signature generation
+    const paramsWithTimestamp = { ...params, timestamp };
+
+    // Build sorted query string for signature
+    const queryStringForSignature = Object.keys(paramsWithTimestamp)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(paramsWithTimestamp[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryStringForSignature);
+
+    // Construct query string for URL without timestamp sorted by insertion order
+    const queryStringForUrl = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Build final URL with mandatory timestamp and optional filters
+    const transactionUrl = queryStringForUrl
+      ? `${baseUrl}/v1/user-data/transaction-history?timestamp=${encodeURIComponent(timestamp)}&${queryStringForUrl}`
+      : `${baseUrl}/v1/user-data/transaction-history?timestamp=${encodeURIComponent(timestamp)}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(transactionUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Transaction history fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_transaction_history():
+    """
+    Fetch the transaction history (authenticated endpoint)
+
+    Returns:
+        The JSON response containing transaction history
+    """
+    try:
+        # Create parameters dictionary for optional query params only
+        params = {}
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query string with timestamp for signature
+        query_params_with_timestamp = params.copy()
+        query_params_with_timestamp['timestamp'] = timestamp
+        query_string = '&'.join([f"{key}={query_params_with_timestamp[key]}" for key in sorted(query_params_with_timestamp.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters (including timestamp)
+        if params:
+            query_string_for_url = '&'.join([f"{key}={params[key]}" for key in params])
+            transaction_url = f"{base_url}/v1/user-data/transaction-history?timestamp={timestamp}&{query_string_for_url}"
+        else:
+            transaction_url = f"{base_url}/v1/user-data/transaction-history?timestamp={timestamp}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(transaction_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Transaction history fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/user-data/transaction-history`
 
 Fetch the options transaction history
@@ -658,7 +1249,287 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-place-order">Place Order</h3>
+```javascript
+async function placeOrder() {
+  try {
+    // Select place type
+    console.log("\nSelect place type:");
+    console.log("1. ORDER_FORM");
+    console.log("2. POSITION");
+    const placeTypeChoice = prompt("Enter choice (1 or 2):").trim();
 
+    let placeType;
+    if (placeTypeChoice === "1") {
+      placeType = "ORDER_FORM";
+    } else if (placeTypeChoice === "2") {
+      placeType = "POSITION";
+    } else {
+      console.log("Invalid choice. Operation cancelled.");
+      return null;
+    }
+
+    // Required fields
+    const symbol = prompt("Enter symbol (e.g., BTC-4OCT25-126000-C-USDT):").trim();
+    if (!symbol) {
+      console.log("Symbol is required. Operation cancelled.");
+      return null;
+    }
+
+    // Select order type
+    console.log("\nSelect order type:");
+    console.log("1. MARKET");
+    console.log("2. LIMIT");
+    const orderTypeChoice = prompt("Enter choice (1 or 2):").trim();
+
+    let orderType;
+    if (orderTypeChoice === "1") {
+      orderType = "MARKET";
+    } else if (orderTypeChoice === "2") {
+      orderType = "LIMIT";
+    } else {
+      console.log("Invalid choice. Operation cancelled.");
+      return null;
+    }
+
+    // Build the payload
+    const payload = {
+      placeType,
+      symbol,
+      type: orderType
+    };
+
+    // POSITION place type requires quantity and positionId
+    if (placeType === "POSITION") {
+      const quantityInput = prompt("Enter quantity:").trim();
+      const quantity = parseFloat(quantityInput);
+      if (isNaN(quantity)) {
+        console.log("Invalid quantity. Operation cancelled.");
+        return null;
+      }
+      payload.quantity = quantity;
+
+      const positionId = prompt("Enter position ID:").trim();
+      if (!positionId) {
+        console.log("Position ID is required for POSITION place type. Operation cancelled.");
+        return null;
+      }
+      payload.positionId = positionId;
+    }
+
+    // ORDER_FORM place type requires quantity and side
+    if (placeType === "ORDER_FORM") {
+      const quantityInput = prompt("Enter quantity:").trim();
+      const quantity = parseFloat(quantityInput);
+      if (isNaN(quantity)) {
+        console.log("Invalid quantity. Operation cancelled.");
+        return null;
+      }
+      payload.quantity = quantity;
+
+      console.log("\nSelect side:");
+      console.log("1. BUY");
+      console.log("2. SELL");
+      const sideChoice = prompt("Enter choice (1 or 2):").trim();
+      if (sideChoice === "1") {
+        payload.side = "BUY";
+      } else if (sideChoice === "2") {
+        payload.side = "SELL";
+      } else {
+        console.log("Invalid choice. Operation cancelled.");
+        return null;
+      }
+    }
+
+    // Price is required for LIMIT order type
+    if (orderType === "LIMIT") {
+      const priceInput = prompt("Enter price:").trim();
+      const price = parseInt(priceInput, 10);
+      if (isNaN(price)) {
+        console.log("Invalid price. Operation cancelled.");
+        return null;
+      }
+      payload.price = price;
+    }
+
+    // Optional reference ID
+    const refId = prompt("Enter reference ID (optional, press Enter to skip):").trim();
+    if (refId) payload.refId = refId;
+
+    // Add timestamp
+    payload.timestamp = Date.now().toString();
+
+    // Create data string for signature
+    const dataToSign = JSON.stringify(payload);
+
+    // Generate signature (implement generateSignature using your API secret)
+    const signature = generateSignature(api_secret, dataToSign);
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Endpoint URL
+    const orderUrl = `${baseUrl}/v1/order/place-order`;
+
+    // Send the authenticated POST request
+    const response = await fetch(orderUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order placed successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def place_order():
+    """
+    Place an options order (authenticated endpoint)
+
+    Returns:
+        The JSON response containing order placement confirmation
+    """
+    try:
+        # Ask for place type
+        print("\nSelect place type:")
+        print("1. ORDER_FORM")
+        print("2. POSITION")
+        place_type_choice = input("Enter choice (1 or 2): ").strip()
+
+        if place_type_choice == "1":
+            place_type = "ORDER_FORM"
+        elif place_type_choice == "2":
+            place_type = "POSITION"
+        else:
+            print("Invalid choice. Operation cancelled.")
+            return None
+
+        # Common required fields
+        symbol = input("Enter symbol (e.g., BTC-4OCT25-126000-C-USDT): ").strip()
+        if not symbol:
+            print("Symbol is required. Operation cancelled.")
+            return None
+
+        # Ask for order type
+        print("\nSelect order type:")
+        print("1. MARKET")
+        print("2. LIMIT")
+        order_type_choice = input("Enter choice (1 or 2): ").strip()
+
+        if order_type_choice == "1":
+            order_type = "MARKET"
+        elif order_type_choice == "2":
+            order_type = "LIMIT"
+        else:
+            print("Invalid choice. Operation cancelled.")
+            return None
+
+        # Build the payload based on place type
+        payload = {
+            "placeType": place_type,
+            "symbol": symbol,
+            "type": order_type
+        }
+
+        # Fields required for POSITION place type
+        if place_type == "POSITION":
+            try:
+                quantity = float(input("Enter quantity: ").strip())
+                payload["quantity"] = quantity
+            except ValueError:
+                print("Invalid quantity. Operation cancelled.")
+                return None
+
+            position_id = input("Enter position ID: ").strip()
+            if not position_id:
+                print("Position ID is required for POSITION place type. Operation cancelled.")
+                return None
+            payload["positionId"] = position_id
+
+        # Fields required for ORDER_FORM place type
+        if place_type == "ORDER_FORM":
+            try:
+                quantity = float(input("Enter quantity: ").strip())
+                payload["quantity"] = quantity
+            except ValueError:
+                print("Invalid quantity. Operation cancelled.")
+                return None
+
+            print("\nSelect side:")
+            print("1. BUY")
+            print("2. SELL")
+            side_choice = input("Enter choice (1 or 2): ").strip()
+
+            if side_choice == "1":
+                payload["side"] = "BUY"
+            elif side_choice == "2":
+                payload["side"] = "SELL"
+            else:
+                print("Invalid choice. Operation cancelled.")
+                return None
+
+        # Price is required for LIMIT orders
+        if order_type == "LIMIT":
+            try:
+                price = int(input("Enter price: ").strip())
+                payload["price"] = price
+            except ValueError:
+                print("Invalid price. Operation cancelled.")
+                return None
+
+        # Optional refId
+        ref_id = input("Enter reference ID (optional, press Enter to skip): ").strip()
+        if ref_id:
+            payload["refId"] = ref_id
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+        payload["timestamp"] = timestamp
+
+        # Create data string for signature
+        data_to_sign = json.dumps(payload, separators=(',', ':'))
+
+        # Generate signature
+        signature = generate_signature(api_secret, data_to_sign)
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Construct the URL
+        order_url = f"{base_url}/v1/order/place-order"
+
+        # Send the authenticated POST request
+        response = requests.post(order_url, json=payload, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order placed successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `POST /v1/order/place-order`
 
 Place options order
@@ -773,10 +1644,162 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-open-orders">Open Orders</h3>
+```javascript
+async function getOpenOrders() {
+  try {
+    // Initialize empty params object for optional filters
+    const params = {};
 
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Generate timestamp after collecting inputs
+    const timestamp = Date.now().toString();
+
+    // Clone params and add timestamp for signature generation
+    const paramsWithTimestamp = { ...params, timestamp };
+
+    // Build sorted query string for signature
+    const queryStringForSignature = Object.keys(paramsWithTimestamp)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(paramsWithTimestamp[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryStringForSignature);
+
+    // Construct query string for URL without timestamp sorted by insertion order
+    const queryStringForUrl = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Build final URL with mandatory timestamp and optional filters
+    const ordersUrl = queryStringForUrl
+      ? `${baseUrl}/v1/order/open-orders?timestamp=${encodeURIComponent(timestamp)}&${queryStringForUrl}`
+      : `${baseUrl}/v1/order/open-orders?timestamp=${encodeURIComponent(timestamp)}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(ordersUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Open orders fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_open_orders():
+    """
+    Fetch open orders (authenticated endpoint)
+
+    Returns:
+        The JSON response containing open orders
+    """
+    try:
+        # Create parameters dictionary for optional query params only
+        params = {}
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query string with timestamp for signature
+        query_params_with_timestamp = params.copy()
+        query_params_with_timestamp['timestamp'] = timestamp
+        query_string = '&'.join([f"{key}={query_params_with_timestamp[key]}" for key in sorted(query_params_with_timestamp.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters (including timestamp)
+        if params:
+            query_string_for_url = '&'.join([f"{key}={params[key]}" for key in params])
+            orders_url = f"{base_url}/v1/order/open-orders?timestamp={timestamp}&{query_string_for_url}"
+        else:
+            orders_url = f"{base_url}/v1/order/open-orders?timestamp={timestamp}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(orders_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Open orders fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/order/open-orders`
 
-Fetch the options transaction history
+Fetch the options open orders
 
 <table style="border-collapse: collapse;">
    <thead>
@@ -956,7 +1979,158 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-order-history">Order History</h3>
+```javascript
+async function getOrderHistory() {
+  try {
+    // Initialize empty params object for optional filters
+    const params = {};
 
+    // Prompt for optional filters (empty input skips the filter)
+    const startTs = prompt("Start timestamp (UNIX milliseconds):").trim();
+    if (startTs) params.startTimestamp = startTs;
+
+    const endTs = prompt("End timestamp (UNIX milliseconds):").trim();
+    if (endTs) params.endTimestamp = endTs;
+
+    const sortOrder = prompt("Sort order (asc/desc, default: desc):").trim().toLowerCase();
+    if (sortOrder === 'asc' || sortOrder === 'desc') params.sortOrder = sortOrder;
+
+    const pageSize = prompt("Page size:").trim();
+    if (pageSize) params.pageSize = pageSize;
+
+    const symbol = prompt("Symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (symbol) params.symbol = symbol;
+
+    const idParam = prompt("ID for pagination:").trim();
+    if (idParam) params.id = idParam;
+
+    // Generate timestamp after collecting inputs
+    const timestamp = Date.now().toString();
+
+    // Clone params and add timestamp for signature generation
+    const paramsWithTimestamp = { ...params, timestamp };
+
+    // Build sorted query string for signature
+    const queryStringForSignature = Object.keys(paramsWithTimestamp)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(paramsWithTimestamp[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryStringForSignature);
+
+    // Construct query string for URL without timestamp sorted by insertion order
+    const queryStringForUrl = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Build final URL with mandatory timestamp and optional filters
+    const historyUrl = queryStringForUrl
+      ? `${baseUrl}/v1/order/order-history?timestamp=${encodeURIComponent(timestamp)}&${queryStringForUrl}`
+      : `${baseUrl}/v1/order/order-history?timestamp=${encodeURIComponent(timestamp)}`;
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(historyUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order history fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_order_history():
+    """
+    Fetch order history (authenticated endpoint)
+
+    Returns:
+        The JSON response containing order history
+    """
+    try:
+        # Create parameters dictionary for optional query params only
+        params = {}
+
+        # Ask for optional parameters
+        print("\nOptional filters (press Enter to skip):")
+
+        start_ts = input("Start timestamp (UNIX milliseconds): ").strip()
+        if start_ts:
+            params['startTimestamp'] = start_ts
+
+        end_ts = input("End timestamp (UNIX milliseconds): ").strip()
+        if end_ts:
+            params['endTimestamp'] = end_ts
+
+        sort_order = input("Sort order (asc/desc, default: desc): ").strip().lower()
+        if sort_order in ['asc', 'desc']:
+            params['sortOrder'] = sort_order
+
+        page_size = input("Page size: ").strip()
+        if page_size:
+            params['pageSize'] = page_size
+
+        symbol = input("Symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+        if symbol:
+            params['symbol'] = symbol
+
+        id_param = input("ID for pagination: ").strip()
+        if id_param:
+            params['id'] = id_param
+
+        # Generate timestamp AFTER collecting all inputs
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query string with timestamp for signature
+        query_params_with_timestamp = params.copy()
+        query_params_with_timestamp['timestamp'] = timestamp
+        query_string = '&'.join([f"{key}={query_params_with_timestamp[key]}" for key in sorted(query_params_with_timestamp.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters (including timestamp)
+        if params:
+            query_string_for_url = '&'.join([f"{key}={params[key]}" for key in params])
+            history_url = f"{base_url}/v1/order/order-history?timestamp={timestamp}&{query_string_for_url}"
+        else:
+            history_url = f"{base_url}/v1/order/order-history?timestamp={timestamp}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(history_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order history fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/order/order-history`
 
 Fetch the options orders history
@@ -1132,7 +2306,116 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-order-details">Order Details</h3>
+```javascript
+async function getOrderDetails() {
+  try {
+    // Get client order ID from user
+    const clientOrderId = prompt("Enter client order ID:").trim();
+    if (!clientOrderId) {
+      console.log("Client order ID is required. Operation cancelled.");
+      return null;
+    }
 
+    // Generate timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Create query parameters
+    const params = {
+      clientOrderId,
+      timestamp
+    };
+
+    // Create sorted query string for signature generation
+    const queryString = Object.keys(params)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+      .join('&');
+
+    // Generate signature using your implemented generateSignature function
+    const signature = generateSignature(api_secret, queryString);
+
+    // Construct the URL with query parameters
+    const orderUrl = `${baseUrl}/v1/order?${queryString}`;
+
+    // Set up headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(orderUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order details fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_order_details():
+    """
+    Get order details by client order ID (authenticated endpoint)
+
+    Returns:
+        The JSON response containing order details
+    """
+    try:
+        # Get client order ID
+        client_order_id = input("Enter client order ID: ").strip()
+        if not client_order_id:
+            print("Client order ID is required. Operation cancelled.")
+            return None
+
+        # Generate timestamp AFTER collecting input
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query parameters
+        params = {
+            'clientOrderId': client_order_id,
+            'timestamp': timestamp
+        }
+
+        # Create query string for signature
+        query_string = '&'.join([f"{key}={params[key]}" for key in sorted(params.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters
+        order_url = f"{base_url}/v1/order?{query_string}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(order_url, headers=headers)
+        response.raise_for_status()
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order details fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/order`
 
 Get the Order details
@@ -1278,7 +2561,116 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-referenced-order-details">Referenced Order Details</h3>
+```javascript
+async function getOrderByRefId() {
+  try {
+    // Get reference ID from user
+    const refId = prompt("Enter reference ID (e.g., BTCPi4210-BTC-1754219825821):").trim();
+    if (!refId) {
+      console.log("Reference ID is required. Operation cancelled.");
+      return null;
+    }
 
+    // Generate timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Create query parameters
+    const params = {
+      refId,
+      timestamp
+    };
+
+    // Create sorted query string for signature generation
+    const queryString = Object.keys(params)
+      .sort()
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+      .join('&');
+
+    // Generate signature using a pre-defined generateSignature function
+    const signature = generateSignature(api_secret, queryString);
+
+    // Construct the URL with query parameters
+    const orderUrl = `${baseUrl}/v1/order/ref-id?${queryString}`;
+
+    // Set up headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send authenticated GET request
+    const response = await fetch(orderUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order details fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_order_by_ref_id():
+    """
+    Get order details by reference ID (authenticated endpoint)
+
+    Returns:
+        The JSON response containing order details
+    """
+    try:
+        # Get reference ID
+        ref_id = input("Enter reference ID (e.g., BTCPi4210-BTC-1754219825821): ").strip()
+        if not ref_id:
+            print("Reference ID is required. Operation cancelled.")
+            return None
+
+        # Generate timestamp AFTER collecting input
+        timestamp = str(int(time.time() * 1000))
+
+        # Create query parameters
+        params = {
+            'refId': ref_id,
+            'timestamp': timestamp
+        }
+
+        # Create query string for signature
+        query_string = '&'.join([f"{key}={params[key]}" for key in sorted(params.keys())])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters
+        order_url = f"{base_url}/v1/order/ref-id?{query_string}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(order_url, headers=headers)
+        response.raise_for_status()
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order details fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `GET /v1/order/ref-id`
 
 Get the Options Order details attached to the Reference id
@@ -1425,8 +2817,120 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-delete-order">Delete Order</h3>
+```javascript
+async function deleteOrder() {
+  try {
+    // Get client order ID to delete from user
+    const clientOrderId = prompt("Enter client order ID to delete:").trim();
+    if (!clientOrderId) {
+      console.log("Client order ID is required. Operation cancelled.");
+      return null;
+    }
 
+    // Generate timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Prepare payload
+    const payload = {
+      clientOrderId,
+      timestamp
+    };
+
+    // Create data string for signature
+    const dataToSign = JSON.stringify(payload);
+
+    // Generate signature using your API secret and data string
+    const signature = generateSignature(api_secret, dataToSign);
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Endpoint URL for delete order
+    const deleteUrl = `${baseUrl}/v1/order/delete-order`;
+
+    // Send DELETE request with body and headers
+    const response = await fetch(deleteUrl, {
+      method: 'DELETE',
+      headers: headers,
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order deleted successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def delete_order():
+    """
+    Delete a single order (authenticated endpoint)
+
+    Returns:
+        The JSON response confirming order deletion
+    """
+    try:
+        # Get client order ID
+        client_order_id = input("Enter client order ID to delete: ").strip()
+        if not client_order_id:
+            print("Client order ID is required. Operation cancelled.")
+            return None
+
+        # Generate timestamp AFTER collecting input
+        timestamp = str(int(time.time() * 1000))
+
+        # Create the payload
+        payload = {
+            "clientOrderId": client_order_id,
+            "timestamp": timestamp
+        }
+
+        # Create data string for signature
+        data_to_sign = json.dumps(payload, separators=(',', ':'))
+
+        # Generate signature
+        signature = generate_signature(api_secret, data_to_sign)
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Construct the URL
+        delete_url = f"{base_url}/v1/order/delete-order"
+
+        # Send the authenticated DELETE request
+        response = requests.delete(delete_url, json=payload, headers=headers)
+        response.raise_for_status()
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order deleted successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `DELETE /v1/order/delete-order`
+
+Delete options open order
 
 <table>
   <thead>
@@ -1484,7 +2988,185 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-edit-order">Edit Order</h3>
+```javascript
+async function editOrder() {
+  try {
+    // Get client order ID to edit
+    const clientOrderId = prompt("Enter client order ID to edit:").trim();
+    if (!clientOrderId) {
+      console.log("Client order ID is required. Operation cancelled.");
+      return null;
+    }
 
+    // Build payload starting with clientOrderId
+    const payload = { clientOrderId };
+
+    // Optional fields: new quantity
+    const quantityInput = prompt("Enter new quantity (press Enter to skip):").trim();
+    if (quantityInput) {
+      const quantity = parseFloat(quantityInput);
+      if (isNaN(quantity)) {
+        console.log("Invalid quantity format.");
+        return null;
+      }
+      payload.quantity = quantity;
+    }
+
+    // Optional fields: new price
+    const priceInput = prompt("Enter new price (press Enter to skip):").trim();
+    if (priceInput) {
+      const price = parseInt(priceInput, 10);
+      if (isNaN(price)) {
+        console.log("Invalid price format.");
+        return null;
+      }
+      payload.price = price;
+    }
+
+    // Optional fields: new order IV
+    const orderIvInput = prompt("Enter new order IV (press Enter to skip):").trim();
+    if (orderIvInput) {
+      const orderIv = parseFloat(orderIvInput);
+      if (isNaN(orderIv)) {
+        console.log("Invalid order IV format.");
+        return null;
+      }
+      payload.orderIv = orderIv;
+    }
+
+    // Check if any fields other than clientOrderId are present
+    if (Object.keys(payload).length === 1) {
+      console.log("No fields to update. Operation cancelled.");
+      return null;
+    }
+
+    // Add timestamp
+    payload.timestamp = Date.now().toString();
+
+    // Create JSON string for signature
+    const dataToSign = JSON.stringify(payload);
+
+    // Generate signature
+    const signature = generateSignature(api_secret, dataToSign);
+
+    // Setup headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Construct endpoint URL
+    const editUrl = `${baseUrl}/v1/order/edit-order`;
+
+    // Send PATCH request
+    const response = await fetch(editUrl, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Order edited successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def edit_order():
+    """
+    Edit a limit or stop order (authenticated endpoint)
+
+    Returns:
+        The JSON response confirming order edit
+    """
+    try:
+        # Get client order ID
+        client_order_id = input("Enter client order ID to edit: ").strip()
+        if not client_order_id:
+            print("Client order ID is required. Operation cancelled.")
+            return None
+
+        # Build the payload
+        payload = {
+            "clientOrderId": client_order_id
+        }
+
+        # Get new quantity (optional)
+        quantity_input = input("Enter new quantity (press Enter to skip): ").strip()
+        if quantity_input:
+            try:
+                payload["quantity"] = float(quantity_input)
+            except ValueError:
+                print("Invalid quantity format.")
+                return None
+
+        # Get new price (optional)
+        price_input = input("Enter new price (press Enter to skip): ").strip()
+        if price_input:
+            try:
+                payload["price"] = int(price_input)
+            except ValueError:
+                print("Invalid price format.")
+                return None
+
+        # Get new order IV (optional)
+        order_iv_input = input("Enter new order IV (press Enter to skip): ").strip()
+        if order_iv_input:
+            try:
+                payload["orderIv"] = float(order_iv_input)
+            except ValueError:
+                print("Invalid order IV format.")
+                return None
+
+        # Check if at least one field is being updated
+        if len(payload) == 1:  # Only clientOrderId
+            print("No fields to update. Operation cancelled.")
+            return None
+
+        # Generate timestamp AFTER collecting input
+        timestamp = str(int(time.time() * 1000))
+        payload["timestamp"] = timestamp
+
+        # Create data string for signature
+        data_to_sign = json.dumps(payload, separators=(',', ':'))
+
+        # Generate signature
+        signature = generate_signature(api_secret, data_to_sign)
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Construct the URL
+        edit_url = f"{base_url}/v1/order/edit-order"
+
+        # Send the authenticated PATCH request
+        response = requests.patch(edit_url, json=payload, headers=headers)
+        response.raise_for_status()
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order edited successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `PATCH /v1/order/edit-order`
 
 Edit an Options(Partially Filled/ New) Limit or Stop Order
@@ -1554,7 +3236,112 @@ The response parameters are described below:
 </table>
 
 <h3 id="options-delete-all-orders">Delete All Orders</h3>
+```javascript
+async function deleteAllOrders() {
+  try {
+    // Confirm deletion from user
+    const confirm = prompt("Are you sure you want to delete ALL orders? (yes/no):").trim().toLowerCase();
+    if (confirm !== "yes") {
+      console.log("Operation cancelled.");
+      return null;
+    }
 
+    // Generate timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Prepare payload with timestamp
+    const payload = { timestamp };
+
+    // Create JSON string for signature
+    const dataToSign = JSON.stringify(payload);
+
+    // Generate signature using your secret key and data string
+    const signature = generateSignature(api_secret, dataToSign);
+
+    // Setup headers with API key and signature
+    const headers = {
+      "Content-Type": "application/json",
+      "api-key": api_key,
+      "signature": signature
+    };
+
+    // Endpoint URL to delete all orders
+    const deleteAllUrl = `${baseUrl}/v1/order/delete-all-orders`;
+
+    // Send DELETE request with body and headers
+    const response = await fetch(deleteAllUrl, {
+      method: "DELETE",
+      headers: headers,
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log("All orders deleted successfully:", JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error("An unexpected error occurred:", error.message);
+    return null;
+  }
+}
+```
+```python
+def delete_all_orders():
+    """
+    Delete all orders (authenticated endpoint)
+
+    Returns:
+        The JSON response confirming all orders deletion
+    """
+    try:
+        # Confirm deletion
+        confirm = input("Are you sure you want to delete ALL orders? (yes/no): ").strip().lower()
+        if confirm != 'yes':
+            print("Operation cancelled.")
+            return None
+
+        # Generate timestamp
+        timestamp = str(int(time.time() * 1000))
+
+        # Create the payload
+        payload = {
+            "timestamp": timestamp
+        }
+
+        # Create data string for signature
+        data_to_sign = json.dumps(payload, separators=(',', ':'))
+
+        # Generate signature
+        signature = generate_signature(api_secret, data_to_sign)
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Construct the URL
+        delete_all_url = f"{base_url}/v1/order/delete-all-orders"
+
+        # Send the authenticated DELETE request
+        response = requests.delete(delete_all_url, json=payload, headers=headers)
+        response.raise_for_status()
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('All orders deleted successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
 `DELETE /v1/order/delete-all-orders`
 
 Delete All Options Open Orders
@@ -1583,4 +3370,460 @@ Delete All Options Open Orders
       <td>Boolean value indicating whether the bulk order cancellation request was processed successfully (true if successful).</td>
     </tr>
   </tbody>
+</table>
+
+
+<%# Wallets %>
+
+<h3 id="options-wallet-details">Transfer Balance</h3>
+```javascript
+async function transferBalance() {
+  try {
+    // Get user inputs via prompt
+    const fromWallet = prompt("Enter source wallet (FUNDING, FUTURES, or OPTIONS):").toUpperCase();
+    if (!["FUNDING", "FUTURES", "OPTIONS"].includes(fromWallet)) {
+      console.log("Invalid source wallet. Must be one of: FUNDING, FUTURES, OPTIONS");
+      return null;
+    }
+
+    const toWallet = prompt("Enter destination wallet (FUNDING, FUTURES, or OPTIONS):").toUpperCase();
+    if (!["FUNDING", "FUTURES", "OPTIONS"].includes(toWallet)) {
+      console.log("Invalid destination wallet. Must be one of: FUNDING, FUTURES, OPTIONS");
+      return null;
+    }
+
+    const amountInput = prompt("Enter amount to transfer:");
+    const amount = Number(amountInput);
+    if (isNaN(amount) || amount <= 0) {
+      console.log("Invalid amount. Please enter a valid number greater than 0.");
+      return null;
+    }
+
+    // Generate current timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Create parameters object
+    const params = {
+      timestamp,
+      from: fromWallet,
+      to: toWallet,
+      amount
+    };
+
+    // Generate signature using a provided generateSignature function
+    // The generateSignature function should be defined to use api_secret and JSON string of params
+    const dataToSign = JSON.stringify(params);
+    const signature = generateSignature(api_secret, dataToSign);
+
+    // Setup headers including API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // URL for transfer
+    const transferUrl = `${baseUrl}/v1/wallet/transfer-balance`;
+
+    // Send POST request
+    const response = await fetch(transferUrl, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(params)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Balance transferred successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def transfer_balance():
+    """
+    Transfer balance from one wallet to another (authenticated endpoint)
+
+    Returns:
+        The JSON response confirming the transfer
+    """
+    try:
+        # Get user inputs
+        from_wallet = input("Enter source wallet (FUNDING, FUTURES, or OPTIONS): ").upper()
+        if from_wallet not in ["FUNDING", "FUTURES", "OPTIONS"]:
+            print("Invalid source wallet. Must be one of: FUNDING, FUTURES, OPTIONS")
+            return None
+
+        to_wallet = input("Enter destination wallet (FUNDING, FUTURES, or OPTIONS): ").upper()
+        if to_wallet not in ["FUNDING", "FUTURES", "OPTIONS"]:
+            print("Invalid destination wallet. Must be one of: FUNDING, FUTURES, OPTIONS")
+            return None
+
+        try:
+            amount = int(input("Enter amount to transfer: "))
+            if amount <= 0:
+                print("Amount must be greater than 0")
+                return None
+        except ValueError:
+            print("Invalid amount. Please enter a valid number.")
+            return None
+
+        # Generate timestamp for the request
+        timestamp = str(int(time.time() * 1000))
+
+        # Create the request parameters
+        params = {
+            'timestamp': timestamp,
+            'from': from_wallet,
+            'to': to_wallet,
+            'amount': amount
+        }
+
+        # Create data string for signature
+        data_to_sign = json.dumps(params, separators=(',', ':'))
+
+        # Generate signature
+        signature = generate_signature(api_secret, data_to_sign)
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Construct the URL
+        transfer_url = f"{base_url}/v1/wallet/transfer-balance"
+
+        # Send the authenticated POST request
+        response = requests.post(transfer_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Balance transferred successfully:', json.dumps(response_data, indent=4))
+        return response_data
+        
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`POST /v1/wallet/transfer-balance`
+
+Transfer balance from Options wallet to other wallets
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>from</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>Source category; must be one of FUNDING, FUTURES, OPTIONS</td>
+    </tr>
+    <tr>
+      <td>to</td>
+      <td>string</td>
+      <td>Yes</td>
+      <td>Target category; must be one of FUNDING, FUTURES, OPTIONS</td>
+    </tr>
+    <tr>
+      <td>amount</td>
+      <td>number</td>
+      <td>Yes</td>
+      <td>Amount to transfer between the specified categories</td>
+    </tr>
+  </tbody>
+</table>
+
+
+### Response
+
+```json
+// Response
+{
+  "id": 1,
+  "uniqueTransferId": "653819-8b52-41ec-82fedd",
+  "fromWalletType": "OPTIONS",
+  "toWalletType": "FUTURES",
+  "asset": "INR",
+  "amount": 10,
+  "transferStatus": "PENDING",
+  "optionsSubAccId": 4,
+  "conversionRate": null,
+  "adminRemarks": null,
+  "revertedTransferId": null,
+  "createdAt": "2025-08-06T08:24:33.670Z"
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>id</td>
+      <td>Unique identifier of the transfer record</td>
+    </tr>
+    <tr>
+      <td>uniqueTransferId</td>
+      <td>A globally unique transfer ID string</td>
+    </tr>
+    <tr>
+      <td>fromWalletType</td>
+      <td>Source wallet category (e.g., OPTIONS, FUTURES)</td>
+    </tr>
+    <tr>
+      <td>toWalletType</td>
+      <td>Destination wallet category (e.g., OPTIONS, FUTURES)</td>
+    </tr>
+    <tr>
+      <td>asset</td>
+      <td>Currency or asset symbol being transferred (e.g., INR)</td>
+    </tr>
+    <tr>
+      <td>amount</td>
+      <td>Numeric amount of the asset to transfer</td>
+    </tr>
+    <tr>
+      <td>transferStatus</td>
+      <td>Current status of the transfer (e.g., PENDING)</td>
+    </tr>
+    <tr>
+      <td>optionsSubAccId</td>
+      <td>Identifier for the options sub-account related to transfer</td>
+    </tr>
+    <tr>
+      <td>conversionRate</td>
+      <td>Exchange rate applied for conversion; null if not applicable</td>
+    </tr>
+    <tr>
+      <td>adminRemarks</td>
+      <td>Optional admin comments about the transfer; nullable</td>
+    </tr>
+    <tr>
+      <td>revertedTransferId</td>
+      <td>ID of a transfer that this transfer might have reverted; nullable</td>
+    </tr>
+    <tr>
+      <td>createdAt</td>
+      <td>Timestamp when the transfer request was created (ISO 8601 format)</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="options-wallet-details">Get options wallet details</h3>
+```javascript
+async function getOptionsWalletDetails() {
+  try {
+    // Prompt if user wants to specify margin asset
+    const includeMarginAsset = prompt("Do you want to specify a margin asset? (y/n):").toLowerCase();
+
+    // Generate timestamp in milliseconds
+    const timestamp = Date.now().toString();
+
+    // Construct params object
+    const params = { timestamp };
+
+    if (includeMarginAsset === 'y') {
+      const marginAsset = prompt("Enter the margin asset (e.g., USDT):").toUpperCase();
+      params.marginAsset = marginAsset;
+    }
+
+    // Build query string from params
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    // Generate signature using a provided generateSignature function
+    // The function should accept api_secret and query string
+    const signature = generateSignature(api_secret, queryString);
+
+    // Construct URL
+    const walletUrl = `${baseUrl}/v1/wallet/options-wallet/details?${queryString}`;
+
+    // Set up headers with API key and signature
+    const headers = {
+      'Content-Type': 'application/json',
+      'api-key': api_key,
+      'signature': signature
+    };
+
+    // Send GET request
+    const response = await fetch(walletUrl, { method: 'GET', headers });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Options wallet details fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+    console.error('An unexpected error occurred:', error.message);
+    return null;
+  }
+}
+```
+```python
+def get_options_wallet_details():
+    """
+    Get all details of Options wallet (authenticated endpoint)
+
+    Returns:
+        The JSON response containing wallet details
+    """
+    try:
+        # Ask if they want to specify a margin asset (optional)
+        include_margin_asset = input("Do you want to specify a margin asset? (y/n): ").lower()
+
+        # Generate timestamp for the request
+        timestamp = str(int(time.time() * 1000))
+
+        # Create the base parameters
+        params = {
+            'timestamp': timestamp
+        }
+
+        # Add margin asset if specified
+        if include_margin_asset == 'y':
+            margin_asset = input("Enter the margin asset (e.g., USDT): ").upper()
+            params['marginAsset'] = margin_asset
+
+        # Create query string
+        query_string = '&'.join([f"{key}={params[key]}" for key in params])
+
+        # Generate signature
+        signature = generate_signature(api_secret, query_string)
+
+        # Construct the URL with query parameters
+        wallet_url = f"{base_url}/v1/wallet/options-wallet/details?{query_string}"
+
+        # Set up headers with API key and signature
+        headers = {
+            'Content-Type': 'application/json',
+            'api-key': api_key,
+            'signature': signature
+        }
+
+        # Send the authenticated GET request
+        response = requests.get(wallet_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Options wallet details fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`GET /v1/wallet/options-wallet/details`
+
+Get details of options wallet.
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Type</th>
+      <th>Required</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>marginAsset</td>
+      <td>string</td>
+      <td>No</td>
+      <td>Optional margin asset used for the transfer</td>
+    </tr>
+  </tbody>
+</table>
+
+
+### Response
+
+```json
+// Response
+{
+  "totalBalance": "590799.47",
+  "availableBalance": "399396.79",
+  "lockedBalance": "0",
+  "availableToTransfer": "391408.85",
+  "marginAsset": "INR",
+  "totalPositionIM": "0",
+  "totalPositionMM": "0",
+  "totalOrderIM": "191480.56",
+  "totalUpnl": "0"
+}
+```
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>totalBalance</td>
+         <td>The total balance across all accounts including locked and available amounts</td>
+      </tr>
+      <tr>
+         <td>availableBalance</td>
+         <td>The balance available for use or withdrawal</td>
+      </tr>
+      <tr>
+         <td>lockedBalance</td>
+         <td>Balance currently locked or reserved (e.g., for pending orders)</td>
+      </tr>
+      <tr>
+         <td>availableToTransfer</td>
+         <td>Balance available for transfer between wallets or accounts</td>
+      </tr>
+      <tr>
+         <td>marginAsset</td>
+         <td>The asset symbol used as margin, e.g., INR</td>
+      </tr>
+      <tr>
+         <td>totalPositionIM</td>
+         <td>Total initial margin held for open positions</td>
+      </tr>
+      <tr>
+         <td>totalPositionMM</td>
+         <td>Total maintenance margin required for open positions</td>
+      </tr>
+      <tr>
+         <td>totalOrderIM</td>
+         <td>Total initial margin reserved for open orders</td>
+      </tr>
+      <tr>
+         <td>totalUpnl</td>
+         <td>Total unrealized profit and loss across all positions</td>
+      </tr>
+   </tbody>
 </table>

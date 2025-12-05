@@ -22,6 +22,138 @@ The WebSocket client connects to a server using a listen key and listens for var
 
 Event listeners are described below:
 
+
+```javascript
+const serverUrl = `https://fawss-uds-options.pi42.com/auth-stream/${listenKey}`;
+
+const socket = io(serverUrl);
+
+socket.on('connect', () => {
+  console.log('Connected to WebSocket server');
+});
+
+socket.on('order', (data) => {
+  console.log('New order:', data);
+});
+
+socket.on('trade', (data) => {
+  console.log('Trade executed:', data);
+});
+
+socket.on('greeks', (data) => {
+  console.log('Option Greeks updated:', data);
+});
+
+socket.on('wallet', (data) => {
+  console.log('Wallet balance/margin updated:', data);
+});
+
+socket.on('position', (data) => {
+  console.log('Position updated:', data);
+});
+
+socket.on('orderFailed', (data) => {
+  console.log('Order failed:', data);
+});
+
+socket.on('fnfWallet', (data) => {
+  console.log('Funds moved in/out of wallet:', data);
+});
+
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket server');
+});
+```
+```python
+# Required installations:
+# python-socketio asyncio aiohttp
+
+import socketio
+import asyncio
+
+# URL of the WebSocket server (replace with actual authenticated URL)
+server_url = 'Pi42-Authenticated-websocket-url'
+
+# Namespace path including your listen key for authenticated streaming
+namespace_path = '/auth-stream/your-listen-key'
+
+# Create a new asynchronous Socket.IO client instance
+sio = socketio.AsyncClient()
+
+
+# Event handler called upon successful connection to the WebSocket server
+@sio.event
+async def connect():
+    print('Successfully connected to the WebSocket server')
+
+
+# Event handler called when the connection to the WebSocket server is closed
+@sio.event
+async def disconnect():
+    print('Disconnected from the WebSocket server')
+
+
+# Handles 'order' events when a new order is created or updated
+@sio.on('order', namespace=namespace_path)
+async def on_order(data):
+    print("New order:", data)
+
+
+# Handles 'trade' events when a trade is executed
+@sio.on('trade', namespace=namespace_path)
+async def on_trade(data):
+    print("Trade executed:", data)
+
+
+# Handles 'greeks' events when option Greeks (delta, gamma, etc.) data is updated
+@sio.on('greeks', namespace=namespace_path)
+async def on_greeks(data):
+    print("Option Greeks updated:", data)
+
+
+# Handles 'wallet' events when wallet balance or margin changes
+@sio.on('wallet', namespace=namespace_path)
+async def on_wallet(data):
+    print("Wallet balance/margin updated:", data)
+
+
+# Handles 'position' events when an open position is created, modified, or closed
+@sio.on('position', namespace=namespace_path)
+async def on_position(data):
+    print("Position updated:", data)
+
+
+# Handles 'orderFailed' events when an order fails to process
+@sio.on('orderFailed', namespace=namespace_path)
+async def on_order_failed(data):
+    print("Order failed:", data)
+
+
+# Handles 'fnfWallet' events when funds move in/out due to fees, funding, or settlements
+@sio.on('fnfWallet', namespace=namespace_path)
+async def on_fnf_wallet(data):
+    print("Funds moved in/out of wallet:", data)
+
+
+# Event handler called if the connection attempt fails
+@sio.event
+async def connect_error(data):
+    print('Failed to connect to the WebSocket server:', data)
+
+
+# Main coroutine that connects and keeps the connection alive to listen for events
+async def main():
+    try:
+        await sio.connect(server_url, transports=["websocket"])
+        await sio.wait()  # Keeps the program running to listen indefinitely
+    except Exception as e:
+        print("Connection error:", e)
+
+
+# Entry point for the async program
+if __name__ == '__main__':
+    asyncio.run(main())
+```
 <table>
         <thead>
             <tr>
@@ -35,52 +167,32 @@ Event listeners are described below:
                 <td>Triggered when the connection to the WebSocket server is open.</td>
             </tr>
             <tr>
-                <td>newPosition</td>
-                <td>Triggered when a new position is received from the server.</td>
+         <td>order</td>
+         <td>Triggered when a new order is created or submitted to the server.</td>
             </tr>
             <tr>
-                <td>orderFilled</td>
-                <td>Triggered when an order is completely filled.</td>
+               <td>trade</td>
+               <td>Triggered when a trade is executed and matched against an order.</td>
             </tr>
             <tr>
-                <td>orderPartiallyFilled</td>
-                <td>Triggered when an order is partially filled.</td>
+               <td>greeks</td>
+               <td>Triggered when option Greeks data (such as delta, gamma, theta, vega) is updated.</td>
             </tr>
             <tr>
-                <td>orderCancelled</td>
-                <td>Triggered when an order is cancelled.</td>
+               <td>wallet</td>
+               <td>Triggered when the wallet balance or margin details are updated.</td>
             </tr>
             <tr>
-                <td>orderFailed</td>
-                <td>Triggered when an order fails.</td>
+               <td>position</td>
+               <td>Triggered when an open position is created, updated, or closed.</td>
             </tr>
             <tr>
-                <td>newOrder</td>
-                <td>Triggered when a stop order is executed.</td>
+               <td>orderFailed</td>
+               <td>Triggered when an order cannot be processed due to validation or system errors.</td>
             </tr>
             <tr>
-                <td>updateOrder</td>
-                <td>Triggered when a stop limit order is executed.</td>
-            </tr>
-            <tr>
-                <td>updatePosition</td>
-                <td>Triggered when a position is updated.</td>
-            </tr>
-            <tr>
-                <td>closePosition</td>
-                <td>Triggered when a position is closed.</td>
-            </tr>
-            <tr>
-                <td>balanceUpdate</td>
-                <td>Triggered when the balance is updated.</td>
-            </tr>
-            <tr>
-                <td>newTrade</td>
-                <td>Triggered when a new trade occurs.</td>
-            </tr>
-            <tr>
-                <td>sessionExpired</td>
-                <td>Triggered when the session expires.</td>
+               <td>fnfWallet</td>
+               <td>Triggered when funds are moved in or out of the wallet due to fees, funding, or settlements.</td>
             </tr>
             <tr>
                 <td>disconnect</td>
@@ -88,182 +200,6 @@ Event listeners are described below:
             </tr>
         </tbody>
 </table>
-
-
-```javascript
-const serverUrl = `https://fawss-uds-options.pi42.com/auth-stream/${listenKey}`;
-
-// Create a new socket connection
-const socket = io(serverUrl);
-
-// Event listener for when the connection is open
-socket.on('connect', () => {
-  console.log('Connected to WebSocket server');
-});
-
-// Event listener for messages from the server
-
-// Event listener for newPosition events
-socket.on('newPosition', (data: any) => {
-  console.log('New position received:', data);
-});
-
-// Listen for order filled event
-socket.on('orderFilled', (data: any) => {
-  console.log('Order filled:', data);
-});
-
-// Listen for order partially filled event
-socket.on('orderPartiallyFilled', (data: any) => {
-  console.log('Order partially filled:', data);
-});
-
-// Listen for order cancelled event
-socket.on('orderCancelled', (data: any) => {
-  console.log('Order cancelled:', data);
-});
-
-// Listen for order failed event
-socket.on('orderFailed', (data: any) => {
-  console.log('Order failed:', data);
-});
-
-// Listen for new order event
-socket.on('newOrder', (data: any) => {
-  console.log('New order:', data);
-});
-
-// Listen for update position event
-socket.on('updatePosition', (data: any) => {
-  console.log('Position updated:', data);
-});
-
-// Listen for close position event
-socket.on('closePosition', (data: any) => {
-  console.log('Position closed:', data);
-});
-
-// Listen for balance update event
-socket.on('balanceUpdate', (data: any) => {
-  console.log('Balance updated:', data);
-});
-
-// Listen for new trade event
-socket.on('newTrade', (data: any) => {
-  console.log('New trade:', data);
-});
-
-// Listen for session expiry
-socket.on('sessionExpired', (data: any) => {
-  console.log('Session Expired:', data);
-});
-
-// Event listener for when the connection is closed
-socket.on('disconnect', () => {
-  console.log('Disconnected from WebSocket server');
-});
-```
-
-```python
-# Required installations:
-# python-socketio asyncio aiohttp
-
-import socketio
-import asyncio
-
-# WebSocket server URL (without namespace)
-server_url = 'Pi42-Authenticated-websocket-url'
-
-# Namespace path for authorized streaming
-namespace_path = '/auth-stream/your-listen-key'
-
-# Create a new asynchronous Socket.IO client
-sio = socketio.AsyncClient()
-
-# Event listener for a successful connection to the server
-@sio.event
-async def connect():
-    print('Successfully connected to the WebSocket server')
-
-# Event listener for when the connection to the server is closed
-@sio.event
-async def disconnect():
-    print('Disconnected from the WebSocket server')
-
-# Event handler for receiving a new position update from the server
-@sio.on('newPosition', namespace=namespace_path)
-async def on_new_position(data):
-    print("New position received:", data)
-
-# Event handler for receiving an order filled notification
-@sio.on('orderFilled', namespace=namespace_path)
-async def on_order_filled(data):  # Accept data parameter
-    print("Order filled:", data)
-
-# Event handler for receiving a partially filled order update
-@sio.on('orderPartiallyFilled', namespace=namespace_path)
-async def on_order_partially_filled(data):
-    print("Order partially filled:", data)
-
-# Event handler for receiving a cancelled order notification
-@sio.on('orderCancelled', namespace=namespace_path)
-async def on_order_cancelled(data):
-    print("Order cancelled:", data)
-
-# Event handler for receiving a failed order notification
-@sio.on('orderFailed', namespace=namespace_path)
-async def on_order_failed(data):
-    print("Order failed:", data)
-
-# Event handler for receiving a new order(TP/SL) notification
-@sio.on('newOrder', namespace=namespace_path)
-async def on_new_order(data):
-    print("New order:", data)
-
-# Event handler for receiving a position update
-@sio.on('updatePosition', namespace=namespace_path)
-async def on_update_position(data):
-    print("Position updated:", data)
-
-# Event handler for receiving a position close notification
-@sio.on('closePosition', namespace=namespace_path)
-async def on_close_position(data):
-    print("Position closed:", data)
-
-# Event handler for balance update notifications
-@sio.on('balanceUpdate', namespace=namespace_path)
-async def on_balance_update(data):
-    print("Balance updated:", data)
-
-# Event handler for receiving a new trade notification
-@sio.on('newTrade', namespace=namespace_path)
-async def on_new_trade(data):
-    print("New trade:", data)
-
-# Event handler for session expiration notifications
-@sio.on('sessionExpired', namespace=namespace_path)
-async def on_session_expired(data):
-    print("Session expired:", data)
-
-# Event listener for connection errors
-@sio.event
-async def connect_error(data):
-    print('Failed to connect to the WebSocket server:', data)
-
-# Main function to initiate and maintain the WebSocket connection
-async def main():
-    try:
-        # Attempt to connect to the server with specified transports
-        await sio.connect(server_url, transports=["websocket"])
-        await sio.wait()  # Keeps the connection open to listen for events
-    except Exception as e:
-        print("Connection error:", e)
-
-# Entry point for the asyncio program
-# Uses asyncio.run() to execute the main coroutine
-if __name__ == '__main__':
-    asyncio.run(main())
-```
 
 <h3 id="options-public-web-sockets">Public Web Sockets</h3>
 
@@ -278,79 +214,6 @@ For example, to receive real-time updates on market data such as price changes, 
 </aside>
 
 Once connected, users can subscribe to different topics mentioned below:
-
-<table>
-    <thead>
-        <tr>
-            <th>Parameter</th>
-            <th>Example</th>
-            <th>Listening Topic</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>contract_pair@depth_minGrouping</td>
-            <td>btcinr@depth
-            _
-            0.1</td>
-            <td>depthUpdate</td>
-        </tr>
-        <tr>
-            <td>contract
-            _pair@kline
-            _
-            interval</td>
-            <td>btcinr@kline
-            _
-            1m</td>
-            <td>kline</td>
-        </tr>
-        <tr>
-            <td>contract
-            _pair@markPrice</td>
-            <td>btcinr@markPrice</td>
-            <td>markPriceUpdate</td>
-        </tr>
-        <tr>
-            <td>contract
-            _pair@aggTrade</td>
-            <td>btcinr@aggTrade</td>
-            <td>aggTrade</td>
-        </tr>
-        <tr>
-            <td>contract
-            _pair@ticker</td>
-            <td>btcinr@ticker</td>
-            <td>24hrTicker</td>
-        </tr>
-        <tr>
-            <td>contract
-            _pair@marketInfo</td>
-            <td>btcinr@marketInfo</td>
-            <td>marketInfo</td>
-        </tr>
-        <tr>
-            <td>markPriceArr</td>
-            <td>N/A</td>
-            <td>markPriceArr</td>
-        </tr>
-        <tr>
-            <td>tickerArr</td>
-            <td>N/A</td>
-            <td>tickerArr</td>
-        </tr>
-        <tr>
-            <td>All contracts details</td>
-            <td>N/A</td>
-            <td>allContractDetails</td>
-        </tr>
-</table>
-
-- Intervals: The intervals for kline (candlestick) data can be `1m`, `3m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `6h`, `8h`, `12h`, `1d`, `3d`, `1w`, `1M`.
-- MinGroupings: Depth groupings vary by contract. For example, 0.1 is used for BTC.
-- Get <code>depthGrouping</code> value of each contract from
-<a href="#options-exchange">Exchange Info API</a>
-
 
 ```javascript
 import { io } from 'socket.io-client';
@@ -377,54 +240,50 @@ socket.on('error', (error: any) => {
   console.error('Socket.IO error:', error);
 });
 
-// Function to subscribe to various WebSocket topics
+// Function to subscribe to specified WebSocket topics
 function subscribeToTopics() {
-  const topics = ['btcinr@depth_0.1', 'btcinr@markPrice']; // List of topics you want to subscribe to
+  const topics = [
+    'BTC-18JUL25-96000-P-USDT@orderBook',
+    'BTC-11JUL25-118000-P-USDT@ticker',
+    'BTC_USDT@ticker',
+    'BTC_USDT_25JUL25@ticker',
+    'BTC-18JUL25-113000-C-USDT@recentTrade',
+    'BTC@recentTrade',
+    'BTC_USDT@indexPrice',
+    'BTC_USDT_25JUL25@underlying'
+  ];
 
   // Subscribe to each topic
   socket.emit('subscribe', {
-    params: topics, // Sends the topics array to the WebSocket server
+    params: topics,
   });
 
-  // Event listener for updates on various data topics
-  socket.on('depthUpdate', (data) => {
-    console.log('depthUpdate: ', data);
+  // Listening for events according to topic types
+  socket.on('orderBook', (data) => {
+    console.log('orderBook: ', data);
   });
 
-  socket.on('kline', (data) => {
-    console.log('kline: ', data);
+  socket.on('ticker', (data) => {
+    console.log('ticker: ', data);
   });
 
-  socket.on('markPriceUpdate', (data) => {
-    console.log('markPriceUpdate: ', data);
+  socket.on('recentTrade', (data) => {
+    console.log('recentTrade: ', data);
   });
 
-  socket.on('aggTrade', (data) => {
-    console.log('aggTrade: ', data);
+  socket.on('recentTradeAll', (data) => {
+    console.log('recentTradeAll: ', data);
   });
 
-  socket.on('24hrTicker', (data) => {
-    console.log('24hrTicker: ', data);
+  socket.on('indexPrice', (data) => {
+    console.log('indexPrice: ', data);
   });
 
-  socket.on('marketInfo', (data) => {
-    console.log('marketInfo: ', data);
-  });
-
-  socket.on('markPriceArr', (data) => {
-    console.log('markPriceArr: ', data);
-  });
-
-  socket.on('tickerArr', (data) => {
-    console.log('tickerArr: ', data);
-  });
-
-  socket.on('marginRate', (data) => {
-    console.log('marginRate: ', data);
+  socket.on('underlying', (data) => {
+    console.log('underlying: ', data);
   });
 }
 ```
-
 ```python
 # Required installations:
 # pip install python-socketio
@@ -437,18 +296,18 @@ server_url = 'https://fawss-options.pi42.com/'
 # Create a new Socket.IO client
 sio = socketio.Client()
 
-# Event listener for when the connection is open
+# Event listener for connection open
 @sio.event
 def connect():
     print('Connected to WebSocket server')
     subscribe_to_topics()
 
-# Event listener for when the connection is closed
+# Event listener for connection close
 @sio.event
 def disconnect():
     print('Disconnected from WebSocket server')
 
-# Event listener for errors
+# Event listener for connection errors
 @sio.event
 def connect_error(data):
     print('Socket.IO connection error:', data)
@@ -458,58 +317,102 @@ def connect_error(data):
 def handle_error(data):
     print('Socket.IO error:', data)
 
-# Function to subscribe to various WebSocket topics
+# Function to subscribe to specified WebSocket topics
 def subscribe_to_topics():
-    topics = ['btcinr@depth_0.1', 'btcinr@markPrice']  # List of topics to subscribe to
+    topics = [
+        'BTC-18JUL25-96000-P-USDT@orderBook',
+        'BTC-11JUL25-118000-P-USDT@ticker',
+        'BTC_USDT@ticker',
+        'BTC_USDT_25JUL25@ticker',
+        'BTC-18JUL25-113000-C-USDT@recentTrade',
+        'BTC@recentTrade',
+        'BTC_USDT@indexPrice',
+        'BTC_USDT_25JUL25@underlying'
+    ]
+    sio.emit('subscribe', {'params': topics})
 
-    # Subscribe to each topic
-    sio.emit('subscribe', {
-        'params': topics  # Sends the topics array to the WebSocket server
-    })
+    # Event listeners for updates on various topics
+    @sio.on('orderBook')
+    def on_order_book(data):
+        print('orderBook:', data)
 
-    # Event listeners for updates on various data topics
-    @sio.on('depthUpdate')
-    def on_depth_update(data):
-        print('depthUpdate:', data)
+    @sio.on('ticker')
+    def on_ticker(data):
+        print('ticker:', data)
 
-    @sio.on('kline')
-    def on_kline(data):
-        print('kline:', data)
+    @sio.on('recentTrade')
+    def on_recent_trade(data):
+        print('recentTrade:', data)
 
-    @sio.on('markPriceUpdate')
-    def on_mark_price_update(data):
-        print('markPriceUpdate:', data)
+    @sio.on('recentTradeAll')
+    def on_recent_trade_all(data):
+        print('recentTradeAll:', data)
 
-    @sio.on('aggTrade')
-    def on_agg_trade(data):
-        print('aggTrade:', data)
+    @sio.on('indexPrice')
+    def on_index_price(data):
+        print('indexPrice:', data)
 
-    @sio.on('24hrTicker')
-    def on_24hr_ticker(data):
-        print('24hrTicker:', data)
-
-    @sio.on('marketInfo')
-    def on_market_info(data):
-        print('marketInfo:', data)
-
-    @sio.on('markPriceArr')
-    def on_mark_price_arr(data):
-        print('markPriceArr:', data)
-
-    @sio.on('tickerArr')
-    def on_ticker_arr(data):
-        print('tickerArr:', data)
-
-    @sio.on('marginRate')
-    def on_margin_rate(data):
-        print('marginRate:', data)
+    @sio.on('underlying')
+    def on_underlying(data):
+        print('underlying:', data)
 
 # Connect to the WebSocket server
 sio.connect(server_url)
 
-# Keep the connection open
+# Keep the connection alive
 sio.wait()
 ```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Example</th>
+            <th>Listening Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>symbol@orderBook</td>
+            <td>BTC-18JUL25-96000-P-USDT@orderBook</td>
+            <td>orderBook</td>
+        </tr>
+        <tr>
+            <td>symbol@ticker</td>
+            <td>BTC-11JUL25-118000-P-USDT@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>base_pair@ticker</td>
+            <td>BTC_USDT@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>base_pair_expiry@ticker</td>
+            <td>BTC_USDT_25JUL25@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>symbol@recentTrade</td>
+            <td>BTC-18JUL25-113000-C-USDT@recentTrade</td>
+            <td>recentTrade</td>
+        </tr>
+        <tr>
+            <td>base_coin@recentTrade</td>
+            <td>BTC@recentTrade</td>
+            <td>recentTradeAll</td>
+        </tr>
+        <tr>
+            <td>base_pair@indexPrice</td>
+            <td>BTC_USDT@indexPrice</td>
+            <td>indexPrice</td>
+        </tr>
+        <tr>
+            <td>base_pair_expiry@underlying</td>
+            <td>BTC_USDT_25JUL25@underlying</td>
+            <td>underlying</td>
+        </tr>
+</table>
+
 
 <h3 id="options-create-listen-key"> Create Listen Key </h3>
 
