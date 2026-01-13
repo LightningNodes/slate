@@ -1,0 +1,734 @@
+<h2 id='options-web-sockets'>Web Sockets</h2>
+
+WebSockets are used to provide real-time updates and maintain a continuous connection between clients (traders) and servers (exchanges).
+
+Here's how different web sockets work:
+
+
+<h3 id="options-authenticated-web-sockets">Authenticated Web Sockets</h3>
+
+Authenticated WebSockets require user validation to ensure that only authorized users can access the data or functionality provided such as receiving real-time updates about a trader's account.
+
+For example,  balance changes, order executions, or margin updates.
+
+<aside class="notice"> Notes:
+<ul>
+  <li>Authenticated Web Socket stream base URL <code>https://fawss-uds-options.pi42.com/auth-stream </code></li>
+  <li>Requires listenkey that can be obtained from the <a href="#options-create-listen-key">Create Listen Key API</a></li>
+</ul>
+</aside>
+
+The WebSocket client connects to a server using a listen key and listens for various events related to trading activities and session management. Each event handler logs specific information when the event is received.
+
+Event listeners are described below:
+
+
+```javascript
+const serverUrl = `https://fawss-uds-options.pi42.com/auth-stream/${listenKey}`;
+
+const socket = io(serverUrl);
+
+socket.on('connect', () => {
+  console.log('Connected to WebSocket server');
+});
+
+socket.on('order', (data) => {
+  console.log('New order:', data);
+});
+
+socket.on('trade', (data) => {
+  console.log('Trade executed:', data);
+});
+
+socket.on('greeks', (data) => {
+  console.log('Option Greeks updated:', data);
+});
+
+socket.on('wallet', (data) => {
+  console.log('Wallet balance/margin updated:', data);
+});
+
+socket.on('position', (data) => {
+  console.log('Position updated:', data);
+});
+
+socket.on('orderFailed', (data) => {
+  console.log('Order failed:', data);
+});
+
+socket.on('fnfWallet', (data) => {
+  console.log('Funds moved in/out of wallet:', data);
+});
+
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket server');
+});
+```
+```python
+# Required installations:
+# python-socketio asyncio aiohttp
+
+import socketio
+import asyncio
+
+# URL of the WebSocket server (replace with actual authenticated URL)
+server_url = 'Pi42-Authenticated-websocket-url'
+
+# Namespace path including your listen key for authenticated streaming
+namespace_path = '/auth-stream/your-listen-key'
+
+# Create a new asynchronous Socket.IO client instance
+sio = socketio.AsyncClient()
+
+
+# Event handler called upon successful connection to the WebSocket server
+@sio.event
+async def connect():
+    print('Successfully connected to the WebSocket server')
+
+
+# Event handler called when the connection to the WebSocket server is closed
+@sio.event
+async def disconnect():
+    print('Disconnected from the WebSocket server')
+
+
+# Handles 'order' events when a new order is created or updated
+@sio.on('order', namespace=namespace_path)
+async def on_order(data):
+    print("New order:", data)
+
+
+# Handles 'trade' events when a trade is executed
+@sio.on('trade', namespace=namespace_path)
+async def on_trade(data):
+    print("Trade executed:", data)
+
+
+# Handles 'greeks' events when option Greeks (delta, gamma, etc.) data is updated
+@sio.on('greeks', namespace=namespace_path)
+async def on_greeks(data):
+    print("Option Greeks updated:", data)
+
+
+# Handles 'wallet' events when wallet balance or margin changes
+@sio.on('wallet', namespace=namespace_path)
+async def on_wallet(data):
+    print("Wallet balance/margin updated:", data)
+
+
+# Handles 'position' events when an open position is created, modified, or closed
+@sio.on('position', namespace=namespace_path)
+async def on_position(data):
+    print("Position updated:", data)
+
+
+# Handles 'orderFailed' events when an order fails to process
+@sio.on('orderFailed', namespace=namespace_path)
+async def on_order_failed(data):
+    print("Order failed:", data)
+
+
+# Handles 'fnfWallet' events when funds move in/out due to fees, funding, or settlements
+@sio.on('fnfWallet', namespace=namespace_path)
+async def on_fnf_wallet(data):
+    print("Funds moved in/out of wallet:", data)
+
+
+# Event handler called if the connection attempt fails
+@sio.event
+async def connect_error(data):
+    print('Failed to connect to the WebSocket server:', data)
+
+
+# Main coroutine that connects and keeps the connection alive to listen for events
+async def main():
+    try:
+        await sio.connect(server_url, transports=["websocket"])
+        await sio.wait()  # Keeps the program running to listen indefinitely
+    except Exception as e:
+        print("Connection error:", e)
+
+
+# Entry point for the async program
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+<table>
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>connect</td>
+                <td>Triggered when the connection to the WebSocket server is open.</td>
+            </tr>
+            <tr>
+         <td>order</td>
+         <td>Triggered when a new order is created or submitted to the server.</td>
+            </tr>
+            <tr>
+               <td>trade</td>
+               <td>Triggered when a trade is executed and matched against an order.</td>
+            </tr>
+            <tr>
+               <td>greeks</td>
+               <td>Triggered when option Greeks data (such as delta, gamma, theta, vega) is updated.</td>
+            </tr>
+            <tr>
+               <td>wallet</td>
+               <td>Triggered when the wallet balance or margin details are updated.</td>
+            </tr>
+            <tr>
+               <td>position</td>
+               <td>Triggered when an open position is created, updated, or closed.</td>
+            </tr>
+            <tr>
+               <td>orderFailed</td>
+               <td>Triggered when an order cannot be processed due to validation or system errors.</td>
+            </tr>
+            <tr>
+               <td>fnfWallet</td>
+               <td>Triggered when funds are moved in or out of the wallet due to fees, funding, or settlements.</td>
+            </tr>
+            <tr>
+                <td>disconnect</td>
+                <td>Triggered when the connection to the WebSocket server is closed.</td>
+            </tr>
+        </tbody>
+</table>
+
+<h3 id="options-public-web-sockets">Public Web Sockets</h3>
+
+Public WebSockets are open to all clients and do not require authentication to establish a connection. They are useful for scenarios where the data being transmitted is not sensitive or where the application does not require user-specific interactions.
+
+For example, to receive real-time updates on market data such as price changes, order book depth, and trade history without requiring authentication.
+
+<aside class="notice">
+
+  Public Web Socket URL <code>https://fawss-options.pi42.com/</code>
+
+</aside>
+
+Once connected, users can subscribe to different topics mentioned below:
+
+```javascript
+import { io } from 'socket.io-client';
+
+// WebSocket server URL
+const serverUrl = 'https://fawss-options.pi42.com/';
+
+// Create a new socket connection
+const socket = io(serverUrl);
+
+// Event listener for when the connection is open
+socket.on('connect', () => {
+  console.log('Connected to WebSocket server');
+  subscribeToTopics();
+});
+
+// Event listener for when the connection is closed
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket server');
+});
+
+// Event listener for errors
+socket.on('error', (error: any) => {
+  console.error('Socket.IO error:', error);
+});
+
+// Function to subscribe to specified WebSocket topics
+function subscribeToTopics() {
+  const topics = [
+    'BTC-18JUL25-96000-P-USDT@orderBook',
+    'BTC-11JUL25-118000-P-USDT@ticker',
+    'BTC_USDT@ticker',
+    'BTC_USDT_25JUL25@ticker',
+    'BTC-18JUL25-113000-C-USDT@recentTrade',
+    'BTC@recentTrade',
+    'BTC_USDT@indexPrice',
+    'BTC_USDT_25JUL25@underlying'
+  ];
+
+  // Subscribe to each topic
+  socket.emit('subscribe', {
+    params: topics,
+  });
+
+  // Listening for events according to topic types
+  socket.on('orderBook', (data) => {
+    console.log('orderBook: ', data);
+  });
+
+  socket.on('ticker', (data) => {
+    console.log('ticker: ', data);
+  });
+
+  socket.on('recentTrade', (data) => {
+    console.log('recentTrade: ', data);
+  });
+
+  socket.on('recentTradeAll', (data) => {
+    console.log('recentTradeAll: ', data);
+  });
+
+  socket.on('indexPrice', (data) => {
+    console.log('indexPrice: ', data);
+  });
+
+  socket.on('underlying', (data) => {
+    console.log('underlying: ', data);
+  });
+}
+```
+```python
+# Required installations:
+# pip install python-socketio
+
+import socketio
+
+# WebSocket server URL
+server_url = 'https://fawss-options.pi42.com/'
+
+# Create a new Socket.IO client
+sio = socketio.Client()
+
+# Event listener for connection open
+@sio.event
+def connect():
+    print('Connected to WebSocket server')
+    subscribe_to_topics()
+
+# Event listener for connection close
+@sio.event
+def disconnect():
+    print('Disconnected from WebSocket server')
+
+# Event listener for connection errors
+@sio.event
+def connect_error(data):
+    print('Socket.IO connection error:', data)
+
+# Event listener for general errors
+@sio.on('error')
+def handle_error(data):
+    print('Socket.IO error:', data)
+
+# Function to subscribe to specified WebSocket topics
+def subscribe_to_topics():
+    topics = [
+        'BTC-18JUL25-96000-P-USDT@orderBook',
+        'BTC-11JUL25-118000-P-USDT@ticker',
+        'BTC_USDT@ticker',
+        'BTC_USDT_25JUL25@ticker',
+        'BTC-18JUL25-113000-C-USDT@recentTrade',
+        'BTC@recentTrade',
+        'BTC_USDT@indexPrice',
+        'BTC_USDT_25JUL25@underlying'
+    ]
+    sio.emit('subscribe', {'params': topics})
+
+    # Event listeners for updates on various topics
+    @sio.on('orderBook')
+    def on_order_book(data):
+        print('orderBook:', data)
+
+    @sio.on('ticker')
+    def on_ticker(data):
+        print('ticker:', data)
+
+    @sio.on('recentTrade')
+    def on_recent_trade(data):
+        print('recentTrade:', data)
+
+    @sio.on('recentTradeAll')
+    def on_recent_trade_all(data):
+        print('recentTradeAll:', data)
+
+    @sio.on('indexPrice')
+    def on_index_price(data):
+        print('indexPrice:', data)
+
+    @sio.on('underlying')
+    def on_underlying(data):
+        print('underlying:', data)
+
+# Connect to the WebSocket server
+sio.connect(server_url)
+
+# Keep the connection alive
+sio.wait()
+```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Example</th>
+            <th>Listening Topic</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>symbol@orderBook</td>
+            <td>BTC-18JUL25-96000-P-USDT@orderBook</td>
+            <td>orderBook</td>
+        </tr>
+        <tr>
+            <td>symbol@ticker</td>
+            <td>BTC-11JUL25-118000-P-USDT@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>base_pair@ticker</td>
+            <td>BTC_USDT@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>base_pair_expiry@ticker</td>
+            <td>BTC_USDT_25JUL25@ticker</td>
+            <td>ticker</td>
+        </tr>
+        <tr>
+            <td>symbol@recentTrade</td>
+            <td>BTC-18JUL25-113000-C-USDT@recentTrade</td>
+            <td>recentTrade</td>
+        </tr>
+        <tr>
+            <td>base_coin@recentTrade</td>
+            <td>BTC@recentTrade</td>
+            <td>recentTradeAll</td>
+        </tr>
+        <tr>
+            <td>base_pair@indexPrice</td>
+            <td>BTC_USDT@indexPrice</td>
+            <td>indexPrice</td>
+        </tr>
+        <tr>
+            <td>base_pair_expiry@underlying</td>
+            <td>BTC_USDT_25JUL25@underlying</td>
+            <td>underlying</td>
+        </tr>
+</table>
+
+
+<h3 id="options-create-listen-key"> Create Listen Key </h3>
+
+`POST /v1/retail/listen-key`
+
+Creates a new listen key for WebSocket connections.
+
+A listen key is used to maintain a persistent connection to the WebSocket server, allowing you to receive real-time updates on user account data.
+
+
+```javascript
+const baseUrl = process.env.PI42_BASE_URL + '/v1/retail/listen-key';
+
+// Function to generate a signature for the request
+const generateSignature = (params: object, apiSecret: string) => {
+  return crypto
+    .createHmac('sha256', apiSecret)
+    .update(JSON.stringify(params))
+    .digest('hex');
+};
+
+// Function to call Create Listen Key API
+async function createListenKey(apiKey: string, apiSecret: string) {
+  const params = {
+    timestamp: Date.now().toString(),
+  };
+
+  const signature = generateSignature(params, apiSecret);
+
+  try {
+    const response = await axios.post(baseUrl, params, {
+      headers: {
+        'api-key': apiKey,
+        'Content-Type': 'application/json',
+        'signature': signature,
+      },
+    });
+    console.log('Create Listen Key Response:', response.data);
+    return response.data.listenKey;
+  } catch (error) {
+    console.error(
+      'Error creating Listen Key:',
+      error.response ? error.response.data : error.message
+    );
+    throw error; // Rethrow the error for further handling
+  }
+}
+```
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>timestamp</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>The current timestamp in milliseconds to ensure request uniqueness and prevent replay attacks</td>
+        </tr>
+    </tbody>
+</table>
+
+The `createListenKey` function also requires an `apiKey` and `apiSecret` for authentication, and these are included in the headers of the request:
+
+- `apiKey`: The API key for authenticating the request.
+- `apiSecret`: The API secret used to generate the signature for request validation.
+
+The function generates a signature using HMAC SHA-256 encryption of the request parameters and sends a POST request to the API endpoint to create a new listen key. If successful, it logs and returns the listen key; otherwise, it logs and throws the error for further handling.
+
+### Reponse
+
+The response parameters are described below:
+
+```json
+// Response
+
+{
+  "listenKey": "c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc"
+}
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>listenKey</strong></td>
+      <td>The unique identifier for the Listen Key, used to maintain a persistent connection for real-time data streams. Example: <code>c44ec0b16e1e79d82473283a9736d2d037f105c39190ad48539fd6479a5b8ecc</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="options-get-listen-key">Get Listen Key</h3>
+
+`POST /v1/retail/listen-key`
+
+Retrieves a new listen key for WebSocket connections.
+
+A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.
+
+```javascript
+async function getListenKey() {
+    const endpoint = "/v1/retail/listen-key";
+
+    // Call the postRequest function
+    return await postRequest(endpoint, {});
+}
+```
+```python
+def create_or_update_listen_key():
+  timestamp = str(int(time.time() * 1000))
+
+  params = {
+      'timestamp': timestamp
+  }
+
+  # Convert the parameters to a query string (if signing a query string)
+  data_to_sign = json.dumps(params, separators=(',', ':'))
+  signature = generate_signature(api_secret, data_to_sign)
+
+  # Headers for the request
+  headers = {
+      'api-key': api_key,
+      'Content-Type': 'application/json',
+      'signature': signature,
+  }
+
+  try:
+      # Send the POST request to create or update a listen key
+      response = requests.post(f'{listen_key_url}', json=params, headers=headers)
+      response.raise_for_status()
+      response_data = response.json()
+      print('Listen key created or updated successfully:', json.dumps(response_data, indent=4))
+  except requests.exceptions.HTTPError as err:
+      print(f"Failed {response.status_code}: {response.text}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Retrieves a new listen key for WebSocket connections. <br/>A listen key is used to maintain a persistent WebSocket connection, allowing you to receive real-time updates.</td>
+        </tr>
+    </tbody>
+</table>
+
+
+<h3 id="options-update-listen-key">Update Listen Key</h3>
+
+`PUT /v1/retail/listen-key`
+
+Updates the listen key for WebSocket connections.
+
+
+Updating the listen key is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Updates the listen key for WebSocket connections. </td>
+        </tr>
+    </tbody>
+</table>
+
+
+```javascript
+async function updateListenKey() {
+    const endpoint = "/v1/retail/listen-key";
+
+    // Call the getRequest function
+    return await putRequest(endpoint, {});
+}
+```
+
+```python
+def update_listen_key_expiry():
+  timestamp = str(int(time.time() * 1000))
+
+  params = {
+      'timestamp': timestamp
+  }
+
+  data_to_sign = json.dumps(params, separators=(',', ':'))
+
+  # Generate the signature using the provided helper function
+  signature = generate_signature(api_secret, data_to_sign)
+
+  # Headers for the PUT request
+  headers = {
+      'api-key': api_key,
+      'signature': signature,
+  }
+
+  try:
+      # Send the PUT request to update the listen key expiry
+      response = requests.put(listen_key_url, json=params, headers=headers)
+      print('Listen key expiry updated successfully:', response)
+  except Exception as e:
+      print(f"Failed {response.status_code}: {response.text}")
+```
+
+### Response
+
+The response contains a message as shown:
+
+```json
+// Response
+   Listen Key expiry time updated successfully.
+
+```
+
+<h3 id="options-delete-listen-key">Delete Listen Key</h3>
+
+`DELETE /v1/retail/listen-key`
+
+Deletes the listen key for WebSocket connections.
+
+This action terminates the connection and stops the receipt of real-time updates.
+
+
+```javascript
+async function deleteListenKey() {
+    const endpoint = "/v1/retail/listen-key";
+
+    // Call the deleteRequest function
+    return await deleteRequest(endpoint, {});
+}
+```
+
+```python
+def delete_listen_key():
+  # Generate the current timestamp
+  timestamp = str(int(time.time() * 1000))
+
+  # Prepare the data for the request (listenKey is passed in the URL path)
+  params = {
+      'timestamp': timestamp
+  }
+
+  # Generate the signature based on the params
+  data_to_sign = json.dumps(params, separators=(',', ':'))
+  signature = generate_signature(api_secret, data_to_sign)
+
+  # Headers for the DELETE request
+  headers = {
+      'api-key': api_key,
+      'signature': signature,
+      'accept': '*/*'
+  }
+
+  # Construct the full URL, inserting the listenKey into the path
+  delete_listen_key_url = f"{base_url}/v1/retail/listen-key/"
+
+  try:
+      # Send the DELETE request to delete the listen key
+      response = requests.delete(delete_listen_key_url, json=params, headers=headers)
+      response.raise_for_status() # Raises an error for 4xx/5xx responses
+      print('Listen key deleted successfully.')
+  except requests.exceptions.HTTPError as err:
+      print(f"Error: {err.response.text if err.response else err}")
+  except Exception as e:
+      print(f"An unexpected error occurred: {str(e)}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>None</td>
+            <td>N/A</td>
+            <td>No</td>
+            <td>Deletes the listen key for WebSocket connections</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+The response body contains the message as shown in the snippet:
+
+```
+Listen key deleted successfully.
+```

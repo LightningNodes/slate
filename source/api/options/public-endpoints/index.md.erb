@@ -1,0 +1,1132 @@
+<h2 id='options-public-endpoints'>Public Endpoints</h2>
+<p>Public endpoints in Pi42 are designed to facilitate easy access to various functionalities of the Pi42 platform, particularly for integration with external systems and applications. 
+
+Below is an overview of the public endpoints available in Pi42, their typical uses, and example API calls.</p>
+
+<h3 id='options-base-pairs'>Base Pairs</h3>
+```javascript
+async function getBasePairs() {
+  const basePairsUrl = baseUrl + '/v1/exchange/basePairs';
+
+  try {
+    // Headers for the GET request (no authentication required for public endpoint)
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch base pairs
+    const response = await fetch(basePairsUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      // Throws an error for non-2xx responses
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Base pairs fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+   console.error('Error:', error.message);
+    
+  }
+  return null;
+}
+```
+```python
+def get_base_pairs():
+    """
+    Fetches all available base pairs from Pi42 exchange.
+
+    Returns:
+        The JSON response containing base pairs information
+    """
+    try:
+        base_pairs_url = base_url + '/v1/exchange/basePairs'
+        # Headers for the GET request (no authentication required for public endpoint)
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch base pairs
+        response = requests.get(base_pairs_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Base pairs fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+
+`GET /v1/exchange/basePairs`
+
+Get Base Pairs
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "baseCoin": "BTC",
+    "quoteCoin": "USDT",
+    "displayName": "BTC-USDT",
+    "iconUrl": "https://storage.googleapis.com/pi42-testnet-static/contract-icons/btc.png",
+    "maxImFactorPercentage": 10,
+    "minImFactorPercentage": 5,
+    "mmFactorPercentage": 3,
+    "liquidationFeePercentage": 0.2,
+    "maxProportionOfTxnInOrderPricePercentage": 7,
+    "makerFeePercentage": 0.03,
+    "takerFeePercentage": 0.03,
+    "pricePrecision": 2,
+    "minMaxPriceFactors": {
+      "maxPriceFactor": 1.2,
+      "minPriceFactor": 0.8
+    },
+    "maxBuyMinSellMultipliers": {
+      "deltaMultiplier": 4,
+      "minSellPrice": 5,
+      "multiplierCoefficient": 0.025
+    }
+  }
+]
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>baseCoin</strong></td>
+         <td>The base cryptocurrency symbol, e.g., <code>"BTC"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>quoteCoin</strong></td>
+         <td>The quote currency symbol, e.g., <code>"USDT"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>displayName</strong></td>
+         <td>The display pair name combining base and quote coins, e.g., <code>"BTC-USDT"</code>.</td>
+      </tr>
+      <tr>
+         <td><strong>iconUrl</strong></td>
+         <td>URL for the icon representing the base coin.</td>
+      </tr>
+      <tr>
+         <td><strong>maxImFactorPercentage</strong></td>
+         <td>Maximum initial margin factor allowed, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>minImFactorPercentage</strong></td>
+         <td>Minimum initial margin factor allowed, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>mmFactorPercentage</strong></td>
+         <td>Maintenance margin factor, as a percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>liquidationFeePercentage</strong></td>
+         <td>Fee percentage charged at liquidation.</td>
+      </tr>
+      <tr>
+         <td><strong>maxProportionOfTxnInOrderPricePercentage</strong></td>
+         <td>Maximum proportion of the transaction in order price, as percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>makerFeePercentage</strong></td>
+         <td>Maker fee percentage for the market maker.</td>
+      </tr>
+      <tr>
+         <td><strong>takerFeePercentage</strong></td>
+         <td>Taker fee percentage for the market taker.</td>
+      </tr>
+      <tr>
+         <td><strong>pricePrecision</strong></td>
+         <td>Number of decimal places allowed for price.</td>
+      </tr>
+      <tr>
+         <td><strong>minMaxPriceFactors</strong></td>
+         <td>
+            Object containing: 
+            <ul>
+               <li><code>maxPriceFactor</code>: Maximum price multiplier factor.</li>
+               <li><code>minPriceFactor</code>: Minimum price multiplier factor.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>maxBuyMinSellMultipliers</strong></td>
+         <td>
+            Object containing multipliers for buy/sell: 
+            <ul>
+               <li><code>deltaMultiplier</code>: Price delta multiplier.</li>
+               <li><code>minSellPrice</code>: Minimum sell price.</li>
+               <li><code>multiplierCoefficient</code>: Coefficient for multiplier calculation.</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-delivery-times'>Delivery Times</h3>
+```javascript
+async function getDeliveryTimes() {
+  try {
+    // Get user inputs for base and quote coins via prompt in browser
+    const baseCoin = prompt("Enter the base coin (e.g., BTC):").toUpperCase();
+    const quoteCoin = prompt("Enter the quote coin (e.g., USDT):").toUpperCase();
+    // Construct the URL with query parameters
+    const deliveryTimesUrl = `${baseUrl}/v1/exchange/delivery-times?baseCoin=${baseCoin}&quoteCoin=${quoteCoin}`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch delivery times
+    const response = await fetch(deliveryTimesUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Delivery times fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_delivery_times():
+    """
+    Fetches all available delivery times for a specified base and quote coin.
+
+    Returns:
+        The JSON response containing delivery times information
+    """
+    try:
+        # Get user inputs for base and quote coins
+        base_coin = input("Enter the base coin (e.g., BTC): ").upper()
+        quote_coin = input("Enter the quote coin (e.g., USDT): ").upper()
+
+        # Construct the URL with query parameters
+        delivery_times_url = f"{base_url}/v1/exchange/delivery-times?baseCoin={base_coin}&quoteCoin={quote_coin}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch delivery times
+        response = requests.get(delivery_times_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Delivery times fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+
+`GET /v1/exchange/delivery-times`
+
+Get details of all the delivery times available for trading
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>baseCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Base coin for which delivery times needs to be fetched, e.g., BTC</td>
+      </tr>
+      <tr>
+         <td>quoteCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Quote coin for which delivery times needs to be fetched, e.g., USDT</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[1754467200000,1754553600000,1754640000000,1754726400000,1755244800000]
+```
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>Array of timestamps</strong></td>
+         <td>An array of timestamps (in milliseconds since epoch) representing discrete time points of delivery or other related events.</td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-instrument-info'>Instrument Info</h3>
+```javascript
+async function getInstrumentInfo() {
+  try {
+    // Get user inputs for base coin and quote coin
+    const baseCoin = prompt("Enter the base coin (e.g., BTC):").toUpperCase();
+    const quoteCoin = prompt("Enter the quote coin (e.g., USDT):").toUpperCase();
+    // Ask if they want to specify delivery time (optional)
+    const includeDeliveryTime = prompt("Do you want to specify a delivery time? (y/n):").toLowerCase();
+    // Build the URL
+    let instrumentInfoUrl = `${baseUrl}/v1/exchange/instrument-info?baseCoin=${baseCoin}&quoteCoin=${quoteCoin}`;
+    if (includeDeliveryTime === 'y') {
+      const deliveryTime = prompt("Enter the delivery time (timestamp in milliseconds, e.g., 1774598400000):");
+      instrumentInfoUrl += `&deliveryTime=${deliveryTime}`;
+    }
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch instrument information
+    const response = await fetch(instrumentInfoUrl, { method: 'GET', headers });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Instrument information fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_instrument_info():
+    """
+    Fetches details of instruments available for trading.
+
+    Returns:
+        The JSON response containing instrument information
+    """
+    try:
+        # Get user inputs
+        base_coin = input("Enter the base coin (e.g., BTC): ").upper()
+        quote_coin = input("Enter the quote coin (e.g., USDT): ").upper()
+
+        # Ask if they want to specify delivery time (optional)
+        include_delivery_time = input("Do you want to specify a delivery time? (y/n): ").lower()
+
+        # Build the URL
+        instrument_info_url = f"{base_url}/v1/exchange/instrument-info?baseCoin={base_coin}&quoteCoin={quote_coin}"
+
+        if include_delivery_time == 'y':
+            delivery_time = input("Enter the delivery time (timestamp in milliseconds, e.g., 1774598400000): ")
+            instrument_info_url += f"&deliveryTime={delivery_time}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch instrument information
+        response = requests.get(instrument_info_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Instrument information fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`GET /v1/exchange/instrument-info`
+
+Get details of all the instruments available for trading
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>baseCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Base coin for which delivery times needs to be fetched, e.g., BTC</td>
+      </tr>
+      <tr>
+         <td>quoteCoin</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>Quote coin for which delivery times needs to be fetched, e.g., USDT</td>
+      </tr>
+      <tr>
+         <td>deliveryTime</td>
+         <td>number</td>
+         <td>No</td>
+         <td>Optional delivery time timestamp in milliseconds since epoch, e.g., 1774598400000</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "symbol": "BTC-27MAR26-130000-P-USDT",
+    "displayName": "BTCUSDT-27MAR26-130000-P",
+    "strikePrice": 130000,
+    "baseCoin": "BTC",
+    "quoteCoin": "USDT",
+    "settleCoin": "INR",
+    "optionsType": "Put",
+    "launchTime": 1752171900100,
+    "deliveryTime": 1774598400000,
+    "deliveryFeeRate": 0.00015,
+    "priceFilter": {
+      "maxPrice": "1110000",
+      "minPrice": "5",
+      "tickSize": "5",
+      "quoteCoinPrecision": 0,
+      "settleCoinPrecision": 2,
+      "pricePrecision": 2
+    },
+    "lotSizeFilter": {
+      "qtyStep": "0.01",
+      "maxOrderQty": "10000",
+      "minOrderQty": "0.01",
+      "quantityPrecision": 2
+    }
+  }
+]
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>symbol</strong></td>
+         <td>The unique symbol of the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>displayName</strong></td>
+         <td>User-friendly display name of the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>strikePrice</strong></td>
+         <td>The strike price value.</td>
+      </tr>
+      <tr>
+         <td><strong>baseCoin</strong></td>
+         <td>The base coin symbol, e.g., BTC.</td>
+      </tr>
+      <tr>
+         <td><strong>quoteCoin</strong></td>
+         <td>The quote coin symbol, e.g., USDT.</td>
+      </tr>
+      <tr>
+         <td><strong>settleCoin</strong></td>
+         <td>The settlement coin symbol, e.g., INR.</td>
+      </tr>
+      <tr>
+         <td><strong>optionsType</strong></td>
+         <td>The option type (e.g., Put, Call).</td>
+      </tr>
+      <tr>
+         <td><strong>launchTime</strong></td>
+         <td>The option launch timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryTime</strong></td>
+         <td>The option delivery timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryFeeRate</strong></td>
+         <td>The delivery fee rate percentage.</td>
+      </tr>
+      <tr>
+         <td><strong>priceFilter</strong></td>
+         <td>
+            Constraints on order price: 
+            <ul>
+               <li><code>maxPrice:</code> Maximum price allowed.</li>
+               <li><code>minPrice:</code> Minimum price allowed.</li>
+               <li><code>tickSize:</code> Price tick size.</li>
+               <li><code>quoteCoinPrecision:</code> Decimal precision for quote coin.</li>
+               <li><code>settleCoinPrecision:</code> Decimal precision for settlement coin.</li>
+               <li><code>pricePrecision:</code> Decimal precision for price.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>lotSizeFilter</strong></td>
+         <td>
+            Constraints on order quantity: 
+            <ul>
+               <li><code>qtyStep:</code> Quantity increment step.</li>
+               <li><code>maxOrderQty:</code> Maximum order quantity.</li>
+               <li><code>minOrderQty:</code> Minimum order quantity.</li>
+               <li><code>quantityPrecision:</code> Decimal precision for quantity.</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-instrument-info-symbols'>Instrument Info Symbols</h3>
+```javascript
+async function getInstrumentInfoBySymbols() {
+  try {
+    // Prompt user to enter symbols one by one
+    console.log("Enter symbols one by one (e.g., BTC-27MAR26-50000-C-USDT)");
+    console.log("Press Enter on an empty line when done");
+    const symbols = [];
+    while (true) {
+      const symbol = prompt("Enter symbol (or press Enter to finish):").trim();
+      if (!symbol) break;
+      symbols.push(symbol);
+    }
+    if (symbols.length === 0) {
+      console.log("No symbols provided. Operation cancelled.");
+      return null;
+    }
+    // Prepare payload
+    const payload = { symbols };
+    // Construct URL
+    const instrumentInfoUrl = `${baseUrl}/v1/exchange/instrument-info-symbol`;
+    // Send POST request
+    const response = await fetch(instrumentInfoUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return JSON response
+    const responseData = await response.json();
+    console.log('Instrument information fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_instrument_info_by_symbols():
+    """
+    Fetches details of specific instruments by providing their symbols.
+
+    Returns:
+        The JSON response containing instrument information for the specified symbols
+    """
+    try:
+        # Get user inputs for symbols
+        print("Enter symbols one by one (e.g., BTC-27MAR26-50000-C-USDT)")
+        print("Press Enter on an empty line when done")
+
+        symbols = []
+        while True:
+            symbol = input("Enter symbol (or press Enter to finish): ").strip()
+            if not symbol:
+                break
+            symbols.append(symbol)
+
+        if not symbols:
+            print("No symbols provided. Operation cancelled.")
+            return None
+
+        # Prepare the request body
+        payload = {"symbols": symbols}
+
+        # Construct the URL
+        instrument_info_url = f"{base_url}/v1/exchange/instrument-info-symbol"
+
+        # Headers for the POST request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the POST request to fetch instrument information
+        response = requests.post(instrument_info_url, json=payload, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Instrument information fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`POST /v1/exchange/instrument-info-symbol`
+
+Get details of all the symbols in array. The symbols must all be trading currently  (ie options contract should be active)
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>symbols</td>
+         <td>array of strings</td>
+         <td>Yes</td>
+         <td>Array of option contract symbols to query, e.g., ["BTC-7JUL25-108000-C-USDT", "BTC-27MAR26-50000-C-USDT"]</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "symbol": "BTC-27MAR26-50000-C-USDT",
+    "displayName": "BTCUSDT-27MAR26-50000-C",
+    "strikePrice": 50000,
+    "baseCoin": "BTC",
+    "quoteCoin": "USDT",
+    "settleCoin": "INR",
+    "optionsType": "Call",
+    "launchTime": 1743667200000,
+    "deliveryTime": 1774598400000,
+    "deliveryFeeRate": 0.00015,
+    "priceFilter": {
+      "maxPrice": "1110000",
+      "minPrice": "5",
+      "tickSize": "5",
+      "quoteCoinPrecision": 0,
+      "settleCoinPrecision": 2,
+      "pricePrecision": 2
+    },
+    "lotSizeFilter": {
+      "qtyStep": "0.01",
+      "maxOrderQty": "500",
+      "minOrderQty": "0.01",
+      "quantityPrecision": 2
+    },
+    "lastPrice": 0,
+    "change24h": 0
+  }
+]
+```
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>symbol</strong></td>
+         <td>Unique symbol of the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>displayName</strong></td>
+         <td>User-friendly display name for the option contract.</td>
+      </tr>
+      <tr>
+         <td><strong>strikePrice</strong></td>
+         <td>The strike price at which the option can be exercised.</td>
+      </tr>
+      <tr>
+         <td><strong>baseCoin</strong></td>
+         <td>Base asset symbol (e.g., BTC).</td>
+      </tr>
+      <tr>
+         <td><strong>quoteCoin</strong></td>
+         <td>Quote asset symbol (e.g., USDT).</td>
+      </tr>
+      <tr>
+         <td><strong>settleCoin</strong></td>
+         <td>Settlement asset symbol (e.g., INR).</td>
+      </tr>
+      <tr>
+         <td><strong>optionsType</strong></td>
+         <td>Type of option (e.g., Call or Put).</td>
+      </tr>
+      <tr>
+         <td><strong>launchTime</strong></td>
+         <td>Option contract launch timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryTime</strong></td>
+         <td>Option delivery timestamp in milliseconds since epoch.</td>
+      </tr>
+      <tr>
+         <td><strong>deliveryFeeRate</strong></td>
+         <td>Percentage fee charged on delivery.</td>
+      </tr>
+      <tr>
+         <td><strong>priceFilter</strong></td>
+         <td>
+            Object defining constraints on pricing: 
+            <ul>
+               <li><code>maxPrice</code>: Maximum allowed price.</li>
+               <li><code>minPrice</code>: Minimum allowed price.</li>
+               <li><code>tickSize</code>: Price increment step size.</li>
+               <li><code>quoteCoinPrecision</code>: Decimal precision for quote coin.</li>
+               <li><code>settleCoinPrecision</code>: Decimal precision for settlement coin.</li>
+               <li><code>pricePrecision</code>: Decimal precision for price values.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>lotSizeFilter</strong></td>
+         <td>
+            Object defining constraints on order quantities: 
+            <ul>
+               <li><code>qtyStep</code>: Step size for quantities.</li>
+               <li><code>maxOrderQty</code>: Maximum order quantity allowed.</li>
+               <li><code>minOrderQty</code>: Minimum order quantity allowed.</li>
+               <li><code>quantityPrecision</code>: Decimal precision for quantity values.</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td><strong>lastPrice</strong></td>
+         <td>Last traded price.</td>
+      </tr>
+      <tr>
+         <td><strong>change24h</strong></td>
+         <td>Price change percentage in the last 24 hours.</td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-conversion-rate'>Conversion Rate</h3>
+```javascript
+async function getConversionRate() {
+  try {
+    // Construct the URL
+    const metaUrl = `${baseUrl}/v1/exchange/meta`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch meta data
+    const response = await fetch(metaUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Meta data fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_conversion_rate():
+    """
+    Fetches meta data including conversion rates.
+
+    Returns:
+        The JSON response containing meta data
+    """
+    try:
+        # Construct the URL
+        meta_url = f"{base_url}/v1/exchange/meta"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch meta data
+        response = requests.get(meta_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Meta data fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`GET /v1/exchange/meta`
+
+Get meta data
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+{
+  "conversionRate": 88
+}
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>conversionRate</strong></td>
+         <td>The conversion rate value, e.g., 88, representing the rate for currency conversion.</td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-order-book'>Order Book</h3>
+```javascript
+async function getOrderBook() {
+  try {
+    // Prompt user for symbol input
+    const symbol = prompt("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+    if (!symbol) {
+      console.log("No symbol provided. Operation cancelled.");
+      return null;
+    }
+    // Construct the URL with query parameter
+    const orderBookUrl = `${baseUrl}/v1/market/orderBook?symbol=${encodeURIComponent(symbol)}`;
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    // Send the GET request to fetch order book
+    const response = await fetch(orderBookUrl, {
+      method: 'GET',
+      headers: headers
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Order book fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  return null;
+}
+```
+```python
+def get_order_book():
+    """
+    Fetches order book details for a provided symbol.
+
+    Returns:
+        The JSON response containing order book information
+    """
+    try:
+        # Get user input for symbol
+        symbol = input("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+
+        if not symbol:
+            print("No symbol provided. Operation cancelled.")
+            return None
+
+        # Construct the URL with query parameter
+        order_book_url = f"{base_url}/v1/market/orderBook?symbol={symbol}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch order book
+        response = requests.get(order_book_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Order book fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`GET /v1/market/orderBook`
+
+Get the order book details for the provided symbol.
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>symbol</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>The unique option contract symbol, e.g., "BTC-7JUL25-108000-C-USDT". This encodes the base asset, expiration date, strike price, option type (Call/Put), and quote asset.</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+{
+  "symbol": "BTC-7AUG25-117500-P-USDT",
+  "bids": [
+    [
+      "3975",
+      "0.02"
+    ]
+  ],
+  "asks": [
+    [
+      "3980",
+      "0.02"
+    ]
+  ]
+}
+```
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td><strong>symbol</strong></td>
+         <td>The unique option contract symbol, e.g., "BTC-7AUG25-117500-P-USDT". It encodes the base asset, expiration date, strike price, option type (Call/Put), and quote asset.</td>
+      </tr>
+      <tr>
+         <td><strong>bids</strong></td>
+         <td>List of bid orders. Each item is an array with price and quantity strings, e.g., ["3975", "0.02"].</td>
+      </tr>
+      <tr>
+         <td><strong>asks</strong></td>
+         <td>List of ask orders. Each item is an array with price and quantity strings, e.g., ["3980", "0.02"].</td>
+      </tr>
+   </tbody>
+</table>
+
+<h3 id='options-recent-trades'>Recent Trades</h3>
+```javascript
+async function getRecentTrades() {
+  try {
+    // Prompt user for symbol input
+    const symbol = prompt("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT):").trim();
+
+    if (!symbol) {
+      console.log("No symbol provided. Operation cancelled.");
+      return null;
+    }
+
+    // Construct the URL with query parameter
+    const recentTradesUrl = `${baseUrl}/v1/market/recentTrades?symbol=${encodeURIComponent(symbol)}`;
+
+    // Headers for the GET request
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+
+    // Send the GET request to fetch recent trades
+    const response = await fetch(recentTradesUrl, {
+      method: 'GET',
+      headers: headers
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return the JSON response
+    const responseData = await response.json();
+    console.log('Recent trades fetched successfully:', JSON.stringify(responseData, null, 4));
+    return responseData;
+
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+
+  return null;
+}
+```
+```python
+def get_recent_trades():
+    """
+    Fetches recent trades details for a provided symbol.
+
+    Returns:
+        The JSON response containing recent trades information
+    """
+    try:
+        # Get user input for symbol
+        symbol = input("Enter the symbol (e.g., BTC-4OCT25-120000-C-USDT): ").strip()
+
+        if not symbol:
+            print("No symbol provided. Operation cancelled.")
+            return None
+
+        # Construct the URL with query parameter
+        recent_trades_url = f"{base_url}/v1/market/recentTrades?symbol={symbol}"
+
+        # Headers for the GET request
+        headers = {
+            'Content-Type': 'application/json'
+        }
+
+        # Send the GET request to fetch recent trades
+        response = requests.get(recent_trades_url, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+
+        # Parse and return the JSON response
+        response_data = response.json()
+        print('Recent trades fetched successfully:', json.dumps(response_data, indent=4))
+        return response_data
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+
+    return None
+```
+`GET /v1/market/recentTrades`
+
+Get the recent trades details for the provided symbol.
+
+<table>
+   <thead>
+      <tr>
+         <th>Parameter</th>
+         <th>Type</th>
+         <th>Required</th>
+         <th>Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>symbol</td>
+         <td>string</td>
+         <td>Yes</td>
+         <td>The unique option contract symbol, for example, <code>BTC-7JUL25-108000-C-USDT</code>. It encodes the base asset, expiration date, strike price, option type (Call/Put), and quote asset.</td>
+      </tr>
+   </tbody>
+</table>
+
+### Response
+
+The response parameters are as follows:
+
+```json
+// Response
+[
+  {
+    "execId": "9e057411-9219-547a-907e-22b3247a9dbf",
+    "symbol": "BTC-7AUG25-117500-P-USDT",
+    "price": "3975",
+    "size": "0.02",
+    "side": "Buy",
+    "time": "1754469927813",
+    "isBlockTrade": false,
+    "mP": "3985.29915552",
+    "iP": "113818.82269784",
+    "mIv": "0.6162",
+    "iv": "0.6089",
+    "seq": "1607614099"
+  }
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>execId</td><td>Unique execution identifier for the trade</td></tr>
+    <tr><td>symbol</td><td>Trading symbol of the option, including expiry, strike, type (Put), and margin currency</td></tr>
+    <tr><td>price</td><td>Price at which the option was traded</td></tr>
+    <tr><td>size</td><td>Quantity or size of the option trade</td></tr>
+    <tr><td>side</td><td>Trade side indicating Buy or Sell</td></tr>
+    <tr><td>time</td><td>Timestamp of the trade event in milliseconds since epoch</td></tr>
+    <tr><td>isBlockTrade</td><td>Boolean flag indicating if the trade was a block trade</td></tr>
+    <tr><td>mP</td><td>Marked price of the option at trade time</td></tr>
+    <tr><td>iP</td><td>Index price relevant to the option contract</td></tr>
+    <tr><td>mIv</td><td>Market implied volatility of the option</td></tr>
+    <tr><td>iv</td><td>Implied volatility from the trade data</td></tr>
+    <tr><td>seq</td><td>Sequence number of the event for ordering</td></tr>
+  </tbody>
+</table>
