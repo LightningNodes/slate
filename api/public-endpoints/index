@@ -459,7 +459,7 @@ Below is an overview of the public endpoints available in Pi42, their typical us
 
 <p>It provides historical price data that can be used for charting and analysis, including start and end times, and limits on the number of records returned.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">getKlines</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/klines</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v1/market/klines?priceType=MARK_PRICE</span><span class="dl">"</span><span class="p">;</span>
 
     <span class="c1">// Define the fixed values for positionId and amount (though not used in this function)</span>
     <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">18c6c979-b089-4e67-b627-4c2072d0d5cb</span><span class="dl">"</span><span class="p">;</span> <span class="c1">// Replace with your actual position ID</span>
@@ -497,7 +497,7 @@ Below is an overview of the public endpoints available in Pi42, their typical us
       <span class="p">}</span>
 
       <span class="c1"># Construct the full URL for the Kline endpoint
-</span>      <span class="n">kline_url</span> <span class="o">=</span> <span class="s">"https://api.pi42.com/v1/market/klines"</span>
+</span>      <span class="n">kline_url</span> <span class="o">=</span> <span class="s">"https://api.pi42.com/v1/market/klines?priceType=MARK_PRICE"</span>
 
       <span class="c1"># Send the POST request to get Kline data
 </span>      <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">kline_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
@@ -522,6 +522,12 @@ Below is an overview of the public endpoints available in Pi42, their typical us
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>priceType</td>
+            <td>PriceType</td>
+            <td>No</td>
+            <td>The candle stick price type which to fetch (MARK_PRICE or LAST_PRICE)</td>
+        </tr>
         <tr>
             <td>pair</td>
             <td>string</td>

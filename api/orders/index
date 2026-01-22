@@ -458,6 +458,177 @@
   </tbody>
 </table>
 
+<h2 id="split-tp-sl"> Split TP and SL </h2>
+
+<p><code>POST /v2/split-tp-sl</code></p>
+
+<p>Add split TP/SL to a specific position. It requires a unique position ID, along with the quantity and price for TP and SL respectively. This operation enables dividing take-profit and stop-loss levels across multiple targets, helping optimize risk management and profit-taking for the position.</p>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">split_tp_sl</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Define the API endpoint for adding margin</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v2/split-tp-sl</span><span class="dl">"</span><span class="p">;</span>
+
+    <span class="c1">// Define the fixed values for positionId and amount</span>
+    <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">18c6c979-b089-4e67-b627-4c2072d0d5cb</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// Unique identifier for the position</span>
+    <span class="kd">const</span> <span class="nx">tp_quantity</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>  <span class="c1">// Quantity of TP</span>
+    <span class="kd">const</span> <span class="nx">tp_price</span> <span class="o">=</span> <span class="mi">95000</span> <span class="c1">// Price of TP</span>
+    <span class="kd">const</span> <span class="nx">sl_quantity</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>  <span class="c1">// Quantity of SL</span>
+    <span class="kd">const</span> <span class="nx">sl_price</span> <span class="o">=</span> <span class="mi">85000</span> <span class="c1">// Price of SL   </span>
+
+    <span class="c1">// Prepare request payload</span>
+    <span class="kd">const</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">positionId</span><span class="p">:</span> <span class="nx">positionId</span><span class="p">,</span>  <span class="c1">// ID of the position to which margin is being added</span>
+        <span class="na">splitTakeProfitOrders</span><span class="p">:</span> <span class="p">[{</span> <span class="c1">// Take Profit quantity and price</span>
+          <span class="na">quantity</span><span class="p">:</span> <span class="nx">tp_quantity</span><span class="p">,</span>
+          <span class="na">price</span> <span class="p">:</span> <span class="nx">tp_price</span>
+        <span class="p">}],</span>
+        <span class="na">splitStopLossOrders</span><span class="p">:</span> <span class="p">[{</span> <span class="c1">// Stop Loss quantity and price</span>
+          <span class="na">quantity</span><span class="p">:</span> <span class="nx">sl_quantity</span><span class="p">,</span>
+          <span class="na">price</span> <span class="p">:</span> <span class="nx">sl_price</span>
+        <span class="p">}],</span>
+
+    <span class="p">};</span>
+
+    <span class="c1">// Call the postRequest function to send the POST request to the API</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="nx">postRequest</span><span class="p">(</span><span class="nx">endpoint</span><span class="p">,</span> <span class="nx">params</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="k">def</span> <span class="nf">split_tp_sl</span><span class="p">():</span>
+    <span class="n">position_id</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the positionId: "</span><span class="p">)</span>
+    <span class="n">tp_quantity_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the TP quantity: "</span><span class="p">)</span>
+    <span class="n">tp_price_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the TP price: "</span><span class="p">)</span>
+    <span class="n">sl_quantity_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the SL quantity: "</span><span class="p">)</span>
+    <span class="n">sl_price_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the SL price: "</span><span class="p">)</span>
+
+    <span class="n">add_margin_url</span> <span class="o">=</span> <span class="s">"https://api.pi42.com/v2/split-tp-sl"</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tp_quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tp_quantity_input</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">tp_quantity</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tp_quantity_input</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tp_price</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tp_price_input</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">tp_price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tp_price_input</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sl_quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sl_quantity_input</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">tp_price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sl_quantity_input</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sl_price</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sl_price_input</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="n">sl_price</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">sl_price_input</span><span class="p">)</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'positionId'</span><span class="p">:</span> <span class="n">position_id</span><span class="p">,</span>
+        <span class="s">'splitTakeProfitOrders'</span><span class="p">:[{</span>
+          <span class="s">'quantity'</span><span class="p">:</span> <span class="n">tp_quantity</span><span class="p">,</span>
+          <span class="s">'price'</span> <span class="p">:</span> <span class="n">tp_price</span>
+        <span class="p">}],</span>
+        <span class="n">splitStopLossOrders</span><span class="p">:[{</span>
+          <span class="s">'quantity'</span><span class="p">:</span> <span class="n">sl_quantity</span><span class="p">,</span>
+          <span class="s">'price'</span> <span class="p">:</span> <span class="n">sl_price</span>
+        <span class="p">}],</span>
+        <span class="s">'timestamp'</span><span class="p">:</span> <span class="n">timestamp</span>
+    <span class="p">}</span>
+
+    <span class="n">data_to_sign</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">','</span><span class="p">,</span> <span class="s">':'</span><span class="p">))</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">generate_signature</span><span class="p">(</span><span class="n">api_secret</span><span class="p">,</span> <span class="n">data_to_sign</span><span class="p">)</span>
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'api-key'</span><span class="p">:</span> <span class="n">api_key</span><span class="p">,</span>
+        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span><span class="p">,</span>
+        <span class="s">'signature'</span><span class="p">:</span> <span class="n">signature</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">add_margin_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="n">response_data</span> <span class="o">=</span> <span class="n">response</span><span class="p">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'Margin added successfully:'</span><span class="p">,</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">response_data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="n">requests</span><span class="p">.</span><span class="n">exceptions</span><span class="p">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Failed </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="si">}</span><span class="s">: </span><span class="si">{</span><span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"An unexpected error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div>
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position to which TP/SL is being added</td>
+        </tr>
+        <tr>
+            <td>quantity</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Quantity of split tp or/and split sl</td>
+        </tr>
+        <tr>
+            <td>price</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Price of split tp or/and split sl</td>
+        </tr>
+    </tbody>
+</table>
+
+<aside class="notice">
+The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
+</aside>
+<h3 id='response-3'>Response</h3>
+<p>The response parameters are described below:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
+</span><span class="p">{</span><span class="w">
+  </span><span class="err">totalOrderCount:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="err">acceptedOrderCount:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="err">rejectedOrderCount:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="err">acceptedOrders:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9f72fddf886c37b41e96-5-ext"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-02-21T14:19:39.604Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCINR"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"contractType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PERPETUAL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"STOP_MARKET"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SELL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">110000</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderAmount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"filledAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"linkId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"894f5694c18b1200e508-5-ext"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"linkType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORDER_TP"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"subType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TAKE_PROFIT"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"placeType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POSITION"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c0f1a2b4d5e697887766-5-ext"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-02-21T14:19:39.604Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"symbol"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCINR"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"contractType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PERPETUAL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"STOP_MARKET"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SELL"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"orderAmount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.02</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"filledAmount"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"linkId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9e3b5a7d4c6f123abcde-5-ext"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"linkType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORDER_TP"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"subType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TAKE_PROFIT"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"placeType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POSITION"</span><span class="w">
+    </span><span class="p">}],</span><span class="w">
+  </span><span class="err">rejectedOrders:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
 <h2 id="add-margin"> Add Margin </h2>
 
 <p><code>POST /v1/order/add-margin</code></p>
@@ -547,7 +718,7 @@
 <aside class="notice">
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
-<h3 id='response-3'>Response</h3>
+<h3 id='response-4'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -682,7 +853,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 <aside class="notice">
 The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
 </aside>
-<h3 id='response-4'>Response</h3>
+<h3 id='response-5'>Response</h3>
 <p>The JSON body returned in the response is as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="w">
 </span><span class="err">#</span><span class="w"> </span><span class="err">Response</span><span class="w">
@@ -815,7 +986,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
         </tr>
     </tbody>
 </table>
-<h3 id='response-5'>Response</h3>
+<h3 id='response-6'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -1016,7 +1187,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
         </tr>
     </tbody>
 </table>
-<h3 id='response-6'>Response</h3>
+<h3 id='response-7'>Response</h3>
 <p>The details of the JSON object returned in the response body are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -1237,7 +1408,7 @@ The required <code>positionId</code> can be obtained calling the <a href="#get-p
 <aside class="notice">
 Requires linkId that can be obtained from <a href="#place-order">Place Order API response.</a>
 </aside>
-<h3 id='response-7'>Response</h3>
+<h3 id='response-8'>Response</h3>
 <p>The details returned in the response body as are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="w">
 </span><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
@@ -1465,7 +1636,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-8'>Response</h3>
+<h3 id='response-9'>Response</h3>
 <p>The response details are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -1671,7 +1842,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-9'>Response</h3>
+<h3 id='response-10'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5454</span><span class="p">,</span><span class="w">
@@ -1873,7 +2044,7 @@ Requires linkId that can be obtained from <a href="#place-order">Place Order API
         </tr>
     </tbody>
 </table>
-<h3 id='response-10'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-11'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
         </span><span class="nl">"contractPair"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTCUSDT"</span><span class="p">,</span><span class="w">
@@ -2089,7 +2260,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-11'>Response</h3>
+<h3 id='response-12'>Response</h3>
 <p>The response parameters are as follows:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -2330,7 +2501,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-12'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+<h3 id='response-13'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">109884</span><span class="p">,</span><span class="w">
     </span><span class="nl">"time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-09-16T09:39:28.754Z"</span><span class="p">,</span><span class="w">
@@ -2507,7 +2678,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-13'>Response</h3>
+<h3 id='response-14'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -2641,7 +2812,7 @@ except requests.exceptions.HTTPError as err:
         </tr>
     </tbody>
 </table>
-<h3 id='response-14'>Response</h3>
+<h3 id='response-15'>Response</h3>
 <p>The response parameters are described below:</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
@@ -2744,7 +2915,7 @@ except requests.exceptions.HTTPError as err:
 <aside class="notice">
 Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-open-orders">Get Open Orders API</a>.
 </aside>
-<h3 id='response-15'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"clientOrderId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"93513fe2a8af44157234-6238-ext"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"orderId"</span><span class="p">:</span><span class="w"> </span><span class="mi">24717</span><span class="p">,</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CANCELED"</span><span class="p">,</span><span class="w">
@@ -2855,7 +3026,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-16'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -2966,7 +3137,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-17'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
   </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -3086,7 +3257,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-18'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-19'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1941.50"</span><span class="p">,</span><span class="w">
@@ -3257,7 +3428,7 @@ Requires <code>clientOrderId</code> that can be retrieved from <a href="#get-ope
         </tr>
     </tbody>
 </table>
-<h3 id='response-19'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
+<h3 id='response-20'>Response</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="err">//</span><span class="w"> </span><span class="err">Response</span><span class="w">
 </span><span class="p">{</span><span class="w">
   </span><span class="nl">"inrBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"walletBalance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"601.00"</span><span class="p">,</span><span class="w">
