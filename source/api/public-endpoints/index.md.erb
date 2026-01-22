@@ -496,7 +496,7 @@ It provides historical price data that can be used for charting and analysis, in
 
 ```javascript
 async function getKlines() {
-    const endpoint = "/v1/market/klines";
+    const endpoint = "/v1/market/klines?priceType=MARK_PRICE";
 
     // Define the fixed values for positionId and amount (though not used in this function)
     const positionId = "18c6c979-b089-4e67-b627-4c2072d0d5cb"; // Replace with your actual position ID
@@ -537,7 +537,7 @@ def get_kline_data():
       }
 
       # Construct the full URL for the Kline endpoint
-      kline_url = "https://api.pi42.com/v1/market/klines"
+      kline_url = "https://api.pi42.com/v1/market/klines?priceType=MARK_PRICE"
 
       # Send the POST request to get Kline data
       response = requests.post(kline_url, json=params, headers=headers)
@@ -563,6 +563,12 @@ def get_kline_data():
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>priceType</td>
+            <td>PriceType</td>
+            <td>No</td>
+            <td>The candle stick price type which to fetch (MARK_PRICE or LAST_PRICE)</td>
+        </tr>
         <tr>
             <td>pair</td>
             <td>string</td>

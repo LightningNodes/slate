@@ -13,6 +13,12 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
   </thead>
   <tbody>
     <tr>
+      <td>2300</td>
+      <td>500</td>
+      <td>Unable to fetch exchange information</td>
+      <td><code>v1/exchange/exchangeInfo</code></td>
+    </tr>
+    <tr>
       <td>2303</td>
       <td>400</td>
       <td>Contract pair not found</td>
@@ -41,6 +47,48 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td>500</td>
       <td>Unable to update user leverage preference</td>
       <td><code>v1/exchange/update/leverage</code></td>
+    </tr>
+    <tr>
+      <td>2310</td>
+      <td>400</td>
+      <td>Contract pair not found</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2311</td>
+      <td>400</td>
+      <td>Invalid request</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2312</td>
+      <td>400</td>
+      <td>Margin mode can't be updated with an open order</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2313</td>
+      <td>400</td>
+      <td>Margin mode can't be updated with an open position</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2314</td>
+      <td>400</td>
+      <td>Cross margin is not enabled</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2315</td>
+      <td>400</td>
+      <td>Unable to update user margin mode preference</td>
+      <td><code>v1/exchange/update/preference</code></td>
+    </tr>
+    <tr>
+      <td>2316</td>
+      <td>500</td>
+      <td>Unable to update account preference for provided account id</td>
+      <td><code>v1/exchange/update/preference</code></td>
     </tr>
     <tr>
       <td>2400</td>
@@ -130,13 +178,25 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td>3001</td>
       <td>400</td>
       <td>Symbol is missing</td>
-      <td><code>v1/order/place-order</code></td>
+      <td><code>v1/order/place-order</code><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3002</td>
+      <td>500</td>
+      <td>Unable to fetch conversion rates for given assets</td>
+      <td><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3003</td>
       <td>400</td>
       <td>Invalid leverage</td>
       <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3003</td>
+      <td>400</td>
+      <td>Order type is not supported for edit</td>
+      <td><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3004</td>
@@ -151,16 +211,22 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td><code>v1/order/place-order</code></td>
     </tr>
     <tr>
+      <td>3005</td>
+      <td>400</td>
+      <td>Edit quantity is missing</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
       <td>3006</td>
       <td>400</td>
       <td>Quantity precision should be less than {value}</td>
-      <td><code>v1/order/place-order</code></td>
+      <td><code>v1/order/place-order</code><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3007</td>
       <td>400</td>
       <td>Price precision should be less than {value}</td>
-      <td><code>v1/order/place-order</code></td>
+      <td><code>v1/order/place-order</code><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3008</td>
@@ -169,16 +235,28 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td><code>v1/order/place-order</code></td>
     </tr>
     <tr>
+      <td>3008</td>
+      <td>400</td>
+      <td>Edit price is missing</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3009</td>
+      <td>400</td>
+      <td>The new stop price causes the limit price to fall outside the allowed {value} range. Please adjust the stop price within the valid range.</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
       <td>3009</td>
       <td>400</td>
       <td>Limit price is out of allowed values</td>
-      <td><code>v1/order/place-order</code></td>
+      <td><code>v1/order/place-order</code><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3010</td>
       <td>400</td>
       <td>Order quantity is out of range</td>
-      <td><code>v1/order/place-order</code></td>
+      <td><code>v1/order/place-order</code><code>v1/order/edit-order</code></td>
     </tr>
     <tr>
       <td>3011</td>
@@ -211,6 +289,24 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td><code>v1/order/place-order</code></td>
     </tr>
     <tr>
+      <td>3016</td>
+      <td>500</td>
+      <td>Unable to calculate base margin</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3017</td>
+      <td>500</td>
+      <td>Unable to calculate margin in margin asset</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3018</td>
+      <td>400</td>
+      <td>Insufficient margin</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
       <td>3018</td>
       <td>400</td>
       <td>Insufficient margin</td>
@@ -229,6 +325,12 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td><code>v1/order/place-order</code></td>
     </tr>
     <tr>
+      <td>3020</td>
+      <td>500</td>
+      <td>Future wallet update failed</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
       <td>3021</td>
       <td>400</td>
       <td>Order type is not supported</td>
@@ -245,6 +347,120 @@ Pi42 APIs utilize a set of custom error codes, each associated with an HTTP stat
       <td>500</td>
       <td>Order cancellation error</td>
       <td><code>v1/order/cancel-order</code></td>
+    </tr>
+    <tr>
+      <td>3025</td>
+      <td>400</td>
+      <td>Quantity being placed is out of range</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3028</td>
+      <td>400</td>
+      <td>TP/SL price is out of range</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3029</td>
+      <td>500</td>
+      <td>Order placement failed</td>
+      <td><code>v1/order/place-order</code></td>
+    </tr>
+    <tr>
+      <td>3030</td>
+      <td>500</td>
+      <td>Failed to fetch open orders</td>
+      <td><code>v1/order/open-orders</code></td>
+    </tr>
+    <tr>
+      <td>3032</td>
+      <td>500</td>
+      <td>Failed to delete order</td>
+      <td><code>v1/order/delete-order</code></td>
+    </tr>
+    <tr>
+      <td>3033</td>
+      <td>500</td>
+      <td>Failed to fetch order history</td>
+      <td><code>v1/order/order-history</code></td>
+    </tr>
+    <tr>
+      <td>3035</td>
+      <td>500</td>
+      <td>Failed to add margin</td>
+      <td><code>v1/order/add-margin</code></td>
+    </tr>
+    <tr>
+      <td>3037</td>
+      <td>500</td>
+      <td>Failed to reduce margin</td>
+      <td><code>v1/order/reduce-margin</code></td>
+    </tr>
+    <tr>
+      <td>3040</td>
+      <td>500</td>
+      <td>Failed to fetch linked orders for provided link id</td>
+      <td><code>v1/order/linked-orders</code></td>
+    </tr>
+    <tr>
+      <td>3043</td>
+      <td>500</td>
+      <td>Failed to fetch order</td>
+      <td><code>v1/order/get-multiple</code><code>v1/order</code></td>
+    </tr>
+    <tr>
+      <td>3053</td>
+      <td>500</td>
+      <td>Failed to delete one or more orders</td>
+      <td><code>v1/order/cancel-all-orders</code></td>
+    </tr>
+    <tr>
+      <td>3054</td>
+      <td>500</td>
+      <td>Split TP/SL placement failed</td>
+      <td><code>v2/split-tp-sl</code></td>
+    </tr>
+    <tr>
+      <td>3060</td>
+      <td>400</td>
+      <td>Order not found or unable to edit</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3061</td>
+      <td>400</td>
+      <td>Quantity is not a valid edit parameter for a waiting order</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3062</td>
+      <td>400</td>
+      <td>Price is not a valid edit parameter for stop market order</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3063</td>
+      <td>400</td>
+      <td>Stop Price is not a valid edit parameter for limit order</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3064</td>
+      <td>400</td>
+      <td>Alteast one of price or quantity is required to edit limit order</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
+    <tr>
+      <td>3065</td>
+      <td>400</td>
+      <td>Edit quantity is less than already executed quantity for this order</td>
+      <td><code>v1/order/edit-order</code></td>
+    <tr>
+      <td>3066</td>
+      <td>400</td>
+      <td>Another Edit request is already ongoing, please try again later</td>
+      <td><code>v1/order/edit-order</code></td>
+    </tr>
     </tr>
   </tbody>
 </table>

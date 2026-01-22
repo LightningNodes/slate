@@ -488,11 +488,187 @@ The response parameters are described below:
 </table>
 
 
+<h2 id="split-tp-sl"> Split TP and SL </h2>
+
+`POST /v2/split-tp-sl`
+
+Add split TP/SL to a specific position. It requires a unique position ID, along with the quantity and price for TP and SL respectively. This operation enables dividing take-profit and stop-loss levels across multiple targets, helping optimize risk management and profit-taking for the position.
 
 
+```javascript
+async function split_tp_sl() {
+    // Define the API endpoint for adding margin
+    const endpoint = "/v2/split-tp-sl";
 
+    // Define the fixed values for positionId and amount
+    const positionId = "18c6c979-b089-4e67-b627-4c2072d0d5cb";  // Unique identifier for the position
+    const tp_quantity = 0.01;  // Quantity of TP
+    const tp_price = 95000 // Price of TP
+    const sl_quantity = 0.01;  // Quantity of SL
+    const sl_price = 85000 // Price of SL   
 
+    // Prepare request payload
+    const params = {
+        positionId: positionId,  // ID of the position to which margin is being added
+        splitTakeProfitOrders: [{ // Take Profit quantity and price
+          quantity: tp_quantity,
+          price : tp_price
+        }],
+        splitStopLossOrders: [{ // Stop Loss quantity and price
+          quantity: sl_quantity,
+          price : sl_price
+        }],
+        
+    };
 
+    // Call the postRequest function to send the POST request to the API
+    return await postRequest(endpoint, params);
+}
+```
+
+```python
+def split_tp_sl():
+    position_id = input("Enter the positionId: ")
+    tp_quantity_input = input("Enter the TP quantity: ")
+    tp_price_input = input("Enter the TP price: ")
+    sl_quantity_input = input("Enter the SL quantity: ")
+    sl_price_input = input("Enter the SL price: ")
+
+    add_margin_url = "https://api.pi42.com/v2/split-tp-sl"
+
+    try:
+        tp_quantity = int(tp_quantity_input)
+    except ValueError:
+        tp_quantity = float(tp_quantity_input)
+
+    try:
+        tp_price = int(tp_price_input)
+    except ValueError:
+        tp_price = float(tp_price_input)
+
+    try:
+        sl_quantity = int(sl_quantity_input)
+    except ValueError:
+        tp_price = float(sl_quantity_input)
+
+    try:
+        sl_price = int(sl_price_input)
+    except ValueError:
+        sl_price = float(sl_price_input)
+
+    timestamp = str(int(time.time() * 1000))
+
+    params = {
+        'positionId': position_id,
+        'splitTakeProfitOrders':[{
+          'quantity': tp_quantity,
+          'price' : tp_price
+        }],
+        splitStopLossOrders:[{
+          'quantity': sl_quantity,
+          'price' : sl_price
+        }],
+        'timestamp': timestamp
+    }
+
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+    signature = generate_signature(api_secret, data_to_sign)
+
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature,
+    }
+
+    try:
+        response = requests.post(add_margin_url, json=params, headers=headers)
+        response.raise_for_status()
+        response_data = response.json()
+        print('Margin added successfully:', json.dumps(response_data, indent=4))
+
+    except requests.exceptions.HTTPError as err:
+        print(f"Failed {response.status_code}: {response.text}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>positionId</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Unique identifier for the position to which TP/SL is being added</td>
+        </tr>
+        <tr>
+            <td>quantity</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Quantity of split tp or/and split sl</td>
+        </tr>
+        <tr>
+            <td>price</td>
+            <td>number</td>
+            <td>No</td>
+            <td>Price of split tp or/and split sl</td>
+        </tr>
+    </tbody>
+</table>
+
+<aside class="notice">
+The required <code>positionId</code> can be obtained calling the <a href="#get-positions">Get Positions API</a>
+</aside>
+
+### Response
+The response parameters are described below:
+
+```json
+# Response
+{
+  totalOrderCount: 2,
+  acceptedOrderCount: 2,
+  rejectedOrderCount: 0,
+  acceptedOrders: [{
+      "clientOrderId": "9f72fddf886c37b41e96-5-ext",
+      "time": "2024-02-21T14:19:39.604Z",
+      "symbol": "BTCINR",
+      "contractType": "PERPETUAL",
+      "type": "STOP_MARKET",
+      "side": "SELL",
+      "price": 110000,
+      "orderAmount": 0.01,
+      "filledAmount": 0,
+      "linkId": "894f5694c18b1200e508-5-ext",
+      "linkType": "ORDER_TP",
+      "subType": "TAKE_PROFIT",
+      "placeType": "POSITION"
+    },
+    {
+      "clientOrderId": "c0f1a2b4d5e697887766-5-ext",
+      "time": "2024-02-21T14:19:39.604Z",
+      "symbol": "BTCINR",
+      "contractType": "PERPETUAL",
+      "type": "STOP_MARKET",
+      "side": "SELL",
+      "price": 100000,
+      "orderAmount": 0.02,
+      "filledAmount": 0,
+      "linkId": "9e3b5a7d4c6f123abcde-5-ext",
+      "linkType": "ORDER_TP",
+      "subType": "TAKE_PROFIT",
+      "placeType": "POSITION"
+    }],
+  rejectedOrders: []
+}
+```
 
 
 <h2 id="add-margin"> Add Margin </h2>
