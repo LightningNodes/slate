@@ -1,4 +1,14 @@
-<p><h1 id='change-log'>Change Log</h1><h2 id='22-01-2026'>22-01-2026</h2>
+<p><h1 id='change-log'>Change Log</h1><h2 id='29-01-2026'>29-01-2026</h2>
+<ol>
+<li>New Endpoint:</li>
+<ul>
+<li>Get multiple orders <code>(POST /v1/order/get-multiple)</code></li>
+</ul>
+<br/>
+</ol></p>
+
+<h2 id='22-01-2026'>22-01-2026</h2>
+
 <ol>
 <li>New update klines:</li>
 <ul>
@@ -24,7 +34,7 @@
 <li>3054 for <code>(/v2/split-tp-sl)</code></li>
 </ul>
 <br/>
-</ol></p>
+</ol>
 
 <h2 id='21-4-2025'>21-4-2025</h2>
 
