@@ -1458,26 +1458,6 @@ async function linkedOrders(linkId) {
 // Call the getRequest function (similar to postRequest)
   return await getRequest(endpoint);
 }
-
-// Fetch Margin History
-async function fetchMarginHistory() {
- const endpoint = "/v1/order/fetch-margin-history";
- const pageSize = 100;
- const sortOrder = "desc";
- const startTimestamp = "1696425435000";
- const endTimestamp = "1725451568979";
- const symbol = "BTCUSDT";
-
-// Prepare query parameters
- const params = {
-
-// Optional Params
- pageSize: pageSize.toString(),
- sortOrder: sortOrder,
- startTimestamp: startTimestamp,
- endTimestamp: endTimestamp,
- symbol: symbol,
- };
 ```
 
 <table>
@@ -1616,6 +1596,780 @@ The details returned in the response body as are as follows:
   </tbody>
 </table>
 
+
+<h2 id="get-reference-order">Get Referenced Order</h2>
+
+`GET /v1/order/ref-id`
+
+Retrieves order details based on the reference ID.
+
+```python
+# Function to fetch order details based on reference id
+def ref_order_details():
+reference_id = input("Enter the reference Id: ")
+timestamp = str(int(time.time() * 1000))
+order_url = "https://fapi.pi42.com/v1/order/ref-id"
+
+url = f"{order_url}/{reference_id}"
+
+params = {
+'timestamp': timestamp
+}
+query_string = f"timestamp={params['timestamp']}"
+
+signature = generate_signature(api_secret, query_string)
+
+headers = {
+'api-key': api_key,
+'signature': signature,
+'accept': '*/*'
+ }
+try:
+response = requests.get(f"{url}?{query_string}", headers=headers)
+response.raise_for_status()
+response_data = response.json()
+print('Order details fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Failed {response.status_code}: {response.text}")
+```
+
+```javascript
+// Get Order Details
+async function orderDetails(reference_id) {
+  const endpoint = `/v1/order/ref-id?ref_id=${reference_id}`; // Endpoint for fetching order
+
+// Call the getRequest function (similar to postRequest)
+  return await getRequest(endpoint);
+}
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>refID</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Reference id of the order</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+The response details are as follows:
+
+```json
+// Response
+{
+  "id": number,
+  "clientOrderId": string,
+  "filledQty": number, // net filled qty
+  "executedQty": number, // last filled qty
+  "avgPrice": number, // avg price
+  "quantity": number, // leveraged qty
+  "price": number, // Order price - limit/ stop price, market price
+  "placeType": PlaceType,
+  "lockedMargin": number,
+  "lockedMarginInMarginAsset": number, // Optional
+  "side": OrderSide,
+  "leverage": number,
+  "status": OrderStatus,
+  "stopPrice": number,
+  "symbol": string,
+  "type": UserOrderType,
+  "isIsolated": boolean,
+  "linkType": OrderLinkType,
+  "linkId": string,
+  "limitPrice": number,
+  "takeProfitPrice": number,
+  "stopLossPrice": number,
+  "subType": OrderSubType,
+  "isLiquidationOrder": boolean,
+  "createdTime": Date,
+  "updatedTime": Date,
+  "contractType": string,
+  "filledValue": number,
+  "refId": string,
+  "baseAsset": string,
+  "quoteAsset": strin,
+  "marginAsset": string,
+  "marginConversionRate": number,
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Client-provided unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledQty</strong></td>
+      <td>Total net quantity filled for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>executedQty</strong></td>
+      <td>Quantity filled in the most recent execution.</td>
+    </tr>
+    <tr>
+      <td><strong>avgPrice</strong></td>
+      <td>Average execution price of the filled quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>Total leveraged order quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>Order price (limit price, stop price, or market price depending on order type).</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>Specifies how the order was placed.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Amount of margin locked for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Locked margin expressed in the margin asset (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Order side indicating buy or sell.</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>Leverage applied to the order.</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Current status of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>stopPrice</strong></td>
+      <td>Trigger price for stop or stop-limit orders.</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>Trading symbol for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>Type of user order.</td>
+    </tr>
+    <tr>
+      <td><strong>isIsolated</strong></td>
+      <td>Indicates whether the order uses isolated margin.</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>Type of order linkage.</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Identifier used to link related orders.</td>
+    </tr>
+    <tr>
+      <td><strong>limitPrice</strong></td>
+      <td>Limit price specified for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>takeProfitPrice</strong></td>
+      <td>Price at which the take-profit order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>stopLossPrice</strong></td>
+      <td>Price at which the stop-loss order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>Sub-category of the order type.</td>
+    </tr>
+    <tr>
+      <td><strong>isLiquidationOrder</strong></td>
+      <td>Indicates whether the order is a liquidation order.</td>
+    </tr>
+    <tr>
+      <td><strong>createdTime</strong></td>
+      <td>Timestamp when the order was created.</td>
+    </tr>
+    <tr>
+      <td><strong>updatedTime</strong></td>
+      <td>Timestamp when the order was last updated.</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>Type of contract associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledValue</strong></td>
+      <td>Total value of the filled portion of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>refId</strong></td>
+      <td>Reference ID associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>Base asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>Quote asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>Asset used for margin.</td>
+    </tr>
+    <tr>
+      <td><strong>marginConversionRate</strong></td>
+      <td>Conversion rate applied to the margin asset.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="get-order-details">Get Order details</h2>
+
+`GET /v1/order`
+
+Retrieves order details based on the client order ID.
+
+It is used to fetch detailed information for a specific order, helping with order tracking, status verification, and lifecycle management.
+
+```python
+# Function to fetch order details based on client order id
+def order_details():
+client_order_id = input("Enter the client order Id: ")
+timestamp = str(int(time.time() * 1000))
+order_url = "https://fapi.pi42.com/v1/order"
+
+url = f"{order_url}/{client_order_id}"
+
+params = {
+'timestamp': timestamp
+}
+query_string = f"timestamp={params['timestamp']}"
+
+signature = generate_signature(api_secret, query_string)
+
+headers = {
+'api-key': api_key,
+'signature': signature,
+'accept': '*/*'
+ }
+try:
+response = requests.get(f"{url}?{query_string}", headers=headers)
+response.raise_for_status()
+response_data = response.json()
+print('Order details fetched successfully:', json.dumps(response_data, indent=4))
+except requests.exceptions.HTTPError as err:
+print(f"Failed {response.status_code}: {response.text}")
+```
+
+```javascript
+// Get Order Details
+async function orderDetails(client_order_id) {
+  const endpoint = `/v1/order/${client_order_id}`; // Endpoint for fetching order
+
+// Call the getRequest function (similar to postRequest)
+  return await getRequest(endpoint);
+}
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>clientOrderID</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Client order id of the order</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+The response details are as follows:
+
+```json
+// Response
+{
+  "id": number,
+  "clientOrderId": string,
+  "filledQty": number, // net filled qty
+  "executedQty": number, // last filled qty
+  "avgPrice": number, // avg price
+  "quantity": number, // leveraged qty
+  "price": number, // Order price - limit/ stop price, market price
+  "placeType": PlaceType,
+  "lockedMargin": number,
+  "lockedMarginInMarginAsset": number, // Optional
+  "side": OrderSide,
+  "leverage": number,
+  "status": OrderStatus,
+  "stopPrice": number,
+  "symbol": string,
+  "type": UserOrderType,
+  "isIsolated": boolean,
+  "linkType": OrderLinkType,
+  "linkId": string,
+  "limitPrice": number,
+  "takeProfitPrice": number,
+  "stopLossPrice": number,
+  "subType": OrderSubType,
+  "isLiquidationOrder": boolean,
+  "createdTime": Date,
+  "updatedTime": Date,
+  "contractType": string,
+  "filledValue": number,
+  "refId": string, // Optional
+  "baseAsset": string,
+  "quoteAsset": strin,
+  "marginAsset": string,
+  "marginConversionRate": number,
+}
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Client-provided unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledQty</strong></td>
+      <td>Total net quantity filled for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>executedQty</strong></td>
+      <td>Quantity filled in the most recent execution.</td>
+    </tr>
+    <tr>
+      <td><strong>avgPrice</strong></td>
+      <td>Average execution price of the filled quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>Total leveraged order quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>Order price (limit price, stop price, or market price depending on order type).</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>Specifies how the order was placed.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Amount of margin locked for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Locked margin expressed in the margin asset (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Order side indicating buy or sell.</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>Leverage applied to the order.</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Current status of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>stopPrice</strong></td>
+      <td>Trigger price for stop or stop-limit orders.</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>Trading symbol for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>Type of user order.</td>
+    </tr>
+    <tr>
+      <td><strong>isIsolated</strong></td>
+      <td>Indicates whether the order uses isolated margin.</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>Type of order linkage.</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Identifier used to link related orders.</td>
+    </tr>
+    <tr>
+      <td><strong>limitPrice</strong></td>
+      <td>Limit price specified for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>takeProfitPrice</strong></td>
+      <td>Price at which the take-profit order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>stopLossPrice</strong></td>
+      <td>Price at which the stop-loss order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>Sub-category of the order type.</td>
+    </tr>
+    <tr>
+      <td><strong>isLiquidationOrder</strong></td>
+      <td>Indicates whether the order is a liquidation order.</td>
+    </tr>
+    <tr>
+      <td><strong>createdTime</strong></td>
+      <td>Timestamp when the order was created.</td>
+    </tr>
+    <tr>
+      <td><strong>updatedTime</strong></td>
+      <td>Timestamp when the order was last updated.</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>Type of contract associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledValue</strong></td>
+      <td>Total value of the filled portion of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>refId</strong></td>
+      <td>Optional reference ID associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>Base asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>Quote asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>Asset used for margin.</td>
+    </tr>
+    <tr>
+      <td><strong>marginConversionRate</strong></td>
+      <td>Conversion rate applied to the margin asset.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="get-multiple-orders">Get Multiple Orders</h2>
+
+`POST /v1/order/get-multiple`
+
+Retrieves multiple orders based on client order id.
+
+It is used to fetch a list of orders in a single request, which helps with bulk order retrieval, reporting, and efficient order management.
+
+```python
+import time
+import json
+import requests
+
+def get_multiple_orders():
+    endpoint = "/v1/order/get-multiple"
+
+    # Generate the current timestamp
+    timestamp = str(int(time.time() * 1000))
+
+    # Prepare the request body (JSON)
+    params = {
+  "clientOrderIds" : ["clientOrderId1","clientOrderId2",...]
+  }
+
+    # Convert the request body to a JSON string for signing
+    data_to_sign = json.dumps(params, separators=(',', ':'))
+
+    # Generate the signature (ensure `generate_signature` is properly defined)
+    signature = generate_signature(api_secret, data_to_sign)
+
+    # Headers for the POST request
+    headers = {
+        'api-key': api_key,
+        'Content-Type': 'application/json',
+        'signature': signature
+    }
+
+    # Construct the full URL
+    get_orders_url = f"{base_url}{endpoint}"
+
+    try:
+        # Send the POST request to update the preference
+        response = requests.post(get_orders_url, json=params, headers=headers)
+        response.raise_for_status()  # Raises an error for 4xx/5xx responses
+        response_data = response.json()
+        print('Orders fetched successfully:', json.dumps(response_data, indent=4))
+    except requests.exceptions.HTTPError as err:
+        print(f"Error: {err.response.text if err.response else err}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {str(e)}")
+```
+
+```javascript
+async function getMultipleOrders() {
+    const endpoint = "/v1/order/get-multiple";
+
+    // Prepare request payload
+    const params = {
+  "clientOrderIds" : ["clientOrderId1","clientOrderId2",...]
+};
+
+    // Call the postRequest function
+    return await postRequest(endpoint, params);
+}
+```
+
+<table>
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>clientOrderID</td>
+            <td>string</td>
+            <td>Yes</td>
+            <td>Array of client order ids</td>
+        </tr>
+    </tbody>
+</table>
+
+### Response
+
+The response details are as follows:
+
+```json
+// Response
+[
+  {
+  "id": number,
+  "clientOrderId": string,
+  "filledQty": number, // net filled qty
+  "executedQty": number, // last filled qty
+  "avgPrice": number, // avg price
+  "quantity": number, // leveraged qty
+  "price": number, // Order price - limit/ stop price, market price
+  "placeType": PlaceType,
+  "lockedMargin": number,
+  "lockedMarginInMarginAsset": number, // Optional
+  "side": OrderSide,
+  "leverage": number,
+  "status": OrderStatus,
+  "stopPrice": number,
+  "symbol": string,
+  "type": UserOrderType,
+  "isIsolated": boolean,
+  "linkType": OrderLinkType,
+  "linkId": string,
+  "limitPrice": number,
+  "takeProfitPrice": number,
+  "stopLossPrice": number,
+  "subType": OrderSubType,
+  "isLiquidationOrder": boolean,
+  "createdTime": Date,
+  "updatedTime": Date,
+  "contractType": string,
+  "filledValue": number,
+  "refId": string, // Optional
+  "baseAsset": string,
+  "quoteAsset": strin,
+  "marginAsset": string,
+  "marginConversionRate": number,
+},...
+]
+```
+<table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>id</strong></td>
+      <td>Unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>clientOrderId</strong></td>
+      <td>Client-provided unique identifier for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledQty</strong></td>
+      <td>Total net quantity filled for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>executedQty</strong></td>
+      <td>Quantity filled in the most recent execution.</td>
+    </tr>
+    <tr>
+      <td><strong>avgPrice</strong></td>
+      <td>Average execution price of the filled quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>quantity</strong></td>
+      <td>Total leveraged order quantity.</td>
+    </tr>
+    <tr>
+      <td><strong>price</strong></td>
+      <td>Order price (limit price, stop price, or market price depending on order type).</td>
+    </tr>
+    <tr>
+      <td><strong>placeType</strong></td>
+      <td>Specifies how the order was placed.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMargin</strong></td>
+      <td>Amount of margin locked for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>lockedMarginInMarginAsset</strong></td>
+      <td>Locked margin expressed in the margin asset (INR).</td>
+    </tr>
+    <tr>
+      <td><strong>side</strong></td>
+      <td>Order side indicating buy or sell.</td>
+    </tr>
+    <tr>
+      <td><strong>leverage</strong></td>
+      <td>Leverage applied to the order.</td>
+    </tr>
+    <tr>
+      <td><strong>status</strong></td>
+      <td>Current status of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>stopPrice</strong></td>
+      <td>Trigger price for stop or stop-limit orders.</td>
+    </tr>
+    <tr>
+      <td><strong>symbol</strong></td>
+      <td>Trading symbol for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>type</strong></td>
+      <td>Type of user order.</td>
+    </tr>
+    <tr>
+      <td><strong>isIsolated</strong></td>
+      <td>Indicates whether the order uses isolated margin.</td>
+    </tr>
+    <tr>
+      <td><strong>linkType</strong></td>
+      <td>Type of order linkage.</td>
+    </tr>
+    <tr>
+      <td><strong>linkId</strong></td>
+      <td>Identifier used to link related orders.</td>
+    </tr>
+    <tr>
+      <td><strong>limitPrice</strong></td>
+      <td>Limit price specified for the order.</td>
+    </tr>
+    <tr>
+      <td><strong>takeProfitPrice</strong></td>
+      <td>Price at which the take-profit order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>stopLossPrice</strong></td>
+      <td>Price at which the stop-loss order is triggered.</td>
+    </tr>
+    <tr>
+      <td><strong>subType</strong></td>
+      <td>Sub-category of the order type.</td>
+    </tr>
+    <tr>
+      <td><strong>isLiquidationOrder</strong></td>
+      <td>Indicates whether the order is a liquidation order.</td>
+    </tr>
+    <tr>
+      <td><strong>createdTime</strong></td>
+      <td>Timestamp when the order was created.</td>
+    </tr>
+    <tr>
+      <td><strong>updatedTime</strong></td>
+      <td>Timestamp when the order was last updated.</td>
+    </tr>
+    <tr>
+      <td><strong>contractType</strong></td>
+      <td>Type of contract associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>filledValue</strong></td>
+      <td>Total value of the filled portion of the order.</td>
+    </tr>
+    <tr>
+      <td><strong>refId</strong></td>
+      <td>Optional reference ID associated with the order.</td>
+    </tr>
+    <tr>
+      <td><strong>baseAsset</strong></td>
+      <td>Base asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>quoteAsset</strong></td>
+      <td>Quote asset of the trading pair.</td>
+    </tr>
+    <tr>
+      <td><strong>marginAsset</strong></td>
+      <td>Asset used for margin.</td>
+    </tr>
+    <tr>
+      <td><strong>marginConversionRate</strong></td>
+      <td>Conversion rate applied to the margin asset.</td>
+    </tr>
+  </tbody>
+</table>
 
 
 <h2 id="get-margin-history">Fetch Margin History</h2>
