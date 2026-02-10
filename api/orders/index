@@ -460,12 +460,12 @@
 
 <h2 id="split-tp-sl"> Split TP and SL </h2>
 
-<p><code>POST /v2/split-tp-sl</code></p>
+<p><code>POST /v2/order/split-tp-sl</code></p>
 
 <p>Add split TP/SL to a specific position. It requires a unique position ID, along with the quantity and price for TP and SL respectively. This operation enables dividing take-profit and stop-loss levels across multiple targets, helping optimize risk management and profit-taking for the position.</p>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">async</span> <span class="kd">function</span> <span class="nx">split_tp_sl</span><span class="p">()</span> <span class="p">{</span>
     <span class="c1">// Define the API endpoint for adding margin</span>
-    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v2/split-tp-sl</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">endpoint</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">/v2/order/split-tp-sl</span><span class="dl">"</span><span class="p">;</span>
 
     <span class="c1">// Define the fixed values for positionId and amount</span>
     <span class="kd">const</span> <span class="nx">positionId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">18c6c979-b089-4e67-b627-4c2072d0d5cb</span><span class="dl">"</span><span class="p">;</span>  <span class="c1">// Unique identifier for the position</span>
@@ -498,7 +498,7 @@
     <span class="n">sl_quantity_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the SL quantity: "</span><span class="p">)</span>
     <span class="n">sl_price_input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">"Enter the SL price: "</span><span class="p">)</span>
 
-    <span class="n">add_margin_url</span> <span class="o">=</span> <span class="s">"https://api.pi42.com/v2/split-tp-sl"</span>
+    <span class="n">add_margin_url</span> <span class="o">=</span> <span class="s">"https://api.pi42.com/v2/order/split-tp-sl"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">tp_quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tp_quantity_input</span><span class="p">)</span>

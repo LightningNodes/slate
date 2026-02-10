@@ -16,7 +16,7 @@
 </ul>
 <li>New Endpoint:</li>
 <ul>
-<li>Add Split Tp/Sl to an open position <code>(POST /v2/split-tp-sl)</code></li>
+<li>Add Split Tp/Sl to an open position <code>(POST /v2/order/split-tp-sl)</code></li>
 </ul>
 <li>New Error codes:</li>
 <ul>
@@ -31,7 +31,7 @@
 <li>3037 for <code>(/v1/order/reduce-margin)</code></li>
 <li>3040 for <code>(/v1/order/linked-orders)</code></li>
 <li>3053 for <code>(/v1/order/cancel-all-orders)</code></li>
-<li>3054 for <code>(/v2/split-tp-sl)</code></li>
+<li>3054 for <code>(/v2/order/split-tp-sl)</code></li>
 </ul>
 <br/>
 </ol>
