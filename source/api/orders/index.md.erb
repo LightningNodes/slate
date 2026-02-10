@@ -490,7 +490,7 @@ The response parameters are described below:
 
 <h2 id="split-tp-sl"> Split TP and SL </h2>
 
-`POST /v2/split-tp-sl`
+`POST /v2/order/split-tp-sl`
 
 Add split TP/SL to a specific position. It requires a unique position ID, along with the quantity and price for TP and SL respectively. This operation enables dividing take-profit and stop-loss levels across multiple targets, helping optimize risk management and profit-taking for the position.
 
@@ -498,7 +498,7 @@ Add split TP/SL to a specific position. It requires a unique position ID, along 
 ```javascript
 async function split_tp_sl() {
     // Define the API endpoint for adding margin
-    const endpoint = "/v2/split-tp-sl";
+    const endpoint = "/v2/order/split-tp-sl";
 
     // Define the fixed values for positionId and amount
     const positionId = "18c6c979-b089-4e67-b627-4c2072d0d5cb";  // Unique identifier for the position
@@ -534,7 +534,7 @@ def split_tp_sl():
     sl_quantity_input = input("Enter the SL quantity: ")
     sl_price_input = input("Enter the SL price: ")
 
-    add_margin_url = "https://api.pi42.com/v2/split-tp-sl"
+    add_margin_url = "https://api.pi42.com/v2/order/split-tp-sl"
 
     try:
         tp_quantity = int(tp_quantity_input)
