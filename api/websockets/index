@@ -657,7 +657,7 @@
 
 <p>Updates the listen key for WebSocket connections.</p>
 
-<p>Updating the listen key is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.</p>
+<p>Updating the listen key at least once per hour is necessary to maintain an active WebSocket connection and prevent disconnections due to inactivity.</p>
 
 <table>
     <thead>
