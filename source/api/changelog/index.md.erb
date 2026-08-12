@@ -1,6 +1,129 @@
-<h1 id='change-log'>Change Log</h1><h2 id='17-07-2024'>17-07-2024</h2>
+<h1 id='change-log'>Change Log</h1><h2 id='29-01-2026'>29-01-2026</h2>
 <ol>
-<li>Added Enum Value GST_ON_Funding FEE in TransactionType</li>
+<li>New Endpoint:</li>
+<ul>
+<li>Get multiple orders <code>(POST /v1/order/get-multiple)</code></li>
+</ul>
+<br/>
+</ol>
+
+
+<h2 id='22-01-2026'>22-01-2026</h2>
+<ol>
+<li>New update klines:</li>
+<ul>
+<li>priceType <code>MARK_PRICE</code> or <code>LAST_PRICE</code> in <code>(POST /v1/market/klines)</code></li>
+</ul>
+<li>New Endpoint:</li>
+<ul>
+<li>Add Split Tp/Sl to an open position <code>(POST /v2/order/split-tp-sl)</code></li>
+</ul>
+<li>New Error codes:</li>
+<ul>
+<li>2300 for <code>(/v1/exchange/exchangeInfo)</code></li>
+<li>2310, 2311, 2312, 2313, 2314, 2315, 2316 for <code>(/v1/exchange/update/preference)</code></li>
+<li>3002, 3002, 3005, 3006, 3007, 3008, 3009, 3010, 3016, 3017, 3018, 3020, 3025, 3028, 3060, 3061, 3062, 3063, 3064, 3065, 3066 for <code>(/v1/order/edit-order)</code></li>
+<li>3029 for <code>(/v1/order/place-order)</code></li>
+<li>3030 for <code>(/v1/order/open-orders)</code></li>
+<li>3032 for <code>(/v1/order/delete-order)</code></li>
+<li>3033 for <code>(/v1/order/order-history)</code></li>
+<li>3035 for <code>(/v1/order/add-margin)</code></li>
+<li>3037 for <code>(/v1/order/reduce-margin)</code></li>
+<li>3040 for <code>(/v1/order/linked-orders)</code></li>
+<li>3053 for <code>(/v1/order/cancel-all-orders)</code></li>
+<li>3054 for <code>(/v2/order/split-tp-sl)</code></li>
+</ul>
+<br/>
+</ol>
+
+
+
+<h2 id='21-4-2025'>21-4-2025</h2>
+<ol>
+<li>New Endpoint:</li>
+<ul>
+<li>Edit an existing open order <code>(PATCH /v1/order/edit-order)</code></li>
+</ul>
+<br/>
+</ol>
+
+
+
+<h2 id='23-1-2025'>23-1-2025</h2>
+<ol>
+<li>New fields:</li>
+<ul>
+  <li><code>leverage</code> and <code>lockedMargin</code> in <code>/v1/order/open-orders</code> api response.</li>
+  <li><code>leverage</code> in <code>/v1/order/place-order</code> api response.</li>
+
+</ul>
+<br/>
+</ol>
+
+
+<h2 id='19-12-2024'>19-12-2024</h2>
+<ol>
+<li>New FAWSS_UDS to emit user specific events:</li>
+<ul>
+  <li>FAWSS_UDS Link:<code>(https://fawss-uds.pi42.com/auth-stream)</code></li>
+  <li>FAWSS will only send market data events.</li>
+</ul>
+
+<br/>
+</ol>
+
+<h2 id='25-10-2024'>25-10-2024</h2>
+<ol>
+<li>New Endpoints to get wallet balance.:</li>
+
+<ul>
+  <li>Get futures wallet details<code>(GET /v1/wallet/futures-wallet/details)</code></li>
+  <li>Get funding wallet details<code>(GET /v1/wallet/funding-wallet/details)</code></li>
+</ul>
+
+<li>New Endpoints for close all positions and open orders:</li>
+
+<ul>
+  <li>Cancel all the orders<code>(DELETE /v1/order/cancel-all-orders)</code></li>
+  <li>Close all the positions<code>(DELETE /v1/positions/close-all-positions)</code></li>
+</ul>
+
+<li>New update preference endpoint:</li>
+
+<ul>
+  <li>To Update leverage and margin-mode<code>(POST /v1/exchange/update/preference)</code></li>
+</ul>
+
+
+<br/>
+</ol>
+
+<h2 id='17-09-2024'>17-09-2024</h2>
+<ol>
+<li>Additional authentication method with private web socket using listen key.</li>
+<li>New Endpoints for listen key</li>
+
+<ul>
+  <li>Create new listen key for web-socket connection <code>(POST /v1/retail/listen-key)</code></li>
+  <li>Update expiry time for listen key <code>(PUT /v1/retail/listen-key)</code></li>
+  <li>Delete listen key <code>(DELETE /v1/retail/listen-key)</code></li>
+</ul>
+
+<li>Endpoints for CRUD Operations on api-key which are typically done through UI </li>
+<ul>
+  <li>Create a new api-key <code>(POST /v1/retail/create-api-key)</code></li>
+  <li>Get all api-keys for user <code>(GET /v1/retail/all-api-keys)</code></li>
+  <li>Delete api-key for user <code>(DELETE /v1/retail/delete-api-key)</code></li>
+  <li>Update api-key trading permissions <code>(POST /v1/retail/update-api-key-permissions)</code></li>
+  <li>Whitelist IPs for api-key <code>(POST /v1/retail/add-allowed-ips)</code></li>
+  <li>Remove whitelisted IPs for api-key <code>(POST /v1/retail/remove-allowed-ips)</code></li>
+</ul>
+
+<br/>
+</ol>
+<h2 id='17-07-2024'>17-07-2024</h2>
+<ol>
+<li>Added Enum Value <code>GST_ON_FUNDING_FEE</code> in TransactionType</li>
 <li>Exchange Info <br/>
 
 <ul>
@@ -88,7 +211,7 @@ response</li>
 <li> Response: <code>nextTimestamp</code> which is used in the next paginated API call.</li>
 <li>Examples added in the API descriptions section in the doc.</li>
 </ul></li>
-<li>New Endpoint 
+<li>New Endpoint
 
 <ul>
 <li>Margin History ( GET /v1/order/fetch-margin-history)</li>

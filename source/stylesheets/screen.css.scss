@@ -28,6 +28,7 @@ html, body {
   color: $main-text;
   padding: 0;
   margin: 0;
+  margin-top: -27px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   @extend %default-font;
@@ -71,10 +72,19 @@ html, body {
     }
   }
 
+  .logo-parent{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5%;
+  }
+
   // This is the logo at the top of the ToC
   .logo {
-    display: block;
+    display: flex;
     max-width: 100%;
+    width: 60%;
     margin-bottom: $logo-margin;
   }
 

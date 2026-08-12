@@ -20,9 +20,12 @@ Options:
 "
 
 
-run_build() {
-  bundle exec middleman build --clean
-}
+# run_build() {
+#   bundle exec middleman build --clean
+# }
+
+#Run command : docker run --rm --name slate -p 4567:4567 -v $(pwd)/source:/srv/slate/source slatedocs/slate serve
+#Build command: docker run --rm --name slate -v $(pwd)/build:/srv/slate/build -v $(pwd)/source:/srv/slate/source slatedocs/slate build
 
 parse_args() {
   # Set args from a local environment file.
@@ -217,10 +220,11 @@ sanitize() {
 parse_args "$@"
 
 if [[ ${source_only} ]]; then
-  run_build
+  # run_build
+  continue
 elif [[ ${push_only} ]]; then
   main "$@"
 else
-  run_build
+  # run_build
   main "$@"
 fi
